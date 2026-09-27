@@ -2251,3 +2251,11 @@ export function initCraftApp() {
 
   renderAll();
 }
+
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCraftApp);
+  } else {
+    initCraftApp();
+  }
+}
