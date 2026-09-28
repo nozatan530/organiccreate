@@ -93,19 +93,46 @@ export const S = {
   i2: { n: "ヨウ素液", en: "Iodine solution", f: "I₂", cls: "reagent", note: "褐色液。NaOHとともに加えることでヨードホルム反応を起こす検出試薬。" },
   tollens: { n: "アンモニア性硝酸銀", en: "Tollens' reagent", f: "[Ag(NH₃)₂]⁺", cls: "reagent", note: "ジアンミン銀(I)イオンを含む無色の錯イオン水溶液。アルデヒドにより銀鏡が析出する。" },
   cac2: { n: "炭化カルシウム（カーバイド）", en: "Calcium carbide", f: "CaC₂", cls: "reagent", note: "水を加えると激しく加水分解してアセチレンを発生する無機物質。" },
-  glucose: { n: "ブドウ糖（グルコース）", en: "Glucose", f: "C₆H₁₂O₆", cls: "reagent", note: "酵母（チマーゼ）によるアルコール発酵でエタノールと二酸化炭素に分解される単糖類。" },
-  naphtha: { n: "ナフサ（粗製ガソリン）", en: "Naphtha", f: "C₅〜C₁₀の混合物", cls: "reagent", note: "原油の常圧蒸留で得られる炭化水素混合物。高温熱分解（クラッキング）で低級アルケンを製造する。" }
+  glucose: { n: "ブドウ糖（グルコース）", en: "Glucose", f: "C₆H₁₂O₆", cls: "alcohol", note: "代表的な単糖類（六炭糖）。酵母発酵でエタノールになり、脱水縮合重合でマルトースやデンプン・セルロースを構成する。", use: "生命の主エネルギー源、アルコール発酵、多糖の単量体" },
+  naphtha: { n: "ナフサ（粗製ガソリン）", en: "Naphtha", f: "C₅〜C₁₀の混合物", cls: "reagent", note: "原油の常圧蒸留で得られる炭化水素混合物。高温熱分解（クラッキング）で低級アルケンを製造する。" },
+
+  // ===== 第4章：合成高分子・合成繊維・加硫ゴム・天然高分子（糖・アミノ酸・タンパク質） =====
+  adipic_acid: { n: "アジピン酸", en: "Adipic acid", f: "HOOC−(CH₂)₄−COOH", cls: "acid", smi: "OC(=O)CCCCC(=O)O", note: "炭素数6のジカルボン酸。ヘキサメチレンジアミンと縮合重合させてナイロン66を製造する。", use: "ナイロン66原料" },
+  hda: { n: "ヘキサメチレンジアミン", en: "Hexamethylenediamine", f: "H₂N−(CH₂)₆−NH₂", cls: "reagent", smi: "NCCCCCCN", note: "両末端にアミノ基をもつジアミン。アジピン酸との界面重縮合で強靭なポリアミド繊維（ナイロン66）を与える。", use: "ナイロン66原料" },
+  nylon66: { n: "ナイロン66（ポリアミド）", en: "Nylon 6,6", f: "−[CO(CH₂)₄CONH(CH₂)₆NH]ₙ−", cls: "polymer", note: "アジピン酸とヘキサメチレンジアミンの縮合重合（脱水縮合）により生じるアミド結合（−CO−NH−）をもつ高分子。「クモの糸より細く、鋼鉄より強い」と謳われた世界初の合成繊維。", use: "ストッキング、ロープ、歯ブラシ、エアバッグ" },
+  terephthalic_acid: { n: "テレフタル酸", en: "Terephthalic acid", f: "p-C₆H₄(COOH)₂", cls: "acid", smi: "OC(=O)c1ccc(C(=O)O)cc1", note: "ベンゼン環のパラ位に2個のカルボキシ基をもつジカルボン酸。エチレングリコールと縮合重合してPETになる。", use: "ポリエステル（PET）原料" },
+  ethylene_glycol: { n: "エチレングリコール", en: "Ethylene glycol", f: "HO−CH₂−CH₂−OH", cls: "alcohol", smi: "OCCO", note: "2価アルコール。甘味のある粘性液体。PET樹脂の原料や自動車ラジエーターの不凍液として利用。", use: "PET樹脂原料、自動車用不凍液" },
+  pet: { n: "ポリエチレンテレフタラート（PET）", en: "Polyethylene terephthalate (PET)", f: "−[CO−C₆H₄−CO−O−CH₂CH₂O]ₙ−", cls: "polymer", note: "テレフタル酸とエチレングリコールがエステル結合（−COO−）で縮合重合した熱可塑性ポリエステル。透明性・強度・耐熱性に優れる。", use: "ペットボトル、フリース（ポリエステル繊維）、包装フィルム" },
+  vinyl_acetate: { n: "酢酸ビニル", en: "Vinyl acetate", f: "CH₂=CH(OCOCH₃)", cls: "ester", smi: "CC(=O)OC=C", note: "アセチレンに酢酸が付加、あるいはエチレンの酸化で得られる不飽和エステル。付加重合によりポリ酢酸ビニルになる。", use: "ポリ酢酸ビニル・ビニロン原料" },
+  pvac: { n: "ポリ酢酸ビニル（PVAc）", en: "Polyvinyl acetate (PVAc)", f: "−[CH₂−CH(OCOCH₃)]ₙ−", cls: "polymer", note: "酢酸ビニルの付加重合で生じる無色透明な高分子。木材によく接着する。", use: "木工用ボンド、チューインガム基材" },
+  pva: { n: "ポリビニルアルコール（PVA）", en: "Polyvinyl alcohol (PVA)", f: "−[CH₂−CH(OH)]ₙ−", cls: "polymer", note: "ポリ酢酸ビニルを水酸化ナトリウムNaOHでけん化（加水分解）して得られる親水性高分子。水に溶ける性質をもつ（ビニルアルコール単量体はケト・エノール互変異性でアセトアルデヒドになるため、直接重合では作れない）。", use: "洗濯のり、スライムの主原料、液晶保護フィルム" },
+  vinylon: { n: "ビニロン（アセタール化PVA）", en: "Vinylon", f: "アセタール化ポリビニルアルコール", cls: "polymer", note: "水溶性のPVAをホルマリン（ホルムアルデヒドHCHO）と酸触媒でアセタール化（ヒドロキシ基の約30〜40%をアセタール環化）して耐水化した日本発の合成繊維（桜田一郎ら）。高強度・吸湿性に富む。", use: "テント、作業着、漁網、シート" },
+  styrene: { n: "スチレン（ビニルベンゼン）", en: "Styrene", f: "C₆H₅−CH=CH₂", cls: "aroma", smi: "C=Cc1ccccc1", note: "ベンゼン環にビニル基がついた芳香族単量体。付加重合によりポリスチレンになる。", use: "ポリスチレン（PS）原料" },
+  polystyrene: { n: "ポリスチレン（スチロール樹脂）", en: "Polystyrene (PS)", f: "−[CH₂−CH(C₆H₅)]ₙ−", cls: "polymer", note: "スチレンの付加重合で得られる無色透明で硬く電気絶縁性に優れた熱可塑性樹脂。発泡させると体積が約50倍の発泡スチロールになる。", use: "発泡スチロール、食品トレー、CDケース" },
+  isoprene: { n: "イソプレン（2-メチル-1,3-ブタジエン）", en: "Isoprene", f: "CH₂=C(CH₃)−CH=CH₂", cls: "alkene", smi: "CC(=C)C=C", note: "共役二重結合をもつジエン系炭化水素。シス付加重合すると天然ゴムの骨格をなす。", use: "合成ゴム原料" },
+  natural_rubber: { n: "天然ゴム（生ゴム・ポリイソプレン）", en: "Natural rubber", f: "−[CH₂−C(CH₃)=CH−CH₂]ₙ−", cls: "polymer", note: "ゴムノキの樹液（ラテックス）に含まれるシス-1,4-ポリイソプレン。弾力性をもつが、熱でベタつき、冷やすと硬くなる欠点がある。", use: "ゴム製品原液、輪ゴム" },
+  sulfur: { n: "硫黄粉末", en: "Sulfur", f: "S", cls: "reagent", note: "黄色の非金属単体。生ゴムに数%加えて加熱（加硫）すると、分子鎖間にジスルフィド結合（−S−S−）が形成されて弾性ゴムになる。" },
+  vulcanized_rubber: { n: "加硫ゴム（弾性ゴム）", en: "Vulcanized rubber", f: "加硫ポリイソプレン", cls: "polymer", note: "生ゴムに硫黄を加えて加熱（加硫 vulcanization）したゴム。鎖状分子が硫黄架橋（−S−S−）されて網目構造になり、温度変化に強い高弾性と耐摩耗性を獲得する（チャールズ・グッドイヤーが発見）。", use: "自動車タイヤ、靴底、エボナイト" },
+  maltose: { n: "マルトース（麦芽糖）", en: "Maltose", f: "C₁₂H₂₂O₁₁", cls: "alcohol", note: "α-グルコース2分子が脱水縮合（α-1,4-グリコシド結合）した二糖類。右端の環が開環してホルミル基を生じるため、還元性を示す（銀鏡反応・フェーリング反応陽性）。", use: "水あめ、甘味料" },
+  starch: { n: "デンプン（アミロース・アミロペクチン）", en: "Starch", f: "(C₆H₁₀O₅)ₙ", cls: "polymer", note: "多数のα-グルコースがグリコシド結合でらせん状に縮合重合した天然高分子。ヨウ素分子がらせん内部に取り込まれると特有の青紫色を呈する（ヨウ素デンプン反応）。アミラーゼで加水分解されてマルトースになる。", use: "主食（米・小麦・芋）、糊、バイオエタノール" },
+  cellulose: { n: "セルロース（繊維素）", en: "Cellulose", f: "(C₆H₁₀O₅)ₙ", cls: "polymer", note: "β-グルコースが直線状に縮合重合した植物細胞壁の主成分。分子間水素結合で強固な束（ミクロフィブリル）をつくる。木材パルプや綿の主成分。", use: "紙、綿糸、再生繊維（レーヨン）原料" },
+  cell_triacetate: { n: "トリアセチルセルロース", en: "Cellulose triacetate", f: "[C₆H₇O₂(OCOCH₃)₃]ₙ", cls: "polymer", note: "セルロースのグルコース単位あたり3個あるヒドロキシ基を無水酢酸と濃硫酸触媒ですべてアセチル化（エステル化）した高分子。不燃性フィルムとして映画フィルム等に利用。", use: "液晶保護フィルム、偏光板、アセテート繊維" },
+  glycine: { n: "グリシン（アミノ酢酸）", en: "Glycine", f: "H₂N−CH₂−COOH", cls: "acid", smi: "NCC(=O)O", note: "最も構造が単純なアミノ酸。α炭素に水素が2個ついているため、天然のアミノ酸の中で唯一不斉炭素原子をもたず光学異性体がない。ニンヒドリン水溶液で赤紫色〜青紫色に呈色。", use: "生体タンパク質、食品添加物（調味料・静菌剤）" },
+  alanine: { n: "アラニン（α-アミノプロピオン酸）", en: "Alanine", f: "CH₃−CH(NH₂)−COOH", cls: "acid", smi: "CC(N)C(=O)O", note: "メチル基をもつ中性アミノ酸。不斉炭素原子を1個もち、生体中ではL体が存在する。", use: "生体タンパク質、栄養素" },
+  gly_ala: { n: "ジペプチド（グリシルアラニン）", en: "Glycylalanine (Dipeptide)", f: "H₂N−CH₂−CO−NH−CH(CH₃)−COOH", cls: "acid", note: "グリシンのカルボキシ基とアラニンのアミノ基が脱水縮合してペプチド結合（−CO−NH−）を形成した化合物。末端にアミノ基とカルボキシ基をもつ。", use: "ペプチド、生体機能分子" },
+  protein: { n: "タンパク質（ポリペプチド）", en: "Protein", f: "ポリペプチド複合体", cls: "polymer", note: "アミノ酸がペプチド結合で多数連なった生体高分子。2本以上のペプチド結合をもつためビウレット反応で赤紫色を呈し、ニンヒドリン反応陽性。加熱や強酸で変性して凝固する。", use: "筋肉、酵素、抗体、毛髪、爪" }
 };
 
 export const DEX1 = ["methane","ethane","propane","ethylene","propene","acetylene","ch3cl","ch2cl2","chcl3","ccl4","chloroethane","dibromoethane","dichloroethane","vinylchloride","dibromoethene","tetrabromoethane","dibromopropane","polyethylene","pvc","pp"];
 export const DEX2 = ["methanol","formaldehyde","formic_acid","ethanol","acetaldehyde","acetic_acid","ethyl_acetate","sodium_acetate","isopropanol","acetone","ether","iodoform","silver","h2"];
 export const DEX3 = ["benzene","chlorobenzene","toluene","benzoic_acid","phenol","tribromophenol","picric_acid","salicylic_acid","aspirin","methyl_salicylate","nitrobenzene","aniline","acetanilide","diazonium","azo_dye"];
+export const DEX4 = ["adipic_acid","hda","nylon66","terephthalic_acid","ethylene_glycol","pet","vinyl_acetate","pvac","pva","vinylon","styrene","polystyrene","isoprene","natural_rubber","vulcanized_rubber","maltose","starch","cellulose","cell_triacetate","glycine","alanine","gly_ala","protein"];
 export const DEXX = ["co2"];
 
 export const SOURCES = [
   { id: "gas", n: "天然ガス田", items: ["methane"], start: true },
   { id: "salt", n: "食塩水の電気分解工場", items: ["cl2", "h2"], start: true },
-  { id: "nature", n: "井戸と空気", items: ["h2o", "o2"], start: true },
+  { id: "nature", n: "井戸と空気", items: ["h2o", "o2", "co2"], start: true },
   { id: "shelf", n: "鑑定用の試薬棚", items: ["br2"], start: true },
   { id: "quarry", n: "石灰岩の採石場", items: ["cac2"], by: "依頼1" },
   { id: "farm", n: "サトウキビ畑", items: ["glucose"], by: "依頼2" },
@@ -115,8 +142,11 @@ export const SOURCES = [
   { id: "oxidant", n: "試薬棚（酸化剤）", items: ["kmno4"], ch: 2, start: true },
   { id: "reagents2", n: "第2章 分析・合成試薬棚", items: ["na", "tollens", "i2", "naoh", "h2so4"], ch: 2, by: "依頼1" },
   { id: "aroma_lab", n: "芳香族実験室", items: ["benzene", "toluene"], ch: 3, start: true },
-  { id: "acids_ch3", n: "第3章 強酸・混酸棚", items: ["hno3", "h2so4", "hcl", "cl2", "br2"], ch: 3, start: true },
-  { id: "reagents3", n: "第3章 芳香族・医薬合成試薬", items: ["sn", "nano2", "ac2o", "fecl3", "naoh", "kmno4"], ch: 3, by: "依頼1" }
+  { id: "acids_ch3", n: "第3章 強酸・試薬棚", items: ["hno3", "h2so4", "hcl", "cl2", "br2", "co2", "h2o"], ch: 3, start: true },
+  { id: "reagents3", n: "第3章 芳香族・医薬合成試薬", items: ["sn", "nano2", "ac2o", "fecl3", "naoh", "kmno4", "co2", "methanol", "h2o"], ch: 3, by: "依頼1" },
+  { id: "petro_ch4", n: "第4章 モノマー精製プラント", items: ["adipic_acid", "terephthalic_acid", "ethylene_glycol", "vinyl_acetate", "styrene", "isoprene"], ch: 4, start: true },
+  { id: "bio_ch4", n: "第4章 天然資源・バイオ研究所", items: ["glucose", "cellulose", "glycine", "alanine"], ch: 4, start: true },
+  { id: "reagents4", n: "第4章 高分子合成試薬棚", items: ["hda", "sulfur", "naoh", "formaldehyde", "ac2o", "i2", "h2o", "h2so4"], ch: 4, start: true }
 ];
 
 export const CATS = [
@@ -279,22 +309,50 @@ export const RULES = [
   { id: "ox_tol", in: ["toluene", "kmno4"], t: [70, 100], lowMsg: "温水浴〜沸騰水浴（70〜100℃）で加熱しよう。", out: ["benzoic_acid"], types: ["酸化"], eq: "C₆H₅CH₃ + 3[O] → C₆H₅COOH + H₂O", text: "強酸化剤によりトルエンの側鎖メチル基 −CH₃ が酸化され、カルボキシ基をもつ安息香酸（白色結晶）が析出した！" },
 
   // 3. アニリンの還元とアセチル化
-  { id: "red_ani", in: ["nitrobenzene", "sn"], cat: ["none"], t: [60, 90], lowMsg: "温水浴（60〜80℃）で温めてスズと塩酸で還元しよう。", out: ["aniline"], types: ["置換", "酸化"], eq: "C₆H₅NO₂ + 3Sn + 7HCl → C₆H₅NH₂・HCl + 3SnCl₂ + 2H₂O（NaOHで中和して遊離）", text: "スズと塩酸の強い還元作用でニトロ基がアミノ基に還元され、弱塩基のアニリンが遊離した！" },
+  { id: "red_ani", in: ["nitrobenzene", "sn"], t: [60, 90], lowMsg: "温水浴（60〜80℃）で温めてスズと塩酸で還元しよう。", out: ["aniline"], types: ["置換", "酸化"], eq: "C₆H₅NO₂ + 3Sn + 7HCl → C₆H₅NH₂・HCl + 3SnCl₂ + 2H₂O（NaOHで中和して遊離）", text: "スズと塩酸の強い還元作用でニトロ基がアミノ基に還元され、弱塩基のアニリンが遊離した！" },
   { id: "acet_ani", in: ["aniline", "ac2o"], t: [20, 60], out: ["acetanilide"], types: ["縮合"], eq: "C₆H₅NH₂ + (CH₃CO)₂O → C₆H₅NHCOCH₃ + CH₃COOH", text: "アミノ基が無水酢酸によってアセチル化され、解熱鎮痛剤の元祖である白色結晶のアセトアニリドが生じた！" },
 
   // 4. 氷冷ジアゾ化とアゾカップリング
   { id: "diazo", in: ["aniline", "nano2"], t: [0, 5], lowMsg: "0℃未満では凍結してしまう。", highMsg: "温度が高すぎる（5℃超）！ ジアゾニウムイオンが分解してフェノールと窒素になってしまう。氷冷（0〜5℃）を維持せよ！", out: ["diazonium"], types: ["その他"], eq: "C₆H₅NH₂ + NaNO₂ + 2HCl → C₆H₅N₂⁺Cl⁻ + NaCl + 2H₂O", text: "氷冷下（0〜5℃）の精密な温度管理により、極めて不安定な塩化ベンゼンジアゾニウムの単離に成功した！" },
   { id: "diazo_hot", in: ["diazonium", "h2o"], t: [30, 80], lowMsg: "温めて（30℃以上）分解させよう。", out: ["phenol"], types: ["加水分解", "脱離"], eq: "C₆H₅N₂⁺Cl⁻ + H₂O → C₆H₅OH + N₂↑ + HCl", text: "ジアゾニウム塩水溶液を温めると窒素ガス N₂ を放出しながら分解し、フェノールが生成した！" },
-  { id: "coupling", in: ["diazonium", "phenol"], cat: ["none"], t: [0, 20], out: ["azo_dye"], types: ["縮合"], eq: "C₆H₅N₂⁺Cl⁻ + C₆H₅ONa → C₆H₅−N=N−C₆H₄OH + NaCl", text: "弱アルカリ性下でカップリング反応が起き、鮮やかな橙赤色の沈殿（p-ヒドロキシアゾベンゼン）が一瞬で析出した！ 合成染料の完成！" },
+  { id: "coupling", in: ["diazonium", "phenol"], t: [0, 20], out: ["azo_dye"], types: ["縮合"], eq: "C₆H₅N₂⁺Cl⁻ + C₆H₅ONa → C₆H₅−N=N−C₆H₄OH + NaCl", text: "弱アルカリ性下でカップリング反応が起き、鮮やかな橙赤色の沈殿（p-ヒドロキシアゾベンゼン）が一瞬で析出した！ 合成染料の完成！" },
 
   // 5. フェノールとサリチル酸誘導体・医薬品
+  { id: "dow_phenol", in: ["chlorobenzene", "naoh"], t: [280, 350], lowMsg: "クロロベンゼンの加水分解（ダウ法）には約300℃の高温高圧が必要。", out: ["phenol"], types: ["加水分解", "置換"], eq: "C₆H₅Cl + 2NaOH → C₆H₅ONa + NaCl + H₂O →（酸析）→ C₆H₅OH", text: "高温高圧下でクロロベンゼンが加水分解され、フェノールが得られた（工業的ダウ法）！" },
   { id: "fe_phenol", in: ["phenol", "fecl3"], t: [10, 40], out: ["phenol"], types: ["検出"], eq: "フェノール性水酸基 + FeCl₃ → 紫色呈色", text: "フェノールに塩化鉄(III)を加えると、美しい紫色に呈色した！ ベンゼン環に直結した−OH（フェノール類）の特異的検出。" },
   { id: "br_phenol", in: ["phenol", "br2"], t: [10, 40], out: ["tribromophenol"], types: ["置換", "検出"], eq: "C₆H₅OH + 3Br₂ → C₆H₂Br₃OH↓ + 3HBr", text: "フェノール水溶液に臭素水を滴下すると、o-位とp-位が激しく置換されて直ちに白色沈殿（2,4,6-トリブロモフェノール）が生じた！" },
   { id: "picric", in: ["phenol", "hno3"], cat: ["H2SO4_cat"], catMsg: "濃硫酸を触媒として加える。", t: [70, 100], lowMsg: "温水浴（70〜100℃）で加熱しよう。", out: ["picric_acid"], types: ["置換"], eq: "C₆H₅OH + 3HNO₃ → C₆H₂(NO₂)₃OH + 3H₂O", text: "フェノールのo-位とp-位が三重にニトロ化され、強酸性の黄色爆薬「ピクリン酸」が析出した！" },
-  { id: "kolbe", in: ["phenol", "co2"], cat: ["none"], t: [120, 150], lowMsg: "コルベ・シュミット反応には120〜140℃の加熱と加圧が必要。", out: ["salicylic_acid"], types: ["付加", "その他"], eq: "C₆H₅ONa + CO₂ → C₆H₄(OH)COONa →（酸析）→ C₆H₄(OH)COOH", text: "フェノールナトリウムに二酸化炭素を高温高圧で反応させ、サリチル酸を合成した！ 医薬品合成の中核素材。" },
+  { id: "kolbe", in: ["phenol", "co2"], t: [120, 160], lowMsg: "コルベ・シュミット反応には120〜150℃の加熱と加圧が必要（温度プリセット140℃を選ぼう）。", highMsg: "温度が高すぎる（160℃超）。120〜150℃付近（140℃プリセットなど）で加熱しよう。", out: ["salicylic_acid"], types: ["付加", "その他"], eq: "C₆H₅ONa + CO₂ → C₆H₄(OH)COONa →（酸析）→ C₆H₄(OH)COOH", text: "フェノールナトリウムに二酸化炭素を高温高圧で反応させ、サリチル酸を合成した！ 医薬品合成の中核素材。" },
   { id: "fe_salicylic", in: ["salicylic_acid", "fecl3"], t: [10, 40], out: ["salicylic_acid"], types: ["検出"], eq: "サリチル酸 + FeCl₃ → 赤紫色呈色", text: "サリチル酸にはフェノール性−OHが残っているため、塩化鉄(III)で鮮やかな赤紫色に呈色した！" },
   { id: "synth_aspirin", in: ["salicylic_acid", "ac2o"], t: [60, 80], lowMsg: "温水浴（60〜80℃）で加熱しよう。", out: ["aspirin"], types: ["縮合"], eq: "C₆H₄(OH)COOH + (CH₃CO)₂O → C₆H₄(OCOCH₃)COOH + CH₃COOH", text: "サリチル酸のフェノール性−OHが無水酢酸でアセチル化され、解熱鎮痛薬アスピリン（アセチルサリチル酸）が生成した！ フェノール性−OHが塞がれたためFeCl₃で呈色しない。" },
-  { id: "synth_salicylate", in: ["salicylic_acid", "methanol"], cat: ["H2SO4_cat"], catMsg: "エステル化には濃硫酸触媒が必要。", t: [60, 80], lowMsg: "温水浴（60〜80℃）で温めよう。", out: ["methyl_salicylate"], types: ["縮合"], eq: "C₆H₄(OH)COOH + CH₃OH ⇄ C₆H₄(OH)COOCH₃ + H₂O", text: "サリチル酸のカルボキシ基−COOHがメタノールとエステル化し、湿布薬特有の清涼な芳香をもつサリチル酸メチルが生成した！" }
+  { id: "synth_salicylate", in: ["salicylic_acid", "methanol"], cat: ["H2SO4_cat"], catMsg: "エステル化には濃硫酸触媒が必要。", t: [60, 80], lowMsg: "温水浴（60〜80℃）で温めよう。", out: ["methyl_salicylate"], types: ["縮合"], eq: "C₆H₄(OH)COOH + CH₃OH ⇄ C₆H₄(OH)COOCH₃ + H₂O", text: "サリチル酸のカルボキシ基−COOHがメタノールとエステル化し、湿布薬特有の清涼な芳香をもつサリチル酸メチルが生成した！" },
+
+  // ===== 第4章：合成高分子・合成繊維・加硫ゴム・糖類・アミノ酸・タンパク質 =====
+  // 1. 合成繊維（縮合重合）
+  { id: "nylon66_rx", in: ["adipic_acid", "hda"], t: [20, 80], out: ["nylon66"], types: ["縮合", "重合"], eq: "n HOOC(CH₂)₄COOH + n H₂N(CH₂)₆NH₂ → −[CO(CH₂)₄CONH(CH₂)₆NH]ₙ− + 2n H₂O", text: "アジピン酸とヘキサメチレンジアミンが脱水縮合してアミド結合（−CO−NH−）を形成し、強靭な合成繊維「ナイロン66」が紡ぎ出された！" },
+  { id: "pet_rx", in: ["terephthalic_acid", "ethylene_glycol"], cat: ["H2SO4_cat"], catMsg: "エステル化・重縮合には酸触媒が必要。", t: [130, 180], lowMsg: "重縮合を進行させるため140℃〜170℃で加熱しよう。", out: ["pet"], types: ["縮合", "重合"], eq: "n p-C₆H₄(COOH)₂ + n HO(CH₂)₂OH → −[CO−C₆H₄−COO−(CH₂)₂O]ₙ− + 2n H₂O", text: "テレフタル酸とエチレングリコールがエステル結合（−COO−）で縮合重合し、ペットボトルやフリースの素材「ポリエチレンテレフタラート（PET）」が完成した！" },
+
+  // 2. ビニロン（付加重合 → けん化 → アセタール化）
+  { id: "poly_vAc", in: ["vinyl_acetate"], cat: ["poly"], catMsg: "単量体の付加重合には重合触媒が必要。", t: [50, 90], lowMsg: "温水浴（60〜80℃）で温めて重合を開始しよう。", out: ["pvac"], types: ["重合", "付加"], eq: "n CH₂=CH(OCOCH₃) → −[CH₂−CH(OCOCH₃)]ₙ−", text: "酢酸ビニルが付加重合して、木工用ボンドの主成分「ポリ酢酸ビニル（PVAc）」になった！" },
+  { id: "sapon_vAc", in: ["pvac", "naoh"], t: [50, 90], lowMsg: "温水浴（60〜80℃）でけん化を促進しよう。", out: ["pva"], give: ["sodium_acetate"], types: ["加水分解", "置換"], eq: "−[CH₂−CH(OCOCH₃)]ₙ− + n NaOH → −[CH₂−CH(OH)]ₙ− + n CH₃COONa", text: "ポリ酢酸ビニルを水酸化ナトリウムでけん化し、水溶性高分子「ポリビニルアルコール（PVA）」が得られた！ 洗濯のりやスライムの主原料。" },
+  { id: "vinylon_rx", in: ["pva", "formaldehyde"], cat: ["H2SO4_cat"], catMsg: "アセタール化には酸触媒（濃硫酸）が必要。", t: [50, 80], lowMsg: "温水浴（60〜80℃）で加熱しよう。", out: ["vinylon"], types: ["縮合", "置換"], eq: "PVA + HCHO → ビニロン（環状アセタール化） + H₂O", text: "親水性のPVAをホルムアルデヒドでアセタール化（ヒドロキシ基の約30〜40%をアセタール化）し、耐水性と吸湿性を兼ね備えた日本発の合成繊維「ビニロン」を完成させた！" },
+
+  // 3. 付加重合プラスチック
+  { id: "poly_styrene", in: ["styrene"], cat: ["poly"], catMsg: "重合触媒を選ぼう。", t: [70, 150], lowMsg: "加熱して重合を開始させよう。", out: ["polystyrene"], types: ["重合", "付加"], eq: "n CH₂=CH(C₆H₅) → −[CH₂−CH(C₆H₅)]ₙ−", text: "スチレンが付加重合して、透明で硬質なスチロール樹脂「ポリスチレン（PS）」が完成した！ 発泡スチロールの原料。" },
+
+  // 4. ジエンと加硫ゴム
+  { id: "poly_isoprene", in: ["isoprene"], cat: ["poly"], catMsg: "共役ジエンの重合には重合触媒が必要。", t: [20, 80], out: ["natural_rubber"], types: ["重合", "付加"], eq: "n CH₂=C(CH₃)−CH=CH₂ → −[CH₂−C(CH₃)=CH−CH₂]ₙ−", text: "イソプレンがシス付加重合して、生ゴム（天然ゴム・シス-1,4-ポリイソプレン）が生成した！" },
+  { id: "vulcanize", in: ["natural_rubber", "sulfur"], t: [120, 160], lowMsg: "加硫には130〜150℃の加熱が必要（140℃プリセットを選ぼう）。", out: ["vulcanized_rubber"], types: ["付加", "その他"], eq: "生ゴム + 硫黄 S → 加硫ゴム（ジスルフィド架橋 −S−S−）", text: "生ゴムに硫黄を加えて加熱（加硫）したことで、分子間に強固な硫黄架橋（−S−S−）が形成され、タイヤに用いられる高弾性の「加硫ゴム」が完成した！" },
+
+  // 5. 天然糖類・二糖・多糖
+  { id: "maltose_rx", in: ["glucose", "glucose"], cat: ["H2SO4_cat"], catMsg: "糖の脱水縮合には酸触媒が必要。", t: [50, 80], lowMsg: "温水浴（60〜80℃）で温めよう。", out: ["maltose"], types: ["縮合"], eq: "2 C₆H₁₂O₆ → C₁₂H₂₂O₁₁ + H₂O", text: "α-グルコース2分子がα-1,4-グリコシド結合で脱水縮合し、還元性を示す二糖類「マルトース（麦芽糖）」ができた！" },
+  { id: "starch_rx", in: ["maltose", "glucose"], cat: ["H2SO4_cat"], catMsg: "多糖の重縮合には酸触媒が必要。", t: [60, 95], lowMsg: "温水浴で加熱しよう。", out: ["starch"], types: ["縮合", "重合"], eq: "n C₆H₁₂O₆ → (C₆H₁₀O₅)ₙ + n H₂O", text: "グルコースがらせん状に多数縮合重合し、天然高分子「デンプン（アミロース）」が完成した！" },
+  { id: "starch_i2", in: ["starch", "i2"], t: [0, 40], highMsg: "ヨウ素デンプン反応は加熱するとヨウ素がらせんから抜けて脱色する。室温〜氷冷で試そう。", out: ["starch"], types: ["検出"], eq: "デンプンらせん + I₂ → 青紫色呈色", text: "デンプンのらせん構造内部にヨウ素分子が取り込まれ、鮮やかな深青紫色に呈色した（ヨウ素デンプン反応）！" },
+  { id: "acetate_cell", in: ["cellulose", "ac2o"], cat: ["H2SO4_cat"], catMsg: "セルロースのアセチル化には濃硫酸触媒が必要。", t: [50, 80], lowMsg: "温水浴（60〜80℃）で加熱しよう。", out: ["cell_triacetate"], types: ["置換", "縮合"], eq: "[C₆H₇O₂(OH)₃]ₙ + 3n (CH₃CO)₂O → [C₆H₇O₂(OCOCH₃)₃]ₙ + 3n CH₃COOH", text: "セルロースのヒドロキシ基を無水酢酸でアセチル化し、不燃性映画フィルム等に利用される「トリアセチルセルロース」を合成した！" },
+
+  // 6. アミノ酸とタンパク質
+  { id: "peptide_rx", in: ["glycine", "alanine"], t: [50, 80], lowMsg: "温水浴（60〜80℃）で温めよう。", out: ["gly_ala"], types: ["縮合"], eq: "H₂N−CH₂−COOH + CH₃−CH(NH₂)−COOH → H₂N−CH₂−CONH−CH(CH₃)−COOH + H₂O", text: "グリシンのカルボキシ基とアラニンのアミノ基が脱水縮合してペプチド結合（−CO−NH−）を形成し、ジペプチド（グリシルアラニン）が生成した！" },
+  { id: "protein_rx", in: ["gly_ala", "glycine"], t: [60, 90], lowMsg: "温水浴で加熱しよう。", out: ["protein"], types: ["縮合", "重合"], eq: "多数のアミノ酸 → ポリペプチド（タンパク質）", text: "アミノ酸がペプチド結合で多数連なり、立体構造を形成する生体高分子「タンパク質」が完成した！ 生命の構成単位。" }
 ];
 
 export const COMB = {
@@ -375,11 +433,66 @@ export const QUESTS3 = [
     hints: ["ベンゼンと濃硝酸 HNO₃ をフラスコへ。", "触媒兼脱水剤として濃硫酸 H₂SO₄（酸触媒）を選択。", "温水浴（50〜60℃）で加熱しよう（60℃を超えないよう精密管理）。"],
     reward: {}, rewardText: "芳香環の親電子置換反応（ニトロ化）を習得！" },
   { id: "q3_3", who: "染料工房の親方", title: "鮮血と太陽の色", say: "「ニトロベンゼンをスズで還元してアニリンを作り、氷冷ジアゾ化を経てフェノールと結合させた橙赤色のアゾ染料を完成させてくれ！」", target: "azo_dye",
-    hints: ["ステップ1：ニトロベンゼンにスズ Sn を加えて温水浴（60〜80℃）で還元し、アニリンを得る。", "ステップ2：アニリンに亜硝酸ナトリウム NaNO₂ を加え、必ず0〜5℃（氷冷）で反応させてジアゾニウム塩を作る！", "ステップ3：ジアゾニウム塩とフェノールを混ぜてカップリングさせると、鮮やかな橙赤色のアゾ染料が析出する！"],
+    hints: [
+      "ステップ1：ニトロベンゼンにスズ Sn を加えて温水浴（60〜80℃）で還元し、アニリンを得る。",
+      "ステップ2：アニリンに亜硝酸ナトリウム NaNO₂ を加え、必ず0〜5℃（氷冷）で反応させてジアゾニウム塩を作る！",
+      "ステップ3：ジアゾニウム塩水溶液に水 H₂O を加えて温める（30〜80℃）と、窒素 N₂ を放出してフェノールができる！",
+      "ステップ4：ジアゾニウム塩とフェノールを混ぜてカップリングさせると、鮮やかな橙赤色のアゾ染料が析出する！"
+    ],
     reward: {}, rewardText: "合成染料の最高峰アゾカップリング反応を完全制覇！" },
   { id: "q3_4", who: "現代製薬研究所", title: "奇跡の万能薬", say: "「サリチル酸から、世界で最も飲まれている解熱鎮痛薬『アスピリン（アセチルサリチル酸）』を合成してほしい」", target: "aspirin",
-    hints: ["フェノールに高温高圧でCO₂を反応させてサリチル酸を作る（コルベ・シュミット反応）。", "得られたサリチル酸に無水酢酸 (CH₃CO)₂O をフラスコで加える。", "温水浴（60〜80℃）で加熱するとフェノール性−OHがアセチル化されてアスピリンが完成する！"],
-    reward: {}, rewardText: "第3章クリア！ 有機化学の全体系を完全制覇！ 大博士の栄誉！" }
+    hints: [
+      "ステップ1：フェノールと二酸化炭素 CO₂ をフラスコに入れ、140℃（120〜150℃）で加熱するとサリチル酸ができる（コルベ・シュミット反応）。",
+      "ステップ2：得られたサリチル酸に無水酢酸 (CH₃CO)₂O を加える。",
+      "ステップ3：温水浴（60〜80℃）で加熱するとフェノール性−OHがアセチル化されてアスピリンが完成する！",
+      "※サリチル酸にメタノールと濃硫酸触媒を加えて温めると、湿布薬のにおいがするサリチル酸メチルも作れる！"
+    ],
+    reward: {}, rewardText: "アスピリン合成を達成！ 医薬品化学の登竜門を突破！" },
+  { id: "q3_5", who: "大学教授の招聘状", title: "芳香族の選別実験", say: "「芳香族化合物を合成できる君なら、混ざり合った化合物を酸・塩基の性質で完璧に分けられるはずだ。分液漏斗を使って系統分離実験を成功させてくれ！」", target: "separation_clear",
+    hints: [
+      "上部ナビゲーションの『🧪 系統分離』タブをクリックしよう。",
+      "分液漏斗に酸や塩基を加え、安息香酸・フェノール・アニリン・ニトロベンゼンを単離する実験だ。",
+      "系統分離シミュレーターでステージ1をクリアすると達成！"
+    ],
+    reward: {}, rewardText: "第3章完全制覇！ 芳香族の系統分離をマスター！ 有機化学の大博士！" }
+];
+
+export const QUESTS4 = [
+  { id: "q4_1", who: "合成繊維研究所", title: "蜘蛛の糸より細く鋼鉄より強く", say: "「アジピン酸とヘキサメチレンジアミンを縮合重合させて、世界初の合成繊維『ナイロン66』を紡ぎ出してほしい！」", target: "nylon66",
+    hints: [
+      "アジピン酸とヘキサメチレンジアミン（HDA）をフラスコに入れよう。",
+      "両末端のカルボキシ基−COOHとアミノ基−NH₂が脱水縮合してアミド結合（−CO−NH−）を形成する。",
+      "室温〜温水浴（20〜60℃）で反応させると、強靭なポリアミド繊維が完成する！"
+    ],
+    reward: {}, rewardText: "縮合重合の金字塔ナイロン66の合成を達成！" },
+  { id: "q4_2", who: "飲料容器メーカー", title: "ペットボトルの革命", say: "「テレフタル酸とエチレングリコールからエステル結合で縮合重合させ、透明で強靭なポリエステル『PET』を合成してくれ！」", target: "pet",
+    hints: [
+      "テレフタル酸とエチレングリコールをフラスコに入れよう。",
+      "触媒に濃硫酸 H₂SO₄（酸触媒）を選択。",
+      "重縮合を進行させるため、140℃〜170℃の高温加熱で水を抜きながら反応させよう！"
+    ],
+    reward: {}, rewardText: "熱可塑性ポリエステルPETの合成に成功！" },
+  { id: "q4_3", who: "京都繊維工房", title: "日本発の独自繊維ビニロン", say: "「酢酸ビニルを重合し、NaOHでけん化してPVAを作った後、ホルムアルデヒドでアセタール化して耐水性繊維『ビニロン』を完成させよ！」", target: "vinylon",
+    hints: [
+      "ステップ1：酢酸ビニルに重合触媒を加えて60〜80℃で温め、ポリ酢酸ビニル（PVAc）を作る。",
+      "ステップ2：PVAcにNaOHを加えて60〜80℃でけん化し、親水性のポリビニルアルコール（PVA）を得る。",
+      "ステップ3：PVAにホルムアルデヒド HCHO と濃硫酸触媒を加えて温め、ヒドロキシ基をアセタール化して耐水化するとビニロン完成！"
+    ],
+    reward: {}, rewardText: "桜田一郎らが開発した日本初の国産合成繊維ビニロンを制覇！" },
+  { id: "q4_4", who: "タイヤ開発研究所", title: "グッドイヤーの奇跡のゴム", say: "「イソプレンを重合させて生ゴムを作り、硫黄を加えて加熱（加硫）することで、弾力性と耐久性に優れた『加硫ゴム』を生み出してほしい！」", target: "vulcanized_rubber",
+    hints: [
+      "ステップ1：イソプレンに重合触媒を選んで反応させ、生ゴム（天然ゴム・ポリイソプレン）を作る。",
+      "ステップ2：生ゴムに硫黄粉末 S を加える。",
+      "ステップ3：140℃（120〜150℃）で加熱（加硫）すると、分子鎖間に硫黄架橋（−S−S−）が形成されて加硫ゴムが完成する！"
+    ],
+    reward: {}, rewardText: "近代産業を支える加硫ゴムの創出に成功！" },
+  { id: "q4_5", who: "生命科学フロンティア", title: "生命の骨格・タンパク質", say: "「アミノ酸からペプチド結合を作り、さらに連ねて生命活動を担う高分子『タンパク質』を合成せよ！」", target: "protein",
+    hints: [
+      "ステップ1：グリシンとアラニンをフラスコに入れ、温水浴（60〜80℃）で脱水縮合させてジペプチド（グリシルアラニン）を作る。",
+      "ステップ2：得られたジペプチドにさらにアミノ酸（グリシン）を加えて加熱縮合重合させると、タンパク質が完成する！",
+      "※ブドウ糖からマルトースを経てデンプンを重合し、ヨウ素液を加えてヨウ素デンプン反応（深青紫色）も試してみよう！"
+    ],
+    reward: {}, rewardText: "全4章完全制覇！ 高分子・生体分子の世界を極めた有機化学の最高神！" }
 ];
 
 export const QUESTS = QUESTS1; // 後方互換性用
@@ -387,7 +500,8 @@ export const QUESTS = QUESTS1; // 後方互換性用
 export const CHAPTERS = [
   { id: 1, name: "第1章 炭化水素の森", sub: "アルカン・アルケン・アルキン・高分子" },
   { id: 2, name: "第2章 官能基の工房", sub: "アルコール・アルデヒド・ケトン・カルボン酸・エステル・検出反応" },
-  { id: 3, name: "第3章 芳香族の迷宮", sub: "ベンゼン誘導体・ニトロ化・アニリン・ジアゾ染料・サリチル酸・医薬品" }
+  { id: 3, name: "第3章 芳香族の迷宮", sub: "ベンゼン誘導体・ニトロ化・アニリン・ジアゾ染料・サリチル酸・医薬品" },
+  { id: 4, name: "第4章 高分子の未来", sub: "合成繊維・合成樹脂・加硫ゴム・糖類・アミノ酸・タンパク質" }
 ];
 
 export const POS1 = {
@@ -424,11 +538,58 @@ export const POS3 = {
   methyl_salicylate: [480, 160]
 };
 
+export const POS4 = {
+  // Sector 1: 合成繊維・重縮合（上段）
+  adipic_acid: [140, 100],
+  hda: [340, 100],
+  nylon66: [240, 210],
+  terephthalic_acid: [520, 100],
+  ethylene_glycol: [720, 100],
+  pet: [620, 210],
+
+  // Sector 2: ビニロン＆付加重合樹脂（中段）
+  vinyl_acetate: [120, 340],
+  pvac: [280, 340],
+  pva: [440, 340],
+  vinylon: [600, 340],
+  styrene: [760, 340],
+  polystyrene: [900, 340],
+
+  // Sector 3: ジエン＆加硫ゴム（下段左）
+  isoprene: [120, 480],
+  natural_rubber: [300, 480],
+  vulcanized_rubber: [480, 480],
+
+  // Sector 4: 天然高分子・糖＆アミノ酸・タンパク質（下段右）
+  glucose: [640, 480],
+  maltose: [780, 480],
+  starch: [910, 480],
+  cellulose: [640, 600],
+  cell_triacetate: [800, 600],
+  glycine: [120, 640],
+  alanine: [260, 640],
+  gly_ala: [400, 640],
+  protein: [540, 640]
+};
+
 export const POS = POS1; // 後方互換
 
 export const RAWSRC1 = { methane: "gas", cac2: "quarry", glucose: "farm", naphtha: "refinery" };
 export const RAWSRC2 = { methanol: "distill", ethanol: "distill", isopropanol: "distill" };
 export const RAWSRC3 = { benzene: "aroma_lab", toluene: "aroma_lab" };
+export const RAWSRC4 = {
+  adipic_acid: "petro_ch4",
+  hda: "reagents4",
+  terephthalic_acid: "petro_ch4",
+  ethylene_glycol: "petro_ch4",
+  vinyl_acetate: "petro_ch4",
+  styrene: "petro_ch4",
+  isoprene: "petro_ch4",
+  glucose: "bio_ch4",
+  cellulose: "bio_ch4",
+  glycine: "bio_ch4",
+  alanine: "bio_ch4"
+};
 export const RAWSRC = RAWSRC1;
 
 export const MAPNAME1 = {
@@ -455,6 +616,17 @@ export const MAPNAME3 = {
   salicylic_acid: "サリチル酸", aspirin: "アスピリン", methyl_salicylate: "サリチル酸メチル"
 };
 
+export const MAPNAME4 = {
+  adipic_acid: "アジピン酸", hda: "ヘキサメチレンジアミン", nylon66: "ナイロン66",
+  terephthalic_acid: "テレフタル酸", ethylene_glycol: "エチレングリコール", pet: "ポリエチレンテレフタラート",
+  vinyl_acetate: "酢酸ビニル", pvac: "ポリ酢酸ビニル", pva: "ポリビニルアルコール", vinylon: "ビニロン",
+  styrene: "スチレン", polystyrene: "ポリスチレン",
+  isoprene: "イソプレン", natural_rubber: "天然生ゴム", vulcanized_rubber: "加硫ゴム",
+  glucose: "グルコース", maltose: "マルトース", starch: "デンプン",
+  cellulose: "セルロース", cell_triacetate: "トリアセチルセルロース",
+  glycine: "グリシン", alanine: "アラニン", gly_ala: "ジペプチド", protein: "タンパク質"
+};
+
 export const MAPNAME = MAPNAME1;
 
 export const REGIONS1 = [
@@ -476,6 +648,13 @@ export const REGIONS3 = [
   ["ベンゼン環の親電子置換", 680, 110],
   ["含窒素芳香族・アゾ染料ルート", 720, 360],
   ["フェノール類・医薬品合成（サリチル酸）", 260, 400]
+];
+
+export const REGIONS4 = [
+  ["合成繊維・重縮合（ポリアミド・ポリエステル）", 430, 40],
+  ["ビニロン連鎖＆付加重合樹脂", 480, 280],
+  ["ジエン系合成ゴム＆硫黄加硫", 260, 440],
+  ["天然高分子（糖類・アミノ酸・タンパク質）", 720, 440]
 ];
 
 export const REGIONS = REGIONS1;
@@ -502,9 +681,18 @@ export const ACH = [
   { id: "azo", n: "緋色の染料", d: "アゾカップリングで橙赤色染料を析出させる", test: s => !!s.found.azo_dye },
   { id: "aspirin_ach", n: "奇跡の薬効", d: "解熱鎮痛薬アスピリンを合成する", test: s => !!s.found.aspirin },
   { id: "dex3", n: "芳香族の大賢者", d: "第3章の物質図鑑をすべて埋める", test: s => DEX3.every(i => s.found[i]) },
+  // ===== 第4章の実績 =====
+  { id: "nylon_ach", n: "鋼鉄の蜘蛛糸", d: "ナイロン66の界面重縮合に成功する", test: s => !!s.found.nylon66 },
+  { id: "vinylon_ach", n: "先駆のビニロン", d: "PVAのアセタール化によりビニロンを合成する", test: s => !!s.found.vinylon },
+  { id: "vulcan_ach", n: "グッドイヤーの執念", d: "生ゴムに硫黄を加えて加硫ゴムを合成する", test: s => !!s.found.vulcanized_rubber },
+  { id: "peptide_ach", n: "生命の鎖", d: "アミノ酸からペプチド結合（タンパク質）を合成する", test: s => !!s.found.protein },
+  { id: "dex4", n: "高分子の至高神", d: "第4章の物質図鑑をすべて埋める", test: s => DEX4.every(i => s.found[i]) },
   // ===== 探偵モードの実績 =====
   { id: "det_first", n: "初陣の名探偵", d: "探偵モードで構造決定事件を1件解決する", test: s => Object.keys(s.detective?.solved || {}).length >= 1 },
-  { id: "det_all", n: "化学のシャーロック", d: "探偵モードの全8事件を完全解決する", test: s => Object.keys(s.detective?.solved || {}).length >= 8 }
+  { id: "det_all", n: "化学のシャーロック", d: "探偵モードの全8事件を完全解決する", test: s => Object.keys(s.detective?.solved || {}).length >= 8 },
+  // ===== 系統分離の実績 =====
+  { id: "sep_first", n: "分液の第一歩", d: "系統分離シミュレーターでステージ1をクリアする", test: s => !!(s.separation?.solved?.stage1) },
+  { id: "sep_all", n: "酸塩基の魔術師", d: "系統分離シミュレーターの全4ステージを完全制覇する", test: s => Object.keys(s.separation?.solved || {}).length >= 4 }
 ];
 
 export const RANKS = [
@@ -514,7 +702,9 @@ export const RANKS = [
   [750, "主任研究員"],
   [1150, "合成マスター"],
   [1600, "官能基の泰斗"],
-  [2200, "有機化学の大博士"]
+  [2200, "芳香族の泰斗"],
+  [3000, "高分子の創造神"],
+  [4200, "有機化学の全知全能"]
 ];
 
 export const K = 1, OY = 22;

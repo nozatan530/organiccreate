@@ -3,13 +3,22 @@
  * 学習指導要領準拠・やさしいモード（Easy Mode）対応
  */
 import {
-  CLS, SHORT, S, DEX1, DEX2, DEX3, DEXX, SOURCES, CATS, CATSHORT, TYPES, TYPE_INFO,
-  RULES, RULE, QUESTS, QUESTS1, QUESTS2, QUESTS3, ACH, RANKS, K, OY,
-  POS1, POS2, POS3, RAWSRC1, RAWSRC2, RAWSRC3, MAPNAME1, MAPNAME2, MAPNAME3, REGIONS1, REGIONS2, REGIONS3, CHAPTERS
+  CLS, SHORT, S, DEX1, DEX2, DEX3, DEX4, DEXX, SOURCES, CATS, CATSHORT, TYPES, TYPE_INFO,
+  RULES, RULE, QUESTS, QUESTS1, QUESTS2, QUESTS3, QUESTS4, ACH, RANKS, K, OY,
+  POS1, POS2, POS3, POS4, RAWSRC1, RAWSRC2, RAWSRC3, RAWSRC4, MAPNAME1, MAPNAME2, MAPNAME3, MAPNAME4,
+  REGIONS1, REGIONS2, REGIONS3, REGIONS4, CHAPTERS
 } from './craft-data.js';
 import {
   DETECTIVE_CASES, DETECTIVE_RANKS, REAGENTS_TEST_INFO
 } from './detective-data.js';
+import {
+  SEP_SUBSTANCES, ACIDITY_ORDER, SEP_REAGENTS, SEP_STAGES
+} from './separation-data.js';
+import {
+  getSeparationState, resetStage, renderSeparationStage,
+  addReagentToFunnel, shakeFunnel, drainWaterLayer,
+  addReagentToFlask, evaporateEtherLayer, getTheoryModalHtml
+} from './separation-app.js';
 
 const KEY = "organic-craft-ch1-v4";
 
@@ -23,7 +32,8 @@ function fresh() {
     q1: 0,
     q2: 0,
     q3: 0,
-    chapter: 1, // 1: 炭化水素の森, 2: 官能基の工房, 3: 芳香族の迷宮, 'detective': 探偵モード
+    q4: 0,
+    chapter: 1, // 1: 炭化水素の森, 2: 官能基の工房, 3: 芳香族の迷宮, 4: 高分子の未来, 'detective': 探偵モード
     prevChapter: 1,
     detective: {
       caseIdx: 0,
@@ -32,6 +42,20 @@ function fresh() {
       eliminated: {},
       selectedCandidate: null,
       activeTest: null
+    },
+    separation: {
+      stageIdx: 0,
+      solved: {},
+      etherLayer: ["benzoic_acid", "nitrobenzene"],
+      waterLayer: null,
+      shaken: false,
+      isShaking: false,
+      isDraining: false,
+      cockOpen: false,
+      drainedFlask: null,
+      isolated: {},
+      lastLog: "分液漏斗に有機化合物のエーテル混合溶液が入っています。試薬を加えて分離を始めましょう。",
+      lastReaction: null
     },
     hints: {},
     clue: {},
@@ -62,33 +86,34 @@ let ui = freshUI();
 const curChapter = () => state.chapter || 1;
 const curQuests = () => {
   const c = curChapter();
-  return c === 3 ? QUESTS3 : c === 2 ? QUESTS2 : QUESTS1;
+  return c === 4 ? QUESTS4 : c === 3 ? QUESTS3 : c === 2 ? QUESTS2 : QUESTS1;
 };
 const curQIdx = () => {
   const c = curChapter();
-  return c === 3 ? (state.q3 || 0) : c === 2 ? (state.q2 || 0) : (state.q1 ?? state.q ?? 0);
+  return c === 4 ? (state.q4 || 0) : c === 3 ? (state.q3 || 0) : c === 2 ? (state.q2 || 0) : (state.q1 ?? state.q ?? 0);
 };
 const setCurQIdx = (val) => {
   const c = curChapter();
-  if (c === 3) state.q3 = val;
+  if (c === 4) state.q4 = val;
+  else if (c === 3) state.q3 = val;
   else if (c === 2) state.q2 = val;
   else { state.q1 = val; state.q = val; }
 };
 const curPos = () => {
   const c = curChapter();
-  return c === 3 ? POS3 : c === 2 ? POS2 : POS1;
+  return c === 4 ? POS4 : c === 3 ? POS3 : c === 2 ? POS2 : POS1;
 };
 const curRawSrc = () => {
   const c = curChapter();
-  return c === 3 ? RAWSRC3 : c === 2 ? RAWSRC2 : RAWSRC1;
+  return c === 4 ? RAWSRC4 : c === 3 ? RAWSRC3 : c === 2 ? RAWSRC2 : RAWSRC1;
 };
 const curMapName = () => {
   const c = curChapter();
-  return c === 3 ? MAPNAME3 : c === 2 ? MAPNAME2 : MAPNAME1;
+  return c === 4 ? MAPNAME4 : c === 3 ? MAPNAME3 : c === 2 ? MAPNAME2 : MAPNAME1;
 };
 const curRegions = () => {
   const c = curChapter();
-  return c === 3 ? REGIONS3 : c === 2 ? REGIONS2 : REGIONS1;
+  return c === 4 ? REGIONS4 : c === 3 ? REGIONS3 : c === 2 ? REGIONS2 : REGIONS1;
 };
 
 function getDetState() {
@@ -114,16 +139,35 @@ function getDetRank(solved) {
 }
 
 function switchChapter(ch) {
-  if (state.chapter !== "detective" && (ch === 1 || ch === 2 || ch === 3)) {
+  if (state.chapter !== "detective" && state.chapter !== "separation" && (ch === 1 || ch === 2 || ch === 3 || ch === 4)) {
     state.prevChapter = ch;
   }
   state.chapter = ch;
-  if (ch === "detective") {
+  if (ch === "separation") {
+    getSeparationState(state);
+    toast("🧪 <b>系統分離実験室を開始しました</b><br>分液漏斗と酸・塩基の性質を使って、混合化合物を鮮やかに単離しましょう！");
+  } else if (ch === "detective") {
     getDetState();
     toast("🕵️ <b>探偵モード「構造決定事件簿」を開始しました</b><br>試薬で未知化合物の官能基を暴き、真の構造を特定しましょう！");
+  } else if (ch === 4) {
+    state.src.petro_ch4 = true;
+    state.src.bio_ch4 = true;
+    state.src.reagents4 = true;
+    state.src.nature = true;
+    state.cat.poly = true;
+    state.found.adipic_acid = true;
+    state.found.glucose = true;
+    if (ui.a === "methane" || ui.a === "benzene" || ui.a === "ethanol" || !ui.a) ui.a = "adipic_acid";
+    if (ui.b === "cl2" || ui.b === "hno3" || !ui.b) ui.b = "hda";
+    ui.temp = 20;
+    ui.light = false;
+    ui.cat = "none";
+    ui.pred = "";
+    toast("🧵 <b>第4章「高分子の未来」に切り替えました</b><br>ナイロン66・PET・ビニロン・加硫ゴム・糖類・タンパク質の合成へ！");
   } else if (ch === 3) {
     state.src.aroma_lab = true;
     state.src.acids_ch3 = true;
+    state.src.nature = true;
     if (state.q3 && state.q3 >= 1) {
       state.src.reagents3 = true;
     }
@@ -185,9 +229,21 @@ function load() {
             activeTest: null
           };
         }
-        if (state.chapter === 3) {
+        if (!state.separation) {
+          getSeparationState(state);
+        }
+        if (state.chapter === 4) {
+          state.src.petro_ch4 = true;
+          state.src.bio_ch4 = true;
+          state.src.reagents4 = true;
+          state.src.nature = true;
+          state.cat.poly = true;
+          state.found.adipic_acid = true;
+          state.found.glucose = true;
+        } else if (state.chapter === 3) {
           state.src.aroma_lab = true;
           state.src.acids_ch3 = true;
+          state.src.nature = true;
           if (state.q3 && state.q3 >= 1) state.src.reagents3 = true;
           state.found.benzene = true;
           state.found.toluene = true;
@@ -377,6 +433,21 @@ function resolve() {
   if (set.has("na") && (other === "ether" || other === "ethyl_acetate" || oc === "alkane")) {
     return { kind: "none", msg: "気体は発生しなかった。金属ナトリウムはヒドロキシ基（−OH）をもつアルコールと特異的に反応して水素H₂を発生するが、エーテルやエステルは反応しない。" };
   }
+  if (set.has("phenol") && set.has("naoh")) {
+    return { kind: "none", msg: "フェノールは弱酸性のため水酸化ナトリウムNaOHと中和してナトリウムフェノキシドの水溶液になります。サリチル酸を合成するには、フェノールと二酸化炭素（CO₂）をフラスコに入れ、140℃付近（120〜150℃）で加熱しましょう（コルベ・シュミット反応）。" };
+  }
+  if (set.has("phenol") && set.has("na")) {
+    return { kind: "none", msg: "フェノール性−OHがナトリウムと反応して水素H₂を発生し、ナトリウムフェノキシドになります。サリチル酸の合成には、フェノールと二酸化炭素（CO₂）を120〜150℃で加熱して反応させましょう。" };
+  }
+  if (set.has("pvac") && set.has("h2o")) {
+    return { kind: "none", msg: "水だけではポリ酢酸ビニルの加水分解は極めて遅い。水酸化ナトリウムNaOHを加えて温め（60〜80℃）、けん化してPVAにしよう。" };
+  }
+  if (set.has("natural_rubber") && set.has("o2")) {
+    return { kind: "none", msg: "生ゴムの弾性を高めてタイヤにするには、硫黄粉末（S）を加えて140℃付近で加熱（加硫）しよう。" };
+  }
+  if (set.has("glucose") && set.has("naoh")) {
+    return { kind: "none", msg: "単糖を重合させて二糖（マルトース）や多糖（デンプン）にするには、濃硫酸触媒を選んで脱水縮合させよう。" };
+  }
   if (set.has("tollens") && (other === "acetone" || oc === "alcohol" || oc === "acid")) {
     return { kind: "none", msg: "銀鏡は析出しなかった。アンモニア性硝酸銀を還元して銀鏡を析出できるのは、強い還元性をもつホルミル基（−CHO）をもつアルデヒド（およびギ酸）だけである。" };
   }
@@ -541,6 +612,15 @@ function animate(res) {
     } else if (res.rule.id === "fe_salicylic") {
       liq.setAttribute("fill", "#9333ea"); // FeCl3 赤紫色呈色
       liq.setAttribute("opacity", "0.9");
+    } else if (res.rule.id === "starch_i2") {
+      liq.setAttribute("fill", "#1e1b4b"); // ヨウ素デンプン反応 深青紫色
+      liq.setAttribute("opacity", "0.95");
+    } else if (res.rule.id === "vulcanize") {
+      liq.setAttribute("fill", "#334155"); // 加硫ゴム 濃炭黒色
+      liq.setAttribute("opacity", "0.9");
+    } else if (res.rule.id === "nylon66_rx") {
+      liq.setAttribute("fill", "#f8fafc"); // ナイロン66 白色界面膜
+      liq.setAttribute("opacity", "0.95");
     } else {
       liq.setAttribute("fill", res.rule.fade ? "var(--surface-2)" : cc(main));
       liq.setAttribute("opacity", res.rule.fade ? "1" : ".55");
@@ -609,6 +689,7 @@ function drawMol(svg, smi, bg) {
 /* ================= guidance ================= */
 function questTargetSub(q) {
   if (!q) return null;
+  if (q.target === "separation_clear") return null;
   if (q.target) return q.target;
   return state.found[q.via] ? null : q.via;
 }
@@ -654,19 +735,43 @@ function nodeState(id, av) {
 }
 
 let vb = null, vbAnim = null;
+/**
+ * 合成マップのカメラ画角（viewBox）計算
+ * 詳細は /docs/MAP_BALANCE_IMPROVEMENTS.md 参照
+ */
 function targetViewBox(ids) {
   let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
   ids.forEach(id => {
     const [x, y] = P(id);
-    x0 = Math.min(x0, x - 100); x1 = Math.max(x1, x + 100);
-    y0 = Math.min(y0, y - 60); y1 = Math.max(y1, y + 50);
+    x0 = Math.min(x0, x - 120); x1 = Math.max(x1, x + 120);
+    y0 = Math.min(y0, y - 70); y1 = Math.max(y1, y + 60);
   });
-  let w = Math.max(x1 - x0, 620), h = Math.max(y1 - y0, 1);
-  const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, ar = 1.6;
-  if (w / h > ar) h = w / ar; else w = h * ar;
-  if (h >= 740) { h = 740; w = h * ar; }
-  const x = w >= 980 ? (980 - w) / 2 : Math.max(0, Math.min(980 - w, cx - w / 2));
-  const y = h >= 740 ? 0 : Math.max(0, Math.min(740 - h, cy - h / 2));
+
+  // 極端な局所ズームとカメラの跳ねを防ぐため、最小ビューポートを安定確保
+  let w = Math.max(x1 - x0, 780);
+  let h = Math.max(y1 - y0, 500);
+  const cx = (x0 + x1) / 2;
+  const cy = (y0 + y1) / 2;
+  const ar = 1.45; // 実効アスペクト比
+
+  if (w / h > ar) {
+    h = w / ar;
+  } else {
+    w = h * ar;
+  }
+
+  // キャンバス境界（980 x 740）への精密クランプ
+  if (w > 980) {
+    w = 980;
+    h = Math.min(740, w / ar);
+  }
+  if (h > 740) {
+    h = 740;
+    w = Math.min(980, h * ar);
+  }
+
+  const x = Math.max(0, Math.min(980 - w, cx - w / 2));
+  const y = Math.max(0, Math.min(740 - h, cy - h / 2));
   return [x, y, w, h];
 }
 
@@ -965,9 +1070,17 @@ function tempZoneInfo(t) {
     } else {
       note = "おだやかな温水加熱（湯せん）";
     }
-  } else if (t >= 130 && t <= 140) {
-    if (state.rx.dhEther) {
+  } else if (t >= 120 && t <= 150) {
+    if (state.rx.kolbe) {
+      note = "📖 実験ノート：コルベ・シュミット反応（サリチル酸合成）の最適温度帯";
+    } else if (state.rx.vulcanize) {
+      note = "📖 実験ノート：ゴムの加硫反応（140℃）の成功温度帯";
+    } else if (state.rx.pet_rx) {
+      note = "📖 実験ノート：PETの重縮合（140〜170℃）の成功温度帯";
+    } else if (state.rx.dhEther) {
       note = "📖 実験ノート：分子間脱水（エーテル生成）を確認した温度帯";
+    } else {
+      note = "高温加熱（120〜150℃：コルベ・シュミット反応／ゴム加硫／PET重縮合など）";
     }
   } else if (t >= 160 && t <= 170) {
     if (state.rx.dhEt) {
@@ -1172,7 +1285,9 @@ function renderHUD() {
   const ch = curChapter();
   const subTitle = $("ch-sub-title");
   if (subTitle) {
-    subTitle.textContent = ch === "detective" ? "🔍 探偵モード：未知化合物の構造決定事件簿（高校化学）" :
+    subTitle.textContent = ch === "separation" ? "🧪 系統分離実験室：酸・塩基の強弱と分液漏斗による抽出（高校化学）" :
+                           ch === "detective" ? "🔍 探偵モード：未知化合物の構造決定事件簿（高校化学）" :
+                           ch === 4 ? "第4章 高分子の未来（合成高分子・天然高分子・生体分子）" :
                            ch === 3 ? "第3章 芳香族の迷宮（学習指導要領 準拠）" :
                            ch === 2 ? "第2章 官能基の工房（学習指導要領 準拠）" :
                            "第1章 炭化水素の森（学習指導要領 準拠）";
@@ -1180,9 +1295,11 @@ function renderHUD() {
   const q1Done = (state.q1 ?? state.q ?? 0) >= QUESTS1.length;
   const q2Done = (state.q2 || 0) >= QUESTS2.length;
   const q3Done = (state.q3 || 0) >= QUESTS3.length;
+  const q4Done = (state.q4 || 0) >= QUESTS4.length;
   const detDone = Object.keys(state.detective?.solved || {}).length;
+  const sepDone = Object.keys(state.separation?.solved || {}).length;
 
-  const tab1 = $("ch-tab-1"), tab2 = $("ch-tab-2"), tab3 = $("ch-tab-3"), tabDet = $("ch-tab-det");
+  const tab1 = $("ch-tab-1"), tab2 = $("ch-tab-2"), tab3 = $("ch-tab-3"), tab4 = $("ch-tab-4"), tabDet = $("ch-tab-det"), tabSep = $("ch-tab-sep");
   if (tab1) {
     tab1.setAttribute("aria-selected", ch === 1);
     tab1.textContent = `第1章 炭化水素${q1Done ? " 🏆" : ""}`;
@@ -1207,6 +1324,23 @@ function renderHUD() {
     tab3.style.color = ch === 3 ? "var(--accent)" : "var(--ink-2)";
     tab3.style.fontWeight = ch === 3 ? "700" : "500";
   }
+  if (tab4) {
+    tab4.setAttribute("aria-selected", ch === 4);
+    tab4.textContent = `第4章 高分子${q4Done ? " 🏆" : ""}`;
+    tab4.style.background = ch === 4 ? "var(--accent-soft)" : "transparent";
+    tab4.style.borderColor = ch === 4 ? "var(--accent)" : "var(--line-2)";
+    tab4.style.color = ch === 4 ? "var(--accent)" : "var(--ink-2)";
+    tab4.style.fontWeight = ch === 4 ? "700" : "500";
+  }
+  if (tabSep) {
+    const isSep = ch === "separation";
+    tabSep.setAttribute("aria-selected", isSep);
+    tabSep.textContent = `🧪 系統分離${sepDone >= SEP_STAGES.length ? " 🏆" : (sepDone > 0 ? ` (${sepDone}/${SEP_STAGES.length})` : "")}`;
+    tabSep.style.background = isSep ? "var(--ok-soft)" : "transparent";
+    tabSep.style.borderColor = isSep ? "var(--ok)" : "var(--line-2)";
+    tabSep.style.color = isSep ? "var(--ok)" : "var(--ink-2)";
+    tabSep.style.fontWeight = isSep ? "700" : "500";
+  }
   if (tabDet) {
     const isDet = ch === "detective";
     tabDet.setAttribute("aria-selected", isDet);
@@ -1220,6 +1354,9 @@ function renderHUD() {
 
 function questReady(q) {
   if (!q) return false;
+  if (q.target === "separation_clear") {
+    return Object.keys(state.separation?.solved || {}).length >= 1;
+  }
   return q.rx ? !!state.rx[q.rx] : !!state.found[q.target];
 }
 
@@ -1312,8 +1449,12 @@ function renderQuest() {
       nextBtn = `<div class="acts" style="margin-top:8px"><button type="button" class="btn hot" id="goto-ch2">第2章「官能基の工房」へ進む →</button></div>`;
     } else if (ch === 2) {
       nextBtn = `<div class="acts" style="margin-top:8px"><button type="button" class="btn hot" id="goto-ch3">第3章「芳香族の迷宮」へ進む →</button></div>`;
+    } else if (ch === 3) {
+      nextBtn = `<div class="acts" style="margin-top:8px"><button type="button" class="btn hot" id="goto-ch4">第4章「高分子の未来」へ進む →</button> <button type="button" class="btn ghost" id="goto-sep-mode">🧪 系統分離実験室へ</button></div>`;
+    } else if (ch === 4) {
+      nextBtn = `<div class="acts" style="margin-top:8px"><button type="button" class="btn hot" id="goto-sep-mode">🧪 系統分離実験室に挑む →</button> <button type="button" class="btn ghost" id="goto-det-mode">🕵️ 探偵モード事件簿へ</button></div>`;
     }
-    el.innerHTML = `<div><div class="eyebrow">第${ch}章の依頼 全達成！</div><h2>第${ch}章クリア 🏆</h2><p class="say">${ch === 1 ? "炭化水素の森を開拓しました！第2章「官能基の工房」へ進んで、アルコールやエステル、検出反応を探究しましょう！" : ch === 2 ? "官能基の探究を完遂しました！第3章「芳香族の迷宮」へ進み、ベンゼン環やアゾ染料・医薬品合成に挑みましょう！" : "芳香族化合物の最高峰まで完全制覇しました！有機化学の全体系をマスターした大博士です！"}</p>${nextBtn}</div>`;
+    el.innerHTML = `<div><div class="eyebrow">第${ch}章の依頼 全達成！</div><h2>第${ch}章クリア 🏆</h2><p class="say">${ch === 1 ? "炭化水素の森を開拓しました！第2章「官能基の工房」へ進んで、アルコールやエステル、検出反応を探究しましょう！" : ch === 2 ? "官能基の探究を完遂しました！第3章「芳香族の迷宮」へ進み、ベンゼン環やアゾ染料・医薬品合成に挑みましょう！" : ch === 3 ? "芳香族化合物の最高峰まで完全制覇しました！第4章「高分子の未来」でナイロンやPET、天然高分子の最前線へ！" : "高分子・生体分子の世界を極め、高校有機化学の全体系を完全制覇した大博士です！"}</p>${nextBtn}</div>`;
     return;
   }
   el.className = "panel qbar";
@@ -1331,14 +1472,17 @@ function renderTabs() {
   const d1 = DEX1.filter(i => state.found[i]).length;
   const d2 = DEX2.filter(i => state.found[i]).length;
   const d3 = DEX3.filter(i => state.found[i]).length;
+  const d4 = DEX4.filter(i => state.found[i]).length;
   const foundRx = RULES.filter(r => state.rx[r.id]).length;
-  $("t-dex").textContent = `${d1 + d2 + d3}/${DEX1.length + DEX2.length + DEX3.length}`;
+  $("t-dex").textContent = `${d1 + d2 + d3 + d4}/${DEX1.length + DEX2.length + DEX3.length + DEX4.length}`;
   const tRx = $("t-rx");
   if (tRx) tRx.textContent = `${foundRx}/${RULES.length}`;
   $("t-ach").textContent = `${ACH.filter(a => state.ach[a.id]).length}/${ACH.length}`;
   $("t-log").textContent = state.log.length ? String(state.n) : "";
   const tDet = $("t-det");
   if (tDet) tDet.textContent = `${Object.keys(state.detective?.solved || {}).length}/${DETECTIVE_CASES.length}`;
+  const tSep = $("t-sep");
+  if (tSep) tSep.textContent = `${Object.keys(state.separation?.solved || {}).length}/${SEP_STAGES.length}`;
   document.querySelectorAll("[data-tab]").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === ui.tab));
 
   let h = "";
@@ -1356,6 +1500,7 @@ function renderTabs() {
     h += `<div class="dex-sec"><span>第1章の物質（炭化水素・高分子）</span><span>${d1}/${DEX1.length}</span></div><div class="dex">${DEX1.map(item).join("")}</div>`;
     h += `<div class="dex-sec"><span>第2章の物質（官能基・エステル・検出）</span><span>${d2}/${DEX2.length}</span></div><div class="dex">${DEX2.map(item).join("")}</div>`;
     h += `<div class="dex-sec"><span>第3章の物質（芳香族・染料・医薬品）</span><span>${d3}/${DEX3.length}</span></div><div class="dex">${DEX3.map(item).join("")}</div>`;
+    h += `<div class="dex-sec"><span>第4章の物質（合成高分子・合成繊維・加硫ゴム・糖・タンパク質）</span><span>${d4}/${DEX4.length}</span></div><div class="dex">${DEX4.map(item).join("")}</div>`;
     h += `<div class="dex-sec"><span>副産物</span><span>${DEXX.filter(i => state.found[i]).length}/${DEXX.length}</span></div><div class="dex">${DEXX.map(item).join("")}</div>`;
   } else if (ui.tab === "rx") {
     // 反応図鑑（学習指導要領の分類ごと）
@@ -1420,6 +1565,45 @@ function renderTabs() {
       `;
     });
     h += `</div>`;
+  } else if (ui.tab === "sep") {
+    // 系統分離一覧
+    const sep = getSeparationState(state);
+    const sepSolvedCount = Object.keys(sep.solved || {}).length;
+    h += `<div class="dex-sec"><span>🧪 芳香族化合物の系統分離 実験室</span><span>クリア: ${sepSolvedCount}/${SEP_STAGES.length}</span></div>`;
+    h += `<div style="background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <div>
+        <span class="badge" style="background:var(--ok-soft);color:var(--ok);border:1px solid var(--ok);font-size:12px">分液漏斗実験</span>
+        <span style="font-size:12.5px;color:var(--ink-2);margin-left:8px">水層・エーテル層と酸・塩基抽出による有機化合物の完全分離</span>
+      </div>
+      <button type="button" class="btn primary" id="goto-sep-mode" style="font-size:12px;padding:4px 12px">分液漏斗実験室を開始する →</button>
+    </div>`;
+    h += `<div class="rx-grid">`;
+    SEP_STAGES.forEach((stg, idx) => {
+      const isSol = !!sep.solved[stg.id];
+      h += `
+        <div class="rx-card ${isSol ? "" : "unk"}" style="cursor:pointer" data-sep-stage-jump="${idx}">
+          <div class="rxh">
+            <span class="chip ${isSol ? "good" : "miss"}">${isSol ? "分離完了 ✅" : stg.level}</span>
+            <span style="font-size:12px;font-weight:700">Stage ${stg.num}</span>
+          </div>
+          <div class="rx-eq" style="font-size:14px;color:var(--ink)">${stg.title}</div>
+          <p class="rx-desc">${stg.desc}</p>
+          <div style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:11.5px;color:var(--ink-3)">成分: ${stg.sub}</span>
+            <button type="button" class="btn ghost" style="padding:2px 8px;font-size:11.5px">${isSol ? "再実験する" : "実験を始める →"}</button>
+          </div>
+        </div>
+      `;
+    });
+    h += `</div>`;
+    h += `<div style="margin-top:14px;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:12px 14px">
+      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px">💡 芳香族化合物の系統分離の最重要ポイント（高校化学・大学入試）</div>
+      <div style="font-size:12.5px;line-height:1.6;color:var(--ink-2)">
+        <b>① 酸性度の序列：</b> スルホン酸（強酸） ＞ カルボン酸（中程度の酸） ＞ 炭酸（弱酸） ＞ フェノール類（極めて弱い酸）<br>
+        <b>② 弱酸・弱塩基の遊離：</b> 弱酸の塩にそれより強い酸を加えると、弱酸が遊離して油状物や沈殿に戻る。<br>
+        <b>③ 水層とエーテル層：</b> イオン化した塩は水層に溶け、電荷をもたない中性分子はジエチルエーテル層（上層）に残る。
+      </div>
+    </div>`;
   } else {
     h += state.log.length ? `<ol class="log">${state.log.map(l => `<li><span class="n">#${l.n}</span><span class="e">${l.eq}</span><span class="r ${l.ok ? "ok" : "no"}">${l.ok ? "成功" : "—"}</span></li>`).join("")}</ol>` : `<p class="muted" style="margin:0;font-size:13.5px">まだ実験していません。</p>`;
   }
@@ -1429,15 +1613,27 @@ function renderTabs() {
 function renderAll() {
   renderHUD();
   const isDet = curChapter() === "detective";
+  const isSep = curChapter() === "separation";
   const craftStage = $("craft-stage");
   const qbar = $("qbar");
   const tutBar = $("tut-bar");
   const detStage = $("detective-stage");
+  const sepStage = $("separation-stage");
 
-  if (isDet) {
+  if (isSep) {
     if (craftStage) craftStage.style.display = "none";
     if (qbar) qbar.style.display = "none";
     if (tutBar) tutBar.style.display = "none";
+    if (detStage) detStage.style.display = "none";
+    if (sepStage) {
+      sepStage.style.display = "flex";
+      renderSeparation();
+    }
+  } else if (isDet) {
+    if (craftStage) craftStage.style.display = "none";
+    if (qbar) qbar.style.display = "none";
+    if (tutBar) tutBar.style.display = "none";
+    if (sepStage) sepStage.style.display = "none";
     if (detStage) {
       detStage.style.display = "flex";
       renderDetective();
@@ -1446,6 +1642,7 @@ function renderAll() {
     if (craftStage) craftStage.style.display = "grid";
     if (qbar) qbar.style.display = "grid";
     if (detStage) detStage.style.display = "none";
+    if (sepStage) sepStage.style.display = "none";
     renderTutorial();
     renderQuest();
     renderMap();
@@ -1845,6 +2042,32 @@ function openCaseSolvedDialog(curCase, rank, isFirst) {
   }
 }
 
+/* ================= 系統分離シミュレーター 描画＆ロジック ================= */
+function renderSeparation() {
+  const el = $("separation-stage");
+  if (!el) return;
+  renderSeparationStage(el, state, {
+    onUpdate: () => renderSeparation(),
+    onSubstanceIsolated: sub => {
+      SFX.ok();
+      toast(`🎉 <b>${sub.n}</b> を単離しました！`);
+      checkAch();
+      save();
+      renderSeparation();
+    },
+    onStageClear: stg => {
+      SFX.lvl();
+      state.xp += 30;
+      state.stars += 1;
+      state.found.separation_clear = true;
+      toast(`🏆 <b>ステージクリア！</b> ${stg.title} の全成分を完全分離しました！ <b>+30 XP ★+1</b>`);
+      checkAch();
+      save();
+      renderSeparation();
+    }
+  });
+}
+
 /* ---------- detail dialog ---------- */
 function openDetail(id) {
   const s = S[id];
@@ -2034,8 +2257,20 @@ document.addEventListener("click", e => {
     if (m) m.open = false;
     return;
   }
+  if (t.id === "ch-tab-4" || t.id === "goto-ch4" || t.id === "switch-to-ch4-menu") {
+    switchChapter(4);
+    const m = $("menu");
+    if (m) m.open = false;
+    return;
+  }
   if (t.id === "ch-tab-det" || t.id === "switch-to-det-menu" || t.id === "goto-det-mode") {
     switchChapter("detective");
+    const m = $("menu");
+    if (m) m.open = false;
+    return;
+  }
+  if (t.id === "ch-tab-sep" || t.id === "switch-to-sep-menu" || t.id === "goto-sep-mode") {
+    switchChapter("separation");
     const m = $("menu");
     if (m) m.open = false;
     return;
@@ -2065,6 +2300,116 @@ document.addEventListener("click", e => {
     det.selectedCandidate = null;
     det.activeTest = null;
     switchChapter("detective");
+    return;
+  }
+
+  // Separation Mode Events
+  const sepStageBtn = t.closest("[data-sep-stage]");
+  if (sepStageBtn) {
+    const idx = +sepStageBtn.dataset.sepStage;
+    resetStage(state, idx);
+    SFX.click();
+    save();
+    renderSeparation();
+    return;
+  }
+
+  const sepStageJump = t.closest("[data-sep-stage-jump]");
+  if (sepStageJump) {
+    const idx = +sepStageJump.dataset.sepStageJump;
+    resetStage(state, idx);
+    switchChapter("separation");
+    return;
+  }
+
+  const sepNextStage = t.closest("[data-sep-next-stage]");
+  if (sepNextStage) {
+    const idx = +sepNextStage.dataset.sepNextStage;
+    resetStage(state, idx);
+    SFX.click();
+    save();
+    renderSeparation();
+    return;
+  }
+
+  const sepAddReagent = t.closest("[data-sep-add-reagent]");
+  if (sepAddReagent) {
+    const rId = sepAddReagent.dataset.sepAddReagent;
+    if (addReagentToFunnel(state, rId)) {
+      SFX.ok();
+    } else {
+      SFX.none();
+    }
+    save();
+    renderSeparation();
+    return;
+  }
+
+  if (t.id === "sep-btn-shake") {
+    shakeFunnel(state, {
+      onUpdate: () => renderSeparation()
+    });
+    SFX.click();
+    save();
+    return;
+  }
+
+  if (t.id === "sep-btn-drain") {
+    drainWaterLayer(state, {
+      onUpdate: () => renderSeparation()
+    });
+    SFX.click();
+    save();
+    return;
+  }
+
+  const sepFlaskAdd = t.closest("[data-sep-flask-add]");
+  if (sepFlaskAdd) {
+    const rId = sepFlaskAdd.dataset.sepFlaskAdd;
+    addReagentToFlask(state, rId, {
+      onSubstanceIsolated: sub => {
+        SFX.lvl();
+        checkAch();
+        save();
+        renderSeparation();
+      }
+    });
+    save();
+    renderSeparation();
+    return;
+  }
+
+  if (t.id === "sep-btn-evap") {
+    evaporateEtherLayer(state, {
+      onSubstanceIsolated: () => {
+        SFX.lvl();
+        checkAch();
+        save();
+        renderSeparation();
+      }
+    });
+    save();
+    renderSeparation();
+    return;
+  }
+
+  if (t.id === "sep-btn-reset") {
+    const sep = getSeparationState(state);
+    resetStage(state, sep.stageIdx);
+    SFX.click();
+    save();
+    renderSeparation();
+    return;
+  }
+
+  if (t.id === "sep-open-theory") {
+    const dlg = $("dlg");
+    if (dlg) {
+      $("dlg-body").innerHTML = getTheoryModalHtml();
+      const closeBtn = $("sep-close-theory");
+      if (closeBtn) closeBtn.onclick = () => dlg.close();
+      if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
+    }
     return;
   }
 

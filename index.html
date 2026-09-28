@@ -509,6 +509,111 @@
   .det-report-logic { background: var(--surface-2); border-radius: 10px; padding: 12px 14px; font-size: 13px; line-height: 1.6; }
   .det-report-logic ol { margin: 6px 0 0 18px; padding: 0; }
   .det-report-tip { background: var(--flame-soft); border: 1px solid var(--flame); border-radius: 10px; padding: 10px 14px; font-size: 12.5px; color: var(--flame); line-height: 1.5; font-weight: 500; }
+
+  /* ================= separation stage (系統分離シミュレーター) ================= */
+  .separation-stage { display: flex; flex-direction: column; gap: 14px; }
+  .sep-topbar { display: flex; justify-content: space-between; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; flex-wrap: wrap; gap: 8px; }
+  .sep-stage-nav { display: flex; gap: 6px; flex-wrap: wrap; }
+  .sep-stage-tab { border: 1px solid var(--line-2); background: var(--surface-2); border-radius: 8px; padding: 6px 12px; font-size: 13px; font-weight: 700; color: var(--ink-2); cursor: pointer; display: flex; flex-direction: column; gap: 2px; text-align: left; transition: all .15s; }
+  .sep-stage-tab small { font-size: 10.5px; font-weight: 500; color: var(--ink-3); }
+  .sep-stage-tab:hover { border-color: var(--ok); color: var(--ink); }
+  .sep-stage-tab.active { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); box-shadow: 0 0 0 1px var(--ok); }
+  .sep-stage-tab.clear { border-color: var(--ok); }
+  .sep-topbar-actions { display: flex; gap: 8px; align-items: center; }
+
+  .sep-stage-header { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 18px; display: flex; flex-direction: column; gap: 6px; box-shadow: var(--shadow); }
+  .sep-stage-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .sep-stage-badge { font-size: 11px; font-weight: 700; color: var(--ok); background: var(--ok-soft); border: 1px solid var(--ok); border-radius: 999px; padding: 2px 8px; }
+  .sep-stage-title { margin: 0; font-size: 17px; font-weight: 700; color: var(--ink); }
+  .sep-stage-sub { font-size: 13px; color: var(--ink-2); }
+  .sep-stage-desc { margin: 0; font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+
+  .sep-main-grid { display: grid; grid-template-columns: minmax(340px, 1fr) minmax(380px, 1.2fr); gap: 14px; }
+  @media (max-width: 860px) { .sep-main-grid { grid-template-columns: 1fr; } }
+
+  .sep-lab-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: var(--shadow); }
+  .sep-lab-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+  .sep-cock-indicator { font-size: 11.5px; font-weight: 700; border-radius: 999px; padding: 2px 8px; }
+  .sep-cock-indicator.closed { background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--line-2); }
+  .sep-cock-indicator.open { background: var(--flame-soft); color: var(--flame); border: 1px solid var(--flame); }
+
+  .sep-funnel-bench { display: flex; flex-direction: column; gap: 16px; align-items: center; }
+  .sep-funnel-wrap { position: relative; width: 100%; max-width: 320px; display: flex; justify-content: center; transform-origin: 120px 20px; }
+  @keyframes funnelShake {
+    0%, 100% { transform: rotate(0deg); }
+    20% { transform: rotate(-8deg) translateX(-4px); }
+    40% { transform: rotate(8deg) translateX(4px); }
+    60% { transform: rotate(-5deg); }
+    80% { transform: rotate(5deg); }
+  }
+  .sep-funnel-wrap.shaking { animation: funnelShake 0.4s ease-in-out infinite; }
+  .sep-funnel-svg { width: 220px; height: 350px; }
+
+  .sep-funnel-layers-overlay { position: absolute; top: 75px; left: 18px; right: 18px; display: flex; flex-direction: column; gap: 16px; pointer-events: none; }
+  .sep-layer-box { background: rgba(255, 255, 255, 0.92); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; box-shadow: var(--shadow); backdrop-filter: blur(4px); }
+  [data-theme="dark"] .sep-layer-box { background: rgba(23, 32, 38, 0.92); }
+  .sep-layer-label { font-size: 10px; font-weight: 700; color: var(--ink-3); margin-bottom: 3px; }
+  .sep-layer-contents { display: flex; flex-wrap: wrap; gap: 4px; }
+  .sep-item-tag { font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: var(--surface-2); border-left: 3px solid var(--tag-c, var(--accent)); color: var(--ink); }
+  .sep-reagent-tag { font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); }
+  .sep-salt-tag { font-size: 10.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: #e0e7ff; color: #3730a3; }
+  .sep-empty-text { font-size: 11px; color: var(--ink-3); font-style: italic; }
+
+  /* flask */
+  .sep-flask-card { width: 100%; background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .sep-flask-head { display: flex; justify-content: space-between; align-items: center; }
+  .sep-flask-title { font-size: 13px; font-weight: 700; color: var(--ink); }
+  .sep-flask-body { display: flex; flex-direction: column; gap: 8px; }
+  .sep-flask-info { display: flex; flex-direction: column; gap: 2px; }
+  .sep-flask-fluid-name { font-size: 13px; font-weight: 700; color: var(--ink); }
+  .sep-flask-ions { font-size: 12px; color: var(--ink-2); }
+  .sep-flask-placeholder { font-size: 12px; color: var(--ink-3); text-align: center; padding: 12px 6px; }
+
+  .sep-precipitate-banner { background: var(--surface); border: 1px solid var(--ok); border-radius: 10px; padding: 10px 12px; display: flex; gap: 10px; align-items: flex-start; box-shadow: 0 2px 8px rgba(35,115,74,.15); }
+  .sep-precip-icon { font-size: 20px; line-height: 1; }
+  .sep-precip-text { display: flex; flex-direction: column; gap: 3px; font-size: 12.5px; color: var(--ink); }
+  .sep-precip-text b { color: var(--ok); font-size: 13.5px; }
+  .sep-eq-text { font-family: var(--f-mono); font-size: 11.5px; background: var(--surface-2); padding: 3px 6px; border-radius: 4px; margin-top: 4px; word-break: break-all; color: var(--ink); }
+
+  .sep-flask-actions { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+  .sep-flask-act-label { font-size: 11.5px; font-weight: 700; color: var(--ink-2); }
+  .sep-flask-act-btns { display: flex; flex-direction: column; gap: 5px; }
+  .sep-flask-act-btns .btn { font-size: 12px; text-align: left; padding: 6px 10px; font-weight: 700; }
+
+  /* right controls */
+  .sep-control-column { display: flex; flex-direction: column; gap: 14px; }
+  .sep-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow); }
+  .sep-card-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+  .sep-card-title { margin: 0; font-size: 14.5px; font-weight: 700; color: var(--ink); }
+
+  .sep-reagent-btns { display: flex; flex-direction: column; gap: 8px; }
+  .sep-reagent-action-btn { background: var(--surface); border: 1px solid var(--line-2); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 3px; text-align: left; cursor: pointer; transition: all .15s; }
+  .sep-reagent-action-btn:hover:not(:disabled) { border-color: var(--ok); transform: translateY(-1px); box-shadow: var(--shadow); }
+  .sep-reagent-action-btn:disabled { opacity: .45; cursor: not-allowed; }
+  .sep-reagent-btn-title { font-size: 13.5px; font-weight: 700; color: var(--ink); }
+  .sep-reagent-btn-sub { font-size: 11.5px; font-family: var(--f-mono); color: var(--accent); }
+  .sep-reagent-btn-desc { font-size: 11px; color: var(--ink-3); line-height: 1.35; }
+
+  .sep-ops-grid { display: flex; flex-direction: column; gap: 8px; }
+  .sep-ops-grid .btn { padding: 10px 14px; font-size: 13.5px; font-weight: 700; text-align: center; }
+
+  .sep-log-box { background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: flex; gap: 8px; align-items: flex-start; }
+  .sep-log-icon { font-size: 16px; flex: none; line-height: 1.3; }
+  .sep-log-content { font-size: 12.5px; line-height: 1.5; color: var(--ink); }
+
+  .sep-progress-list { display: flex; flex-direction: column; gap: 6px; }
+  .sep-progress-item { border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .sep-progress-item.done { border-color: var(--ok); background: var(--ok-soft); }
+  .sep-progress-item.pending { background: var(--surface-2); }
+  .sep-progress-status { font-size: 12px; font-weight: 700; }
+  .sep-progress-item.done .sep-progress-status { color: var(--ok); }
+  .sep-progress-item.pending .sep-progress-status { color: var(--ink-3); }
+  .sep-progress-info { display: flex; flex-direction: column; text-align: right; }
+  .sep-progress-name { font-size: 13px; font-weight: 700; color: var(--ink); }
+  .sep-progress-type { font-size: 11px; color: var(--ink-3); }
+
+  .sep-stage-clear-card { background: var(--surface); border: 2px solid var(--ok); border-radius: 12px; padding: 14px; text-align: center; display: flex; flex-direction: column; gap: 8px; align-items: center; box-shadow: 0 4px 16px rgba(35,115,74,.2); }
+  .sep-clear-stamp { font-family: var(--f-display); font-size: 20px; color: var(--ok); letter-spacing: .08em; }
   </style>
 </head>
 <body>
@@ -522,6 +627,8 @@
             <button type="button" class="btn" id="ch-tab-1" role="tab" style="font-size:12px;padding:2px 8px;font-weight:700">第1章 炭化水素</button>
             <button type="button" class="btn" id="ch-tab-2" role="tab" style="font-size:12px;padding:2px 8px;font-weight:700">第2章 官能基</button>
             <button type="button" class="btn" id="ch-tab-3" role="tab" style="font-size:12px;padding:2px 8px;font-weight:700">第3章 芳香族</button>
+            <button type="button" class="btn" id="ch-tab-4" role="tab" style="font-size:12px;padding:2px 8px;font-weight:700">第4章 高分子</button>
+            <button type="button" class="btn" id="ch-tab-sep" role="tab" style="font-size:12px;padding:2px 8px;font-weight:700">🧪 系統分離</button>
             <button type="button" class="btn" id="ch-tab-det" role="tab" style="font-size:12px;padding:2px 8px;font-weight:700">🕵️ 探偵モード</button>
           </div>
         </div>
@@ -540,6 +647,7 @@
             <button type="button" id="switch-to-ch1-menu">第1章「炭化水素の森」を開く</button>
             <button type="button" id="switch-to-ch2-menu">第2章「官能基の工房」を開く</button>
             <button type="button" id="switch-to-ch3-menu">第3章「芳香族の迷宮」を開く</button>
+            <button type="button" id="switch-to-sep-menu">🧪「系統分離実験室（分液漏斗）」を開く</button>
             <button type="button" id="switch-to-det-menu">🕵️「探偵モード（構造決定事件簿）」を開く</button>
             <button type="button" id="toggle-easy">学習サポート（やさしいモード）：ON</button>
             <button type="button" id="toggle-en">物質の英語名表示：あり</button>
@@ -681,6 +789,9 @@
     <!-- 探偵モード（構造決定事件簿）ステージ -->
     <section class="detective-stage" id="detective-stage" style="display:none"></section>
 
+    <!-- 系統分離実験室（分液漏斗シミュレーター）ステージ -->
+    <section class="separation-stage" id="separation-stage" style="display:none"></section>
+
     <section class="panel lower">
       <div class="tabs" role="tablist">
         <button type="button" role="tab" data-tab="dex" aria-selected="true">物質図鑑<small id="t-dex"></small></button>
@@ -688,6 +799,7 @@
         <button type="button" role="tab" data-tab="ach" aria-selected="false">称号<small id="t-ach"></small></button>
         <button type="button" role="tab" data-tab="log" aria-selected="false">実験ノート<small id="t-log"></small></button>
         <button type="button" role="tab" data-tab="det" aria-selected="false">🕵️ 事件簿<small id="t-det"></small></button>
+        <button type="button" role="tab" data-tab="sep" aria-selected="false">🧪 系統分離<small id="t-sep"></small></button>
       </div>
       <div class="tb" id="tabbody"></div>
     </section>
