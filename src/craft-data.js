@@ -14,7 +14,7 @@ export const CLS = {
   ketone: { label: "ケトン", c: "--c-ketone", desc: "カルボニル基 −CO− をもつ化合物。酸化されにくい。" },
   acid: { label: "カルボン酸", c: "--c-acid", desc: "カルボキシ基 −COOH をもつ有機酸。弱酸性を示す。" },
   ester: { label: "エステル・塩", c: "--c-ester", desc: "エステル結合 −COO− をもつ芳香性の液体やカルボン酸の塩。" },
-  aroma: { label: "芳香族（3章）", c: "--c-aroma", desc: "ベンゼン環をもつ環状不飽和炭化水素。" },
+  aroma: { label: "芳香族", c: "--c-aroma", desc: "ベンゼン環をもつ環状不飽和炭化水素およびその誘導体。" },
   reagent: { label: "試薬・原料", c: "--c-reagent", desc: "合成に用いる試薬や天然原料。" },
   inorg: { label: "無機物", c: "--c-inorg", desc: "水や二酸化炭素、水素などの無機化合物。" }
 };
@@ -59,7 +59,21 @@ export const S = {
   sodium_acetate: { n: "酢酸ナトリウム", en: "Sodium acetate", f: "CH₃COONa", cls: "ester", note: "弱酸の酢酸と強塩基のNaOHからなる塩。酢酸エチルのけん化や中和で得られる。水溶液は加水分解で弱塩基性。", use: "緩衝液、発熱カイロ、食品保存料" },
   iodoform: { n: "ヨードホルム", en: "Iodoform", f: "CHI₃", cls: "halide", smi: "IC(I)(I)[H]", note: "特異臭のある黄色結晶。アセトンやエタノールにヨウ素とNaOHを加えて温めると生じる（ヨードホルム反応）。", use: "消毒薬、CH₃CO− / CH₃CH(OH)−の検出" },
   silver: { n: "銀（銀鏡）", en: "Silver (mirror)", f: "Ag", cls: "inorg", note: "アルデヒドの還元作用により、アンモニア性硝酸銀水溶液からガラス壁に析出した純銀の薄膜。", use: "鏡、装飾" },
-  benzene: { n: "ベンゼン", en: "Benzene", f: "C₆H₆", cls: "aroma", smi: "[H]C1=C([H])C([H])=C([H])C([H])=C1[H]", note: "正六角形の環状構造をもつ芳香族化合物の母体。付加反応より置換反応が起こりやすい。第3章の主役。", use: "医薬品、染料、プラスチック原料" },
+  benzene: { n: "ベンゼン", en: "Benzene", f: "C₆H₆", cls: "aroma", smi: "[H]C1=C([H])C([H])=C([H])C([H])=C1[H]", note: "正六角形の環状構造をもつ芳香族化合物の母体。炭素間の結合は単結合と二重結合の中間（共鳴混成体）。付加反応より置換反応が起こりやすい。", use: "医薬品、染料、プラスチック原料" },
+  nitrobenzene: { n: "ニトロベンゼン", en: "Nitrobenzene", f: "C₆H₅NO₂", cls: "aroma", smi: "[H]C1=C([H])C([H])=C(N(=O)=O)C([H])=C1[H]", note: "ベンゼンを濃硝酸と濃硫酸の混酸で温めると得られる（ニトロ化）。苦扁桃油（アーモンド）様の香気をもつ黄色油状液体。水より重い。", use: "アニリンの製造原料、有機溶媒" },
+  aniline: { n: "アニリン", en: "Aniline", f: "C₆H₅NH₂", cls: "aroma", smi: "[H]C1=C([H])C([H])=C(N([H])[H])C([H])=C1[H]", note: "ニトロベンゼンをスズと塩酸で還元して得られる。特異臭をもつ弱塩基性無色液体。空気中で酸化されて赤褐色になる。さらし粉で赤紫色に呈色。", use: "アゾ染料、医薬品（解熱鎮痛薬）、合成樹脂原料" },
+  acetanilide: { n: "アセトアニリド", en: "Acetanilide", f: "C₆H₅NHCOCH₃", cls: "aroma", smi: "[H]C1=C([H])C([H])=C(NC(=O)C)C([H])=C1[H]", note: "アニリンに無水酢酸を作用させてアミノ基をアセチル化すると得られる白色結晶。かつて世界最初の合成解熱鎮痛薬「アンチフェブリン」として市販された。", use: "解熱鎮痛薬（歴史的医薬）、染料中間体" },
+  diazonium: { n: "塩化ベンゼンジアゾニウム", en: "Benzenediazonium chloride", f: "C₆H₅N₂⁺Cl⁻", cls: "aroma", smi: "[H]C1=C([H])C([H])=C([N+]#N)C([H])=C1[H].[Cl-]", note: "アニリンを塩酸酸性下、亜硝酸ナトリウムとともに氷冷（0〜5℃）すると生じるジアゾ化合物。不安定で室温放置や加熱で窒素を放出してフェノールに分解する。", use: "アゾ染料合成の重要中間体" },
+  azo_dye: { n: "p-ヒドロキシアゾベンゼン", en: "p-Hydroxyazobenzene", f: "C₆H₅−N=N−C₆H₄OH", cls: "aroma", smi: "[H]C1=C([H])C(O[H])=C([H])C([H])=C1N=NC1=C([H])C([H])=C([H])C([H])=C1[H]", note: "塩化ベンゼンジアゾニウム水溶液にナトリウムフェノキシド（アルカリ性フェノール水溶液）を注ぐと速やかにカップリングして生じる鮮やかな橙赤色沈殿。代表的なアゾ染料。", use: "アゾ系合成染料・顔料" },
+  chlorobenzene: { n: "クロロベンゼン", en: "Chlorobenzene", f: "C₆H₅Cl", cls: "aroma", smi: "[H]C1=C([H])C([H])=C(Cl)C([H])=C1[H]", note: "ベンゼンに鉄触媒の存在下で塩素を作用させると得られる置換生成物。芳香環に直結した塩素原子は脱離しにくく安定。", use: "農薬、染料、医薬中間体" },
+  toluene: { n: "トルエン", en: "Toluene", f: "C₆H₅CH₃", cls: "aroma", smi: "[H]C1=C([H])C([H])=C(C)C([H])=C1[H]", note: "ベンゼンの水素1個がメチル基に置換された芳香族炭化水素。水に不溶で引火性がある。側鎖メチル基は過マンガン酸カリウムで容易に酸化される。", use: "塗料用有機溶媒、安息香酸原料、TNT火薬原料" },
+  benzoic_acid: { n: "安息香酸", en: "Benzoic acid", f: "C₆H₅COOH", cls: "acid", smi: "[H]C1=C([H])C([H])=C(C(=O)O[H])C([H])=C1[H]", note: "トルエンの側鎖メチル基を強酸化剤（KMnO₄）で酸化すると得られる芳香族カルボン酸。白色結晶。加熱すると昇華する。炭酸水素ナトリウム水溶液に気泡（CO₂）を出して溶ける。", use: "防腐剤・食品保存料（安息香酸ナトリウム）、染料中間体" },
+  phenol: { n: "フェノール（石炭酸）", en: "Phenol", f: "C₆H₅OH", cls: "aroma", smi: "[H]C1=C([H])C([H])=C(O[H])C([H])=C1[H]", note: "ベンゼン環にヒドロキシ基が直結した化合物。弱酸性（炭酸より弱くアルコールより強い）。塩化鉄(III)水溶液で紫色に呈色する。皮膚を侵す有毒な白色結晶。", use: "消毒殺菌剤、フェノール樹脂（ベークライト）原料、医薬原料" },
+  tribromophenol: { n: "2,4,6-トリブロモフェノール", en: "2,4,6-Tribromophenol", f: "C₆H₂Br₃OH", cls: "halide", smi: "Oc1c(Br)cc(Br)cc1Br", note: "フェノール水溶液に臭素水を加えると、o-位およびp-位の3箇所が一気に臭素置換されて直ちに生じる白色沈殿。フェノールの鋭敏な検出に用いられる。", use: "フェノールの検出試薬、難燃剤" },
+  picric_acid: { n: "ピクリン酸", en: "Picric acid", f: "C₆H₂(NO₂)₃OH", cls: "acid", smi: "Oc1c([N+](=O)[O-])cc([N+](=O)[O-])cc1[N+](=O)[O-]", note: "フェノールに濃硝酸と濃硫酸を加えて加熱すると、o-位とp-位が激しくニトロ化されて生じる黄色結晶。3つのニトロ基の強い電子求引性によりカルボン酸に匹敵する強酸性を示す。衝撃で爆発する。", use: "かつての軍用黄色火薬（下瀬火薬）、黄色染料" },
+  salicylic_acid: { n: "サリチル酸", en: "Salicylic acid", f: "C₆H₄(OH)COOH", cls: "acid", smi: "OC(=O)c1ccccc1O", note: "フェノール性ヒドロキシ基とカルボキシ基の両方を隣接（オルト位）にもつ化合物。フェノールナトリウムに高温高圧でCO₂を反応（コルベ・シュミット反応）させて工業合成。塩化鉄(III)で赤紫色呈色。", use: "アスピリンやサリチル酸メチルなど医薬品の万能原料" },
+  aspirin: { n: "アセチルサリチル酸（アスピリン）", en: "Acetylsalicylic acid (Aspirin)", f: "C₆H₄(OCOCH₃)COOH", cls: "ester", smi: "CC(=O)Oc1ccccc1C(=O)O", note: "サリチル酸のフェノール性−OHを無水酢酸でアセチル化したエステル。フェノール性−OHが塞がれているため塩化鉄(III)で呈色しない。世界で最も普及した消炎解熱鎮痛薬。", use: "アスピリン（解熱鎮痛薬、血栓予防薬）" },
+  methyl_salicylate: { n: "サリチル酸メチル", en: "Methyl salicylate", f: "C₆H₄(OH)COOCH₃", cls: "ester", smi: "COC(=O)c1ccccc1O", note: "サリチル酸のカルボキシ基−COOHをメタノールと濃硫酸触媒でエステル化した化合物。湿布薬特有の清涼感ある芳香をもつ液体。フェノール性−OHが残っているため塩化鉄(III)で赤紫色に呈色する。", use: "湿布薬（外用消炎鎮痛剤）、香料" },
   co2: { n: "二酸化炭素", en: "Carbon dioxide", f: "CO₂", cls: "inorg", smi: "O=C=O", note: "完全燃焼やアルコール発酵で生成する無機化合物。", use: "炭酸飲料、ドライアイス" },
   cl2: { n: "塩素", en: "Chlorine", f: "Cl₂", cls: "reagent", smi: "ClCl", note: "黄緑色の有毒気体。光照射によりラジカル置換反応を起こす。" },
   h2: { n: "水素", en: "Hydrogen", f: "H₂", cls: "reagent", smi: "[H][H]", note: "触媒下で不飽和結合に付加する。またアルコールとNaの反応で発生する。" },
@@ -67,10 +81,15 @@ export const S = {
   o2: { n: "酸素", en: "Oxygen", f: "O₂", cls: "reagent", smi: "O=O", note: "点火・加熱すると激しい酸化反応（完全燃焼）を起こす。" },
   br2: { n: "臭素水", en: "Bromine water", f: "Br₂", cls: "reagent", smi: "BrBr", note: "赤褐色の臭素水溶液。炭素間不飽和結合（C=C, C≡C）に速やかに付加して脱色する。" },
   hcl: { n: "塩化水素", en: "Hydrogen chloride", f: "HCl", cls: "reagent", smi: "[H]Cl", note: "極性気体。アルケンやアルキンに付加してハロゲン化アルキルを与える。" },
-  h2so4: { n: "濃硫酸", en: "Sulfuric acid (conc.)", f: "H₂SO₄", cls: "reagent", note: "強い酸性と脱水作用をもつ。脱水反応やエステル化の触媒。" },
+  h2so4: { n: "濃硫酸", en: "Sulfuric acid (conc.)", f: "H₂SO₄", cls: "reagent", note: "強い酸性と脱水作用をもつ。脱水反応やエステル化、混酸ニトロ化の触媒。" },
+  hno3: { n: "濃硝酸", en: "Nitric acid (conc.)", f: "HNO₃", cls: "reagent", note: "強力な酸化力をもつ強酸。濃硫酸と混ぜて混酸をつくり、芳香環をニトロ化（−NO₂置換）する試薬。" },
+  sn: { n: "スズ（金属粉末）", en: "Tin (metal)", f: "Sn", cls: "reagent", note: "還元剤。濃塩酸とともに用いることで、ニトロベンゼンのニトロ基を還元してアニリン塩酸塩にする。" },
+  nano2: { n: "亜硝酸ナトリウム", en: "Sodium nitrite", f: "NaNO₂", cls: "reagent", note: "ジアゾ化試薬。塩酸酸性下、氷冷（0〜5℃）でアニリンに作用させると塩化ベンゼンジアゾニウムを生成する。" },
+  ac2o: { n: "無水酢酸", en: "Acetic anhydride", f: "(CH₃CO)₂O", cls: "reagent", note: "酢酸2分子から脱水した刺激臭のある液体。アミノ基やヒドロキシ基を強力にアセチル化（−COCH₃基を導入）する試薬。" },
+  fecl3: { n: "塩化鉄(III)水溶液", en: "Iron(III) chloride", f: "FeCl₃", cls: "reagent", note: "黄褐色の水溶液。フェノール性水酸基（ベンゼン環に直結した−OH）と錯体を形成し、特有の紫色〜赤紫色に呈色する検出試薬。" },
   na: { n: "金属ナトリウム", en: "Sodium (metal)", f: "Na", cls: "reagent", note: "軟らかいアルカリ金属。アルコール（−OH）と穏やかに反応して水素H₂を発生する（エーテルは反応しない）。" },
-  kmno4: { n: "酸化剤 [O]", en: "Oxidizing agent", f: "[O]", cls: "reagent", note: "過マンガン酸カリウムや二クロム酸カリウム。アルコールを段階的に酸化する試薬。" },
-  naoh: { n: "水酸化ナトリウム", en: "Sodium hydroxide", f: "NaOH", cls: "reagent", note: "強塩基。エステルのけん化や、ヨードホルム反応のアルカリ条件に用いる。" },
+  kmno4: { n: "酸化剤 [O]", en: "Oxidizing agent", f: "[O]", cls: "reagent", note: "過マンガン酸カリウムや二クロム酸カリウム。アルコールやアルキルベンゼンの側鎖を段階的に酸化する試薬。" },
+  naoh: { n: "水酸化ナトリウム", en: "Sodium hydroxide", f: "NaOH", cls: "reagent", note: "強塩基。エステルのけん化や、フェノールの溶解、カップリング反応のアルカリ条件に用いる。" },
   i2: { n: "ヨウ素液", en: "Iodine solution", f: "I₂", cls: "reagent", note: "褐色液。NaOHとともに加えることでヨードホルム反応を起こす検出試薬。" },
   tollens: { n: "アンモニア性硝酸銀", en: "Tollens' reagent", f: "[Ag(NH₃)₂]⁺", cls: "reagent", note: "ジアンミン銀(I)イオンを含む無色の錯イオン水溶液。アルデヒドにより銀鏡が析出する。" },
   cac2: { n: "炭化カルシウム（カーバイド）", en: "Calcium carbide", f: "CaC₂", cls: "reagent", note: "水を加えると激しく加水分解してアセチレンを発生する無機物質。" },
@@ -80,7 +99,8 @@ export const S = {
 
 export const DEX1 = ["methane","ethane","propane","ethylene","propene","acetylene","ch3cl","ch2cl2","chcl3","ccl4","chloroethane","dibromoethane","dichloroethane","vinylchloride","dibromoethene","tetrabromoethane","dibromopropane","polyethylene","pvc","pp"];
 export const DEX2 = ["methanol","formaldehyde","formic_acid","ethanol","acetaldehyde","acetic_acid","ethyl_acetate","sodium_acetate","isopropanol","acetone","ether","iodoform","silver","h2"];
-export const DEXX = ["benzene","co2"];
+export const DEX3 = ["benzene","chlorobenzene","toluene","benzoic_acid","phenol","tribromophenol","picric_acid","salicylic_acid","aspirin","methyl_salicylate","nitrobenzene","aniline","acetanilide","diazonium","azo_dye"];
+export const DEXX = ["co2"];
 
 export const SOURCES = [
   { id: "gas", n: "天然ガス田", items: ["methane"], start: true },
@@ -93,7 +113,10 @@ export const SOURCES = [
   { id: "refinery", n: "製油所", items: ["naphtha"], by: "依頼3" },
   { id: "distill", n: "アルコール蒸留室", items: ["ethanol", "methanol", "isopropanol"], ch: 2, start: true },
   { id: "oxidant", n: "試薬棚（酸化剤）", items: ["kmno4"], ch: 2, start: true },
-  { id: "reagents2", n: "第2章 分析・合成試薬棚", items: ["na", "tollens", "i2", "naoh", "h2so4"], ch: 2, by: "依頼1" }
+  { id: "reagents2", n: "第2章 分析・合成試薬棚", items: ["na", "tollens", "i2", "naoh", "h2so4"], ch: 2, by: "依頼1" },
+  { id: "aroma_lab", n: "芳香族実験室", items: ["benzene", "toluene"], ch: 3, start: true },
+  { id: "acids_ch3", n: "第3章 強酸・混酸棚", items: ["hno3", "h2so4", "hcl", "cl2", "br2"], ch: 3, start: true },
+  { id: "reagents3", n: "第3章 芳香族・医薬合成試薬", items: ["sn", "nano2", "ac2o", "fecl3", "naoh", "kmno4"], ch: 3, by: "依頼1" }
 ];
 
 export const CATS = [
@@ -245,7 +268,33 @@ export const RULES = [
   { id: "test_silver_formic", in: ["formic_acid", "tollens"], t: [50, 70], lowMsg: "約60℃の温水浴で温めよう。", out: ["silver", "co2"], types: ["検出", "酸化"], eq: "HCOOH + 2[Ag(NH₃)₂]⁺ + 2OH⁻ → 2Ag↓ + CO₂ + 4NH₃ + 2H₂O", text: "ギ酸はカルボン酸でありながらホルミル基をもつため、銀鏡反応を示して銀が析出した！" },
   { id: "test_silver_formald", in: ["formaldehyde", "tollens"], t: [50, 70], lowMsg: "約60℃の温水浴で温めよう。", out: ["silver", "formic_acid"], types: ["検出", "酸化"], eq: "HCHO + 2[Ag(NH₃)₂]⁺ + 2OH⁻ → HCOO⁻ + NH₄⁺ + 2Ag↓ + 3NH₃ + H₂O", text: "ホルムアルデヒドの強い還元力により、美しい銀鏡が試験管壁に析出した！" },
   { id: "test_iodo_ac", in: ["acetone", "i2"], cat: ["none"], t: [50, 70], lowMsg: "温水浴（約60℃）で温めよう。", out: ["iodoform", "sodium_acetate"], types: ["検出"], eq: "CH₃COCH₃ + 3I₂ + 4NaOH → CHI₃↓ + CH₃COONa + 3NaI + 3H₂O", text: "特異臭（消毒薬のにおい）をもつ黄色のヨードホルム沈殿が析出した！ CH₃CO−構造をもつケトンの特異的検出。" },
-  { id: "test_iodo_et", in: ["ethanol", "i2"], t: [50, 70], lowMsg: "温水浴（約60℃）で温めよう。", out: ["iodoform"], types: ["検出"], eq: "CH₃CH₂OH + 4I₂ + 6NaOH → CHI₃↓ + HCOONa + 5NaI + 5H₂O", text: "エタノールからも黄色沈殿のヨードホルムが生じた！ CH₃CH(OH)−構造が酸化されてCH₃CO−となり、ヨードホルム反応を示す。" }
+  { id: "test_iodo_et", in: ["ethanol", "i2"], t: [50, 70], lowMsg: "温水浴（約60℃）で温めよう。", out: ["iodoform"], types: ["検出"], eq: "CH₃CH₂OH + 4I₂ + 6NaOH → CHI₃↓ + HCOONa + 5NaI + 5H₂O", text: "エタノールからも黄色沈殿のヨードホルムが生じた！ CH₃CH(OH)−構造が酸化されてCH₃CO−となり、ヨードホルム反応を示す。" },
+
+  // ===== 第3章 芳香族の迷宮 =====
+  // 1. ベンゼンからの置換反応
+  { id: "nitro_bz", in: ["benzene", "hno3"], cat: ["H2SO4_cat"], catMsg: "ニトロ化には触媒兼脱水剤として濃硫酸が必要（混酸）。", t: [50, 60], lowMsg: "温水浴（50〜60℃）で温めよう。", highMsg: "60℃を超えるとジニトロベンゼン等の副生物が増えてしまう。", out: ["nitrobenzene"], types: ["置換"], eq: "C₆H₆ + HNO₃ → C₆H₅NO₂ + H₂O", text: "濃硝酸と濃硫酸の混酸により、ベンゼン環のHがニトロ基 −NO₂ に置換された！ 苦扁桃油のにおいをもつ黄色油状のニトロベンゼンが沈んだ。" },
+  { id: "cl_bz", in: ["benzene", "cl2"], cat: ["Fe"], catMsg: "ベンゼン環のハロゲン置換には鉄（Fe）触媒が必要。", t: [20, 50], out: ["chlorobenzene"], give: ["hcl"], types: ["置換"], eq: "C₆H₆ + Cl₂ → C₆H₅Cl + HCl", text: "鉄触媒の作用で塩素置換が進行し、クロロベンゼンが生じた。副産物のHClも得られた。" },
+  
+  // 2. トルエンと側鎖酸化
+  { id: "ox_tol", in: ["toluene", "kmno4"], t: [70, 100], lowMsg: "温水浴〜沸騰水浴（70〜100℃）で加熱しよう。", out: ["benzoic_acid"], types: ["酸化"], eq: "C₆H₅CH₃ + 3[O] → C₆H₅COOH + H₂O", text: "強酸化剤によりトルエンの側鎖メチル基 −CH₃ が酸化され、カルボキシ基をもつ安息香酸（白色結晶）が析出した！" },
+
+  // 3. アニリンの還元とアセチル化
+  { id: "red_ani", in: ["nitrobenzene", "sn"], cat: ["none"], t: [60, 90], lowMsg: "温水浴（60〜80℃）で温めてスズと塩酸で還元しよう。", out: ["aniline"], types: ["置換", "酸化"], eq: "C₆H₅NO₂ + 3Sn + 7HCl → C₆H₅NH₂・HCl + 3SnCl₂ + 2H₂O（NaOHで中和して遊離）", text: "スズと塩酸の強い還元作用でニトロ基がアミノ基に還元され、弱塩基のアニリンが遊離した！" },
+  { id: "acet_ani", in: ["aniline", "ac2o"], t: [20, 60], out: ["acetanilide"], types: ["縮合"], eq: "C₆H₅NH₂ + (CH₃CO)₂O → C₆H₅NHCOCH₃ + CH₃COOH", text: "アミノ基が無水酢酸によってアセチル化され、解熱鎮痛剤の元祖である白色結晶のアセトアニリドが生じた！" },
+
+  // 4. 氷冷ジアゾ化とアゾカップリング
+  { id: "diazo", in: ["aniline", "nano2"], t: [0, 5], lowMsg: "0℃未満では凍結してしまう。", highMsg: "温度が高すぎる（5℃超）！ ジアゾニウムイオンが分解してフェノールと窒素になってしまう。氷冷（0〜5℃）を維持せよ！", out: ["diazonium"], types: ["その他"], eq: "C₆H₅NH₂ + NaNO₂ + 2HCl → C₆H₅N₂⁺Cl⁻ + NaCl + 2H₂O", text: "氷冷下（0〜5℃）の精密な温度管理により、極めて不安定な塩化ベンゼンジアゾニウムの単離に成功した！" },
+  { id: "diazo_hot", in: ["diazonium", "h2o"], t: [30, 80], lowMsg: "温めて（30℃以上）分解させよう。", out: ["phenol"], types: ["加水分解", "脱離"], eq: "C₆H₅N₂⁺Cl⁻ + H₂O → C₆H₅OH + N₂↑ + HCl", text: "ジアゾニウム塩水溶液を温めると窒素ガス N₂ を放出しながら分解し、フェノールが生成した！" },
+  { id: "coupling", in: ["diazonium", "phenol"], cat: ["none"], t: [0, 20], out: ["azo_dye"], types: ["縮合"], eq: "C₆H₅N₂⁺Cl⁻ + C₆H₅ONa → C₆H₅−N=N−C₆H₄OH + NaCl", text: "弱アルカリ性下でカップリング反応が起き、鮮やかな橙赤色の沈殿（p-ヒドロキシアゾベンゼン）が一瞬で析出した！ 合成染料の完成！" },
+
+  // 5. フェノールとサリチル酸誘導体・医薬品
+  { id: "fe_phenol", in: ["phenol", "fecl3"], t: [10, 40], out: ["phenol"], types: ["検出"], eq: "フェノール性水酸基 + FeCl₃ → 紫色呈色", text: "フェノールに塩化鉄(III)を加えると、美しい紫色に呈色した！ ベンゼン環に直結した−OH（フェノール類）の特異的検出。" },
+  { id: "br_phenol", in: ["phenol", "br2"], t: [10, 40], out: ["tribromophenol"], types: ["置換", "検出"], eq: "C₆H₅OH + 3Br₂ → C₆H₂Br₃OH↓ + 3HBr", text: "フェノール水溶液に臭素水を滴下すると、o-位とp-位が激しく置換されて直ちに白色沈殿（2,4,6-トリブロモフェノール）が生じた！" },
+  { id: "picric", in: ["phenol", "hno3"], cat: ["H2SO4_cat"], catMsg: "濃硫酸を触媒として加える。", t: [70, 100], lowMsg: "温水浴（70〜100℃）で加熱しよう。", out: ["picric_acid"], types: ["置換"], eq: "C₆H₅OH + 3HNO₃ → C₆H₂(NO₂)₃OH + 3H₂O", text: "フェノールのo-位とp-位が三重にニトロ化され、強酸性の黄色爆薬「ピクリン酸」が析出した！" },
+  { id: "kolbe", in: ["phenol", "co2"], cat: ["none"], t: [120, 150], lowMsg: "コルベ・シュミット反応には120〜140℃の加熱と加圧が必要。", out: ["salicylic_acid"], types: ["付加", "その他"], eq: "C₆H₅ONa + CO₂ → C₆H₄(OH)COONa →（酸析）→ C₆H₄(OH)COOH", text: "フェノールナトリウムに二酸化炭素を高温高圧で反応させ、サリチル酸を合成した！ 医薬品合成の中核素材。" },
+  { id: "fe_salicylic", in: ["salicylic_acid", "fecl3"], t: [10, 40], out: ["salicylic_acid"], types: ["検出"], eq: "サリチル酸 + FeCl₃ → 赤紫色呈色", text: "サリチル酸にはフェノール性−OHが残っているため、塩化鉄(III)で鮮やかな赤紫色に呈色した！" },
+  { id: "synth_aspirin", in: ["salicylic_acid", "ac2o"], t: [60, 80], lowMsg: "温水浴（60〜80℃）で加熱しよう。", out: ["aspirin"], types: ["縮合"], eq: "C₆H₄(OH)COOH + (CH₃CO)₂O → C₆H₄(OCOCH₃)COOH + CH₃COOH", text: "サリチル酸のフェノール性−OHが無水酢酸でアセチル化され、解熱鎮痛薬アスピリン（アセチルサリチル酸）が生成した！ フェノール性−OHが塞がれたためFeCl₃で呈色しない。" },
+  { id: "synth_salicylate", in: ["salicylic_acid", "methanol"], cat: ["H2SO4_cat"], catMsg: "エステル化には濃硫酸触媒が必要。", t: [60, 80], lowMsg: "温水浴（60〜80℃）で温めよう。", out: ["methyl_salicylate"], types: ["縮合"], eq: "C₆H₄(OH)COOH + CH₃OH ⇄ C₆H₄(OH)COOCH₃ + H₂O", text: "サリチル酸のカルボキシ基−COOHがメタノールとエステル化し、湿布薬特有の清涼な芳香をもつサリチル酸メチルが生成した！" }
 ];
 
 export const COMB = {
@@ -315,14 +364,30 @@ export const QUESTS2 = [
     reward: {}, rewardText: "ヨードホルム反応による構造決定をマスター！" },
   { id: "q2_6", who: "石鹸職人", title: "エステルのけん化", say: "「合成した酢酸エチルを水酸化ナトリウムで分解して、カルボン酸の塩（酢酸ナトリウム）にしてほしい」", target: "sodium_acetate",
     hints: ["酢酸エチルと水酸化ナトリウム NaOH をフラスコへ。", "温水浴（60〜80℃）で加熱すると、エステル結合が不可逆的に開裂する（けん化）。"],
-    reward: {}, rewardText: "第2章クリア！ 油脂とセッケン、有機合成の真髄に到達！" }
+    reward: {}, rewardText: "第2章クリア！ 芳香族化合物の最高峰「第3章 芳香族の迷宮」が解禁！" }
+];
+
+export const QUESTS3 = [
+  { id: "q3_1", who: "香気の研究者", title: "香気の環", say: "「アセチレンから環化三分子重合で生まれたベンゼン。まずはこの芳香族の母体をフラスコに準備してほしい」", target: "benzene",
+    hints: ["芳香族実験室の棚から『ベンゼン』を取り出してフラスコAへ。", "ベンゼンは正六角形の平面分子で、共鳴構造によって極めて安定している。"],
+    reward: { src: ["reagents3"] }, rewardText: "第3章 合成試薬（スズ粉末・亜硝酸Na・無水酢酸・塩化鉄(III)など）が解放！" },
+  { id: "q3_2", who: "火薬技師", title: "混酸の洗礼", say: "「濃硝酸と濃硫酸を混ぜた混酸を用いて、ベンゼンをニトロ化し、黄色油状のニトロベンゼンを作ってほしい」", target: "nitrobenzene",
+    hints: ["ベンゼンと濃硝酸 HNO₃ をフラスコへ。", "触媒兼脱水剤として濃硫酸 H₂SO₄（酸触媒）を選択。", "温水浴（50〜60℃）で加熱しよう（60℃を超えないよう精密管理）。"],
+    reward: {}, rewardText: "芳香環の親電子置換反応（ニトロ化）を習得！" },
+  { id: "q3_3", who: "染料工房の親方", title: "鮮血と太陽の色", say: "「ニトロベンゼンをスズで還元してアニリンを作り、氷冷ジアゾ化を経てフェノールと結合させた橙赤色のアゾ染料を完成させてくれ！」", target: "azo_dye",
+    hints: ["ステップ1：ニトロベンゼンにスズ Sn を加えて温水浴（60〜80℃）で還元し、アニリンを得る。", "ステップ2：アニリンに亜硝酸ナトリウム NaNO₂ を加え、必ず0〜5℃（氷冷）で反応させてジアゾニウム塩を作る！", "ステップ3：ジアゾニウム塩とフェノールを混ぜてカップリングさせると、鮮やかな橙赤色のアゾ染料が析出する！"],
+    reward: {}, rewardText: "合成染料の最高峰アゾカップリング反応を完全制覇！" },
+  { id: "q3_4", who: "現代製薬研究所", title: "奇跡の万能薬", say: "「サリチル酸から、世界で最も飲まれている解熱鎮痛薬『アスピリン（アセチルサリチル酸）』を合成してほしい」", target: "aspirin",
+    hints: ["フェノールに高温高圧でCO₂を反応させてサリチル酸を作る（コルベ・シュミット反応）。", "得られたサリチル酸に無水酢酸 (CH₃CO)₂O をフラスコで加える。", "温水浴（60〜80℃）で加熱するとフェノール性−OHがアセチル化されてアスピリンが完成する！"],
+    reward: {}, rewardText: "第3章クリア！ 有機化学の全体系を完全制覇！ 大博士の栄誉！" }
 ];
 
 export const QUESTS = QUESTS1; // 後方互換性用
 
 export const CHAPTERS = [
   { id: 1, name: "第1章 炭化水素の森", sub: "アルカン・アルケン・アルキン・高分子" },
-  { id: 2, name: "第2章 官能基の工房", sub: "アルコール・アルデヒド・ケトン・カルボン酸・エステル・検出反応" }
+  { id: 2, name: "第2章 官能基の工房", sub: "アルコール・アルデヒド・ケトン・カルボン酸・エステル・検出反応" },
+  { id: 3, name: "第3章 芳香族の迷宮", sub: "ベンゼン誘導体・ニトロ化・アニリン・ジアゾ染料・サリチル酸・医薬品" }
 ];
 
 export const POS1 = {
@@ -341,10 +406,29 @@ export const POS2 = {
   ether: [120, 520], h2: [360, 520], silver: [600, 520], sodium_acetate: [840, 380]
 };
 
+export const POS3 = {
+  benzene: [480, 280],
+  chlorobenzene: [680, 160],
+  toluene: [280, 160],
+  benzoic_acid: [100, 160],
+  nitrobenzene: [680, 280],
+  aniline: [680, 420],
+  acetanilide: [880, 420],
+  diazonium: [680, 560],
+  azo_dye: [480, 660],
+  phenol: [480, 440],
+  tribromophenol: [300, 440],
+  picric_acid: [300, 540],
+  salicylic_acid: [480, 340],
+  aspirin: [280, 340],
+  methyl_salicylate: [480, 160]
+};
+
 export const POS = POS1; // 後方互換
 
 export const RAWSRC1 = { methane: "gas", cac2: "quarry", glucose: "farm", naphtha: "refinery" };
 export const RAWSRC2 = { methanol: "distill", ethanol: "distill", isopropanol: "distill" };
+export const RAWSRC3 = { benzene: "aroma_lab", toluene: "aroma_lab" };
 export const RAWSRC = RAWSRC1;
 
 export const MAPNAME1 = {
@@ -364,6 +448,13 @@ export const MAPNAME2 = {
   ether: "ジエチルエーテル", h2: "水素", silver: "銀（銀鏡）", sodium_acetate: "酢酸ナトリウム"
 };
 
+export const MAPNAME3 = {
+  benzene: "ベンゼン", chlorobenzene: "クロロベンゼン", toluene: "トルエン", benzoic_acid: "安息香酸",
+  nitrobenzene: "ニトロベンゼン", aniline: "アニリン", acetanilide: "アセトアニリド", diazonium: "塩化ベンゼンジアゾニウム",
+  azo_dye: "アゾ染料", phenol: "フェノール", tribromophenol: "トリブロモフェノール", picric_acid: "ピクリン酸",
+  salicylic_acid: "サリチル酸", aspirin: "アスピリン", methyl_salicylate: "サリチル酸メチル"
+};
+
 export const MAPNAME = MAPNAME1;
 
 export const REGIONS1 = [
@@ -378,6 +469,13 @@ export const REGIONS2 = [
   ["アルデヒドとケトン（カルボニル化合物）", 360, 40],
   ["カルボン酸・エステル・塩", 720, 40],
   ["官能基の検出・鑑識の領域", 360, 470]
+];
+
+export const REGIONS3 = [
+  ["トルエンと安息香酸（側鎖酸化）", 180, 110],
+  ["ベンゼン環の親電子置換", 680, 110],
+  ["含窒素芳香族・アゾ染料ルート", 720, 360],
+  ["フェノール類・医薬品合成（サリチル酸）", 260, 400]
 ];
 
 export const REGIONS = REGIONS1;
@@ -398,6 +496,12 @@ export const ACH = [
   { id: "iodo", n: "黄色い結晶", d: "ヨードホルム反応による特異沈殿を成功させる", test: s => !!s.found.iodoform },
   { id: "ester", n: "芳香とけん化", d: "エステル化とけん化（加水分解）の両方を成功させる", test: s => s.rx.ester_et && s.rx.sapon_et },
   { id: "dex2", n: "官能基の巨匠", d: "第2章の物質図鑑をすべて埋める", test: s => DEX2.every(i => s.found[i]) },
+  // ===== 第3章の実績 =====
+  { id: "nitro", n: "混酸のマスター", d: "ベンゼンの混酸ニトロ化を成功させる", test: s => !!s.rx.nitro_bz },
+  { id: "ice_diazo", n: "絶対零度の職人", d: "5℃以下の氷冷でジアゾ化を成功させる", test: s => !!s.rx.diazo },
+  { id: "azo", n: "緋色の染料", d: "アゾカップリングで橙赤色染料を析出させる", test: s => !!s.found.azo_dye },
+  { id: "aspirin_ach", n: "奇跡の薬効", d: "解熱鎮痛薬アスピリンを合成する", test: s => !!s.found.aspirin },
+  { id: "dex3", n: "芳香族の大賢者", d: "第3章の物質図鑑をすべて埋める", test: s => DEX3.every(i => s.found[i]) },
   // ===== 探偵モードの実績 =====
   { id: "det_first", n: "初陣の名探偵", d: "探偵モードで構造決定事件を1件解決する", test: s => Object.keys(s.detective?.solved || {}).length >= 1 },
   { id: "det_all", n: "化学のシャーロック", d: "探偵モードの全8事件を完全解決する", test: s => Object.keys(s.detective?.solved || {}).length >= 8 }

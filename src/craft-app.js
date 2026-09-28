@@ -3,9 +3,9 @@
  * 学習指導要領準拠・やさしいモード（Easy Mode）対応
  */
 import {
-  CLS, SHORT, S, DEX1, DEX2, DEXX, SOURCES, CATS, CATSHORT, TYPES, TYPE_INFO,
-  RULES, RULE, QUESTS, QUESTS1, QUESTS2, ACH, RANKS, K, OY,
-  POS1, POS2, RAWSRC1, RAWSRC2, MAPNAME1, MAPNAME2, REGIONS1, REGIONS2, CHAPTERS
+  CLS, SHORT, S, DEX1, DEX2, DEX3, DEXX, SOURCES, CATS, CATSHORT, TYPES, TYPE_INFO,
+  RULES, RULE, QUESTS, QUESTS1, QUESTS2, QUESTS3, ACH, RANKS, K, OY,
+  POS1, POS2, POS3, RAWSRC1, RAWSRC2, RAWSRC3, MAPNAME1, MAPNAME2, MAPNAME3, REGIONS1, REGIONS2, REGIONS3, CHAPTERS
 } from './craft-data.js';
 import {
   DETECTIVE_CASES, DETECTIVE_RANKS, REAGENTS_TEST_INFO
@@ -22,7 +22,8 @@ function fresh() {
     q: 0, // 後方互換
     q1: 0,
     q2: 0,
-    chapter: 1, // 1: 炭化水素の森, 2: 官能基の工房, 'detective': 探偵モード
+    q3: 0,
+    chapter: 1, // 1: 炭化水素の森, 2: 官能基の工房, 3: 芳香族の迷宮, 'detective': 探偵モード
     prevChapter: 1,
     detective: {
       caseIdx: 0,
@@ -59,16 +60,36 @@ const freshUI = () => ({
 let ui = freshUI();
 
 const curChapter = () => state.chapter || 1;
-const curQuests = () => curChapter() === 2 ? QUESTS2 : QUESTS1;
-const curQIdx = () => curChapter() === 2 ? (state.q2 || 0) : (state.q1 ?? state.q ?? 0);
+const curQuests = () => {
+  const c = curChapter();
+  return c === 3 ? QUESTS3 : c === 2 ? QUESTS2 : QUESTS1;
+};
+const curQIdx = () => {
+  const c = curChapter();
+  return c === 3 ? (state.q3 || 0) : c === 2 ? (state.q2 || 0) : (state.q1 ?? state.q ?? 0);
+};
 const setCurQIdx = (val) => {
-  if (curChapter() === 2) state.q2 = val;
+  const c = curChapter();
+  if (c === 3) state.q3 = val;
+  else if (c === 2) state.q2 = val;
   else { state.q1 = val; state.q = val; }
 };
-const curPos = () => curChapter() === 2 ? POS2 : POS1;
-const curRawSrc = () => curChapter() === 2 ? RAWSRC2 : RAWSRC1;
-const curMapName = () => curChapter() === 2 ? MAPNAME2 : MAPNAME1;
-const curRegions = () => curChapter() === 2 ? REGIONS2 : REGIONS1;
+const curPos = () => {
+  const c = curChapter();
+  return c === 3 ? POS3 : c === 2 ? POS2 : POS1;
+};
+const curRawSrc = () => {
+  const c = curChapter();
+  return c === 3 ? RAWSRC3 : c === 2 ? RAWSRC2 : RAWSRC1;
+};
+const curMapName = () => {
+  const c = curChapter();
+  return c === 3 ? MAPNAME3 : c === 2 ? MAPNAME2 : MAPNAME1;
+};
+const curRegions = () => {
+  const c = curChapter();
+  return c === 3 ? REGIONS3 : c === 2 ? REGIONS2 : REGIONS1;
+};
 
 function getDetState() {
   if (!state.detective) {
@@ -93,13 +114,28 @@ function getDetRank(solved) {
 }
 
 function switchChapter(ch) {
-  if (state.chapter !== "detective" && (ch === 1 || ch === 2)) {
+  if (state.chapter !== "detective" && (ch === 1 || ch === 2 || ch === 3)) {
     state.prevChapter = ch;
   }
   state.chapter = ch;
   if (ch === "detective") {
     getDetState();
     toast("🕵️ <b>探偵モード「構造決定事件簿」を開始しました</b><br>試薬で未知化合物の官能基を暴き、真の構造を特定しましょう！");
+  } else if (ch === 3) {
+    state.src.aroma_lab = true;
+    state.src.acids_ch3 = true;
+    if (state.q3 && state.q3 >= 1) {
+      state.src.reagents3 = true;
+    }
+    state.found.benzene = true;
+    state.found.toluene = true;
+    if (ui.a === "methane" || ui.a === "ethanol" || !ui.a) ui.a = "benzene";
+    if (ui.b === "cl2" || ui.b === "kmno4" || !ui.b) ui.b = "hno3";
+    ui.temp = 50;
+    ui.light = false;
+    ui.cat = "H2SO4_cat";
+    ui.pred = "";
+    toast("🏛️ <b>第3章「芳香族の迷宮」に切り替えました</b><br>ベンゼン環の置換反応・アゾ染料・医薬品合成の世界へ！");
   } else if (ch === 2) {
     state.src.distill = true;
     state.src.oxidant = true;
@@ -110,16 +146,16 @@ function switchChapter(ch) {
     state.found.methanol = true;
     state.found.ethanol = true;
     state.found.isopropanol = true;
-    if (ui.a === "methane" || !ui.a) ui.a = "ethanol";
-    if (ui.b === "cl2" || !ui.b) ui.b = "kmno4";
+    if (ui.a === "methane" || ui.a === "benzene" || !ui.a) ui.a = "ethanol";
+    if (ui.b === "cl2" || ui.b === "hno3" || !ui.b) ui.b = "kmno4";
     ui.temp = 60;
     ui.light = false;
     ui.cat = "none";
     ui.pred = "";
     toast("🧪 <b>第2章「官能基の工房」に切り替えました</b><br>アルコールやエステル、官能基の検出反応を体験しましょう！");
   } else {
-    if (ui.a === "ethanol" || !ui.a) ui.a = "methane";
-    if (ui.b === "kmno4" || !ui.b) ui.b = "cl2";
+    if (ui.a === "ethanol" || ui.a === "benzene" || !ui.a) ui.a = "methane";
+    if (ui.b === "kmno4" || ui.b === "hno3" || !ui.b) ui.b = "cl2";
     ui.temp = 20;
     ui.light = false;
     ui.cat = "none";
@@ -149,7 +185,13 @@ function load() {
             activeTest: null
           };
         }
-        if (state.chapter === 2) {
+        if (state.chapter === 3) {
+          state.src.aroma_lab = true;
+          state.src.acids_ch3 = true;
+          if (state.q3 && state.q3 >= 1) state.src.reagents3 = true;
+          state.found.benzene = true;
+          state.found.toluene = true;
+        } else if (state.chapter === 2) {
           state.src.distill = true;
           state.src.oxidant = true;
           state.src.store = true;
@@ -487,6 +529,18 @@ function animate(res) {
     } else if (main === "iodoform") {
       liq.setAttribute("fill", "#facc15");
       liq.setAttribute("opacity", ".95");
+    } else if (main === "azo_dye") {
+      liq.setAttribute("fill", "#ea580c"); // 鮮やかな橙赤色
+      liq.setAttribute("opacity", "1");
+    } else if (main === "picric_acid") {
+      liq.setAttribute("fill", "#eab308"); // 鮮黄色
+      liq.setAttribute("opacity", "1");
+    } else if (res.rule.id === "fe_phenol") {
+      liq.setAttribute("fill", "#7e22ce"); // FeCl3 紫色呈色
+      liq.setAttribute("opacity", "0.9");
+    } else if (res.rule.id === "fe_salicylic") {
+      liq.setAttribute("fill", "#9333ea"); // FeCl3 赤紫色呈色
+      liq.setAttribute("opacity", "0.9");
     } else {
       liq.setAttribute("fill", res.rule.fade ? "var(--surface-2)" : cc(main));
       liq.setAttribute("opacity", res.rule.fade ? "1" : ".55");
@@ -895,10 +949,18 @@ function getPredictionOptions() {
 function tempZoneInfo(t) {
   // 実験ノート（智慧）: 発見済みの反応がある場合のみ注記を表示
   let note = "";
-  if (t <= 40) {
+  if (t <= 5) {
+    if (state.rx.diazo) {
+      note = "📖 実験ノート：ジアゾ化の成功温度（0〜5℃氷冷・分解防止）";
+    } else {
+      note = "氷冷（0〜5℃）の精密冷却";
+    }
+  } else if (t <= 40) {
     note = "常温（加熱なし）での実験";
   } else if (t <= 90) {
-    if (state.rx.ester_et || state.rx.test_silver || state.rx.test_iodo_ac) {
+    if (state.rx.nitro_bz) {
+      note = "📖 実験ノート：混酸ニトロ化（50〜60℃）／エステル化";
+    } else if (state.rx.ester_et || state.rx.test_silver || state.rx.test_iodo_ac) {
       note = "📖 実験ノート：温水による穏やかな加熱反応（60〜80℃）";
     } else {
       note = "おだやかな温水加熱（湯せん）";
@@ -926,6 +988,9 @@ function tempZoneInfo(t) {
   }
 
   // ゾーン分類（実験室の自然な分類、ネタバレなし）
+  if (t <= 5) {
+    return { name: "氷冷", color: "var(--accent)", bg: "var(--accent-soft)", desc: note };
+  }
   if (t <= 40) {
     return { name: "室温", color: "var(--ok)", bg: "var(--ok-soft)", desc: note };
   }
@@ -942,7 +1007,7 @@ function tempZoneInfo(t) {
 }
 
 function updateTempUI(temp) {
-  const t = Math.max(20, Math.min(900, Math.round(temp / 10) * 10));
+  const t = Math.max(0, Math.min(900, Math.round(temp / 10) * 10));
   ui.temp = t;
 
   const tempInput = $("temp");
@@ -969,7 +1034,8 @@ function updateTempUI(temp) {
   // プリセットボタンのアクティブ表示切替
   document.querySelectorAll(".t-pre").forEach(btn => {
     const pt = +btn.dataset.temp;
-    const isAct = (pt === 20 && t <= 40) ||
+    const isAct = (pt === 0 && t <= 5) ||
+                  (pt === 20 && t > 5 && t <= 40) ||
                   (pt === 60 && t >= 50 && t <= 90) ||
                   (pt === 140 && t >= 120 && t <= 150) ||
                   (pt === 170 && t >= 155 && t <= 190) ||
@@ -1107,14 +1173,16 @@ function renderHUD() {
   const subTitle = $("ch-sub-title");
   if (subTitle) {
     subTitle.textContent = ch === "detective" ? "🔍 探偵モード：未知化合物の構造決定事件簿（高校化学）" :
+                           ch === 3 ? "第3章 芳香族の迷宮（学習指導要領 準拠）" :
                            ch === 2 ? "第2章 官能基の工房（学習指導要領 準拠）" :
                            "第1章 炭化水素の森（学習指導要領 準拠）";
   }
   const q1Done = (state.q1 ?? state.q ?? 0) >= QUESTS1.length;
   const q2Done = (state.q2 || 0) >= QUESTS2.length;
+  const q3Done = (state.q3 || 0) >= QUESTS3.length;
   const detDone = Object.keys(state.detective?.solved || {}).length;
 
-  const tab1 = $("ch-tab-1"), tab2 = $("ch-tab-2"), tabDet = $("ch-tab-det");
+  const tab1 = $("ch-tab-1"), tab2 = $("ch-tab-2"), tab3 = $("ch-tab-3"), tabDet = $("ch-tab-det");
   if (tab1) {
     tab1.setAttribute("aria-selected", ch === 1);
     tab1.textContent = `第1章 炭化水素${q1Done ? " 🏆" : ""}`;
@@ -1130,6 +1198,14 @@ function renderHUD() {
     tab2.style.borderColor = ch === 2 ? "var(--accent)" : "var(--line-2)";
     tab2.style.color = ch === 2 ? "var(--accent)" : "var(--ink-2)";
     tab2.style.fontWeight = ch === 2 ? "700" : "500";
+  }
+  if (tab3) {
+    tab3.setAttribute("aria-selected", ch === 3);
+    tab3.textContent = `第3章 芳香族${q3Done ? " 🏆" : ""}`;
+    tab3.style.background = ch === 3 ? "var(--accent-soft)" : "transparent";
+    tab3.style.borderColor = ch === 3 ? "var(--accent)" : "var(--line-2)";
+    tab3.style.color = ch === 3 ? "var(--accent)" : "var(--ink-2)";
+    tab3.style.fontWeight = ch === 3 ? "700" : "500";
   }
   if (tabDet) {
     const isDet = ch === "detective";
@@ -1174,8 +1250,10 @@ function deliver() {
   if (nextQ >= quests.length) {
     if (curChapter() === 1) {
       toast("🏆 <b>第1章クリア！</b> 「第2章 官能基の工房」へ進めるようになりました！ ★+2 +50 XP");
+    } else if (curChapter() === 2) {
+      toast("🏆 <b>第2章クリア！</b> 「第3章 芳香族の迷宮」へ進めるようになりました！ ★+2 +50 XP");
     } else {
-      toast("🎉 <b>第2章クリア！</b> 全ての依頼を達成しました！ おめでとうございます！ ★+2 +50 XP");
+      toast("🎉 <b>第3章クリア！</b> 芳香族化合物の最高峰を完全制覇しました！ おめでとうございます！ ★+2 +50 XP");
     }
   } else {
     toast(`依頼「<b>${q.title}</b>」を納品しました！ ★+2 +50 XP<br><small>${q.rewardText || ""}</small>`);
@@ -1232,8 +1310,10 @@ function renderQuest() {
     let nextBtn = "";
     if (ch === 1) {
       nextBtn = `<div class="acts" style="margin-top:8px"><button type="button" class="btn hot" id="goto-ch2">第2章「官能基の工房」へ進む →</button></div>`;
+    } else if (ch === 2) {
+      nextBtn = `<div class="acts" style="margin-top:8px"><button type="button" class="btn hot" id="goto-ch3">第3章「芳香族の迷宮」へ進む →</button></div>`;
     }
-    el.innerHTML = `<div><div class="eyebrow">第${ch}章の依頼 全達成！</div><h2>第${ch}章クリア</h2><p class="say">${ch === 1 ? "炭化水素の森を開拓しました！第2章「官能基の工房」へ進んで、アルコールやエステル、検出反応を探究しましょう！" : "すべての官能基の探究を完遂しました！おめでとうございます！"}</p>${nextBtn}</div>`;
+    el.innerHTML = `<div><div class="eyebrow">第${ch}章の依頼 全達成！</div><h2>第${ch}章クリア 🏆</h2><p class="say">${ch === 1 ? "炭化水素の森を開拓しました！第2章「官能基の工房」へ進んで、アルコールやエステル、検出反応を探究しましょう！" : ch === 2 ? "官能基の探究を完遂しました！第3章「芳香族の迷宮」へ進み、ベンゼン環やアゾ染料・医薬品合成に挑みましょう！" : "芳香族化合物の最高峰まで完全制覇しました！有機化学の全体系をマスターした大博士です！"}</p>${nextBtn}</div>`;
     return;
   }
   el.className = "panel qbar";
@@ -1250,8 +1330,9 @@ function renderQuest() {
 function renderTabs() {
   const d1 = DEX1.filter(i => state.found[i]).length;
   const d2 = DEX2.filter(i => state.found[i]).length;
+  const d3 = DEX3.filter(i => state.found[i]).length;
   const foundRx = RULES.filter(r => state.rx[r.id]).length;
-  $("t-dex").textContent = `${d1 + d2}/${DEX1.length + DEX2.length}`;
+  $("t-dex").textContent = `${d1 + d2 + d3}/${DEX1.length + DEX2.length + DEX3.length}`;
   const tRx = $("t-rx");
   if (tRx) tRx.textContent = `${foundRx}/${RULES.length}`;
   $("t-ach").textContent = `${ACH.filter(a => state.ach[a.id]).length}/${ACH.length}`;
@@ -1274,7 +1355,8 @@ function renderTabs() {
     };
     h += `<div class="dex-sec"><span>第1章の物質（炭化水素・高分子）</span><span>${d1}/${DEX1.length}</span></div><div class="dex">${DEX1.map(item).join("")}</div>`;
     h += `<div class="dex-sec"><span>第2章の物質（官能基・エステル・検出）</span><span>${d2}/${DEX2.length}</span></div><div class="dex">${DEX2.map(item).join("")}</div>`;
-    h += `<div class="dex-sec"><span>他章・副産物</span><span>${DEXX.filter(i => state.found[i]).length}/${DEXX.length}</span></div><div class="dex">${DEXX.map(item).join("")}</div>`;
+    h += `<div class="dex-sec"><span>第3章の物質（芳香族・染料・医薬品）</span><span>${d3}/${DEX3.length}</span></div><div class="dex">${DEX3.map(item).join("")}</div>`;
+    h += `<div class="dex-sec"><span>副産物</span><span>${DEXX.filter(i => state.found[i]).length}/${DEXX.length}</span></div><div class="dex">${DEXX.map(item).join("")}</div>`;
   } else if (ui.tab === "rx") {
     // 反応図鑑（学習指導要領の分類ごと）
     const groups = ["置換", "付加", "脱離", "縮合", "重合", "酸化", "加水分解", "検出", "燃焼", "熱分解", "その他"];
@@ -1400,8 +1482,8 @@ function renderDetective() {
     </button>`;
   });
 
-  // Reagent buttons (combustion + 6 test reagents)
-  const reagentKeys = ["combust", "na", "tollens", "iodo", "br2", "kmno4", "sapon"];
+  // Reagent buttons (combustion + 7 test reagents)
+  const reagentKeys = ["combust", "na", "tollens", "iodo", "br2", "kmno4", "sapon", "fecl3"];
   let reagentGrid = "";
   reagentKeys.forEach(k => {
     const rInfo = REAGENTS_TEST_INFO[k];
@@ -1467,6 +1549,8 @@ function renderDetective() {
       if (tData.ok) {
         tubeEffect = `<line x1="15" y1="65" x2="45" y2="65" stroke="#3b82f6" stroke-width="2" stroke-dasharray="3,2"/>`;
       }
+    } else if (actKey === "fecl3") {
+      tubeLiquidFill = tData.ok ? "#7e22ce" : "#b45309"; // 陽性なら紫色、陰性ならFeCl3の黄褐色
     }
 
     visHtml = `
@@ -1944,6 +2028,12 @@ document.addEventListener("click", e => {
     if (m) m.open = false;
     return;
   }
+  if (t.id === "ch-tab-3" || t.id === "goto-ch3" || t.id === "switch-to-ch3-menu") {
+    switchChapter(3);
+    const m = $("menu");
+    if (m) m.open = false;
+    return;
+  }
   if (t.id === "ch-tab-det" || t.id === "switch-to-det-menu" || t.id === "goto-det-mode") {
     switchChapter("detective");
     const m = $("menu");
@@ -2006,6 +2096,9 @@ document.addEventListener("click", e => {
         if (!testResult.ok && (cand.cls === "アルケン" || cand.cls === "アルキン")) contradict = true;
       } else if (rk === "iodo") {
         if (!testResult.ok && cand.id === "acetone") contradict = true;
+      } else if (rk === "fecl3") {
+        if (!testResult.ok && cand.cls === "フェノール類") contradict = true;
+        if (testResult.ok && cand.cls !== "フェノール類") contradict = true;
       }
       if (contradict && !det.eliminated[curCase.id].includes(cand.id)) {
         det.eliminated[curCase.id].push(cand.id);

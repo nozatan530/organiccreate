@@ -520,7 +520,8 @@
           <span id="ch-sub-title">第1章 炭化水素の森（学習指導要領 準拠）</span>
           <div class="ch-nav" role="tablist" style="display:inline-flex;gap:4px">
             <button type="button" class="btn" id="ch-tab-1" role="tab" style="font-size:12px;padding:2px 8px;font-weight:700">第1章 炭化水素</button>
-            <button type="button" class="btn" id="ch-tab-2" role="tab" style="font-size:12px;padding:2px 8px;font-weight:700">第2章 官能基の工房</button>
+            <button type="button" class="btn" id="ch-tab-2" role="tab" style="font-size:12px;padding:2px 8px;font-weight:700">第2章 官能基</button>
+            <button type="button" class="btn" id="ch-tab-3" role="tab" style="font-size:12px;padding:2px 8px;font-weight:700">第3章 芳香族</button>
             <button type="button" class="btn" id="ch-tab-det" role="tab" style="font-size:12px;padding:2px 8px;font-weight:700">🕵️ 探偵モード</button>
           </div>
         </div>
@@ -538,6 +539,7 @@
             <button type="button" id="start-tut">チュートリアルを体験（第1章）</button>
             <button type="button" id="switch-to-ch1-menu">第1章「炭化水素の森」を開く</button>
             <button type="button" id="switch-to-ch2-menu">第2章「官能基の工房」を開く</button>
+            <button type="button" id="switch-to-ch3-menu">第3章「芳香族の迷宮」を開く</button>
             <button type="button" id="switch-to-det-menu">🕵️「探偵モード（構造決定事件簿）」を開く</button>
             <button type="button" id="toggle-easy">学習サポート（やさしいモード）：ON</button>
             <button type="button" id="toggle-en">物質の英語名表示：あり</button>
@@ -624,6 +626,7 @@
               </div>
               <div class="temp-hint" id="temp-hint" style="display:none"></div>
               <div class="temp-presets" id="temp-presets">
+                <button type="button" class="t-pre" data-temp="0" id="t-pre-ice" style="color:var(--accent)">氷冷 0℃</button>
                 <button type="button" class="t-pre active" data-temp="20">室温 20℃</button>
                 <button type="button" class="t-pre" data-temp="60">湯せん 60℃</button>
                 <button type="button" class="t-pre" data-temp="140" id="t-pre-140">140℃</button>
@@ -635,8 +638,9 @@
               <div class="temp-slider-row">
                 <button type="button" class="temp-step-btn" id="temp-down" aria-label="温度を10℃下げる">−10℃</button>
                 <div class="temp-track-wrap">
-                  <input type="range" id="temp" min="20" max="900" step="10" value="20" aria-label="加熱温度スライダー">
+                  <input type="range" id="temp" min="0" max="900" step="10" value="20" aria-label="加熱温度スライダー">
                   <div class="temp-ticks">
+                    <span data-temp="0">0℃</span>
                     <span data-temp="20">20℃</span>
                     <span data-temp="60">60℃</span>
                     <span data-temp="140">140℃</span>
