@@ -1596,7 +1596,7 @@ function renderTabs() {
     h += `<div class="rx-grid">`;
     DETECTIVE_CASES.forEach((c, idx) => {
       const isSol = !!det.solved[c.id];
-      const hasCombust = (det.testsRun[c.id] || []).includes("combust");
+      const hasCombust = (det.testsRun[c.id] || []).includes("combust") && !c.formulaHidden;
       const fDisplay = isSol || hasCombust ? c.formula : "？（未分析）";
       h += `
         <div class="rx-card ${isSol ? "" : "unk"}" style="cursor:pointer" data-det-case-open="${idx}">
@@ -1775,7 +1775,7 @@ function renderDetective() {
   DETECTIVE_CASES.forEach((c, idx) => {
     const isAct = idx === det.caseIdx;
     const isSol = !!det.solved[c.id];
-    const hasCombust = (det.testsRun[c.id] || []).includes("combust");
+    const hasCombust = (det.testsRun[c.id] || []).includes("combust") && !c.formulaHidden;
     const formulaDisplay = isSol || hasCombust ? c.formula : "？（未分析）";
     casePills += `<button type="button" class="det-case-pill${isAct ? " active" : ""}${isSol ? " solved" : ""}" data-det-case="${idx}">
       <span>${isSol ? "✅" : "📁"}</span>
@@ -1932,8 +1932,10 @@ function renderDetective() {
                     "候補から特定した化合物を選択してください";
 
   const hasCombustionDone = testsRun.includes("combust");
-  const formulaLabel = isSolved || hasCombustionDone ?
+  const formulaLabel = isSolved || (hasCombustionDone && !curCase.formulaHidden) ?
     `<div class="det-sample-formula">${curCase.formula}</div><span style="font-size:10.5px;color:var(--ok)">✓ 元素分析完了</span>` :
+    curCase.formulaHidden ?
+    `<div class="det-sample-formula" style="color:var(--ink-3);letter-spacing:2px">？（未知）</div><span style="font-size:11px;color:var(--flame)">${hasCombustionDone ? "⚠️ 試料が微量で分子式は決まらない。試薬の反応で推理しよう" : "🔥 試料はごく微量。元素分析で分かるのは構成元素まで"}</span>` :
     `<div class="det-sample-formula" style="color:var(--ink-3);letter-spacing:2px">？（未知）</div><span style="font-size:11px;color:var(--flame)">🔥「元素分析」で分子式を特定可能</span>`;
 
   let html = `
@@ -2582,10 +2584,10 @@ document.addEventListener("click", e => {
       let contradict = false;
       if (rk === "na") {
         if (!testResult.ok && (cand.cls === "アルコール" || cand.cls === "カルボン酸")) contradict = true;
-        if (testResult.ok && cand.cls === "エーテル") contradict = true;
+        if (testResult.ok && ["エーテル", "エステル", "アルデヒド", "ケトン"].includes(cand.cls)) contradict = true;
       } else if (rk === "tollens") {
         if (!testResult.ok && (cand.cls === "アルデヒド" || cand.id === "formic_acid")) contradict = true;
-        if (testResult.ok && cand.cls === "ケトン") contradict = true;
+        if (testResult.ok && (cand.cls === "ケトン" || (cand.cls === "カルボン酸" && cand.id !== "formic_acid"))) contradict = true;
       } else if (rk === "sapon") {
         if (testResult.ok && cand.cls !== "エステル") contradict = true;
         if (!testResult.ok && cand.cls === "エステル") contradict = true;
