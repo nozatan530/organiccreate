@@ -63,7 +63,7 @@
   button, select, input { font: inherit; color: inherit; }
   button { cursor: pointer; }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .app { max-width: 1240px; margin: 0 auto; padding-inline: 16px; padding-block: 16px 48px; display: grid; gap: 14px; }
+  .app { max-width: 1240px; margin: 0 auto; padding-inline: 16px; padding-block: 16px 48px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
   .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); }
   .btn { border: 1px solid var(--line-2); background: var(--surface); border-radius: 8px; padding: 5px 12px; font-size: 13px; }
   .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
@@ -429,7 +429,8 @@
     .top { gap: 8px 12px; }
     .brand h1 { font-size: 20px; }
     .brand > span { font-size: 11.5px; }
-    .ch-nav { width: 100%; display: flex; overflow-x: auto; padding-bottom: 2px; }
+    .brand, .brand > div { min-width: 0; max-width: 100%; }
+    .ch-nav { width: 100%; max-width: 100%; display: flex; overflow-x: auto; padding-bottom: 2px; }
     .ch-nav .btn { font-size: 11px; padding: 4px 8px; flex: 1; text-align: center; white-space: nowrap; }
     .hud { width: 100%; justify-content: space-between; }
     .rank { min-width: 110px; flex: 1; }

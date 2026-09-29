@@ -228,7 +228,8 @@ export function renderSeparationStage(container, state, callbacks) {
                       <code class="sep-eq-text">${sep.drainedFlask.precipitate.eq}</code>
                     </div>
                   </div>
-                ` : `
+                ` : ""}
+                ${sep.drainedFlask.ions.length ? `
                   <div class="sep-flask-actions">
                     <span class="sep-flask-act-label">試薬を加えて目的物を遊離・析出させる：</span>
                     <div class="sep-flask-act-btns">
@@ -237,7 +238,7 @@ export function renderSeparationStage(container, state, callbacks) {
                       <button type="button" class="btn" data-sep-flask-add="co2">＋ 二酸化炭素 CO₂ を吹き込む</button>
                     </div>
                   </div>
-                `}
+                ` : ""}
               ` : `
                 <div class="sep-flask-placeholder">
                   分液漏斗のコックを開けると、下層の水層がここに流れ込みます。
@@ -508,6 +509,12 @@ export function addReagentToFlask(state, reagentId, callbacks) {
   const ions = sep.drainedFlask.ions;
   let successSub = null;
 
+  // 安息香酸Naとフェノキシドが混在する水層に強酸を加えると、両方が同時に遊離して混ざってしまう
+  if (reagentId === "hcl" && ions.includes("sodium_benzoate") && ions.includes("sodium_phenoxide")) {
+    sep.lastLog = "⚠️【分離失敗】強酸HClは安息香酸とフェノールの両方を同時に遊離させるため、2つが混ざった状態で析出してしまいます。先にCO₂を吹き込んで炭酸より弱い酸のフェノールだけを遊離させるか、リセットしてNaHCO₃から抽出し直しましょう。";
+    return false;
+  }
+
   // 1. アニリン塩酸塩にNaOHを加える（強塩基による弱塩基の遊離）
   if (ions.includes("aniline_hydrochloride") && reagentId === "naoh") {
     successSub = {
@@ -555,6 +562,13 @@ export function addReagentToFlask(state, reagentId, callbacks) {
   }
 
   if (successSub) {
+    const consumedIon = {
+      aniline: "aniline_hydrochloride",
+      benzoic_acid: "sodium_benzoate",
+      salicylic_acid: "sodium_salicylate",
+      phenol: "sodium_phenoxide"
+    }[successSub.id];
+    sep.drainedFlask.ions = ions.filter(i => i !== consumedIon);
     sep.isolated[successSub.id] = true;
     sep.drainedFlask.precipitate = successSub;
     if (callbacks.onSubstanceIsolated) {

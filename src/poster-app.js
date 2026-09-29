@@ -162,7 +162,7 @@ export function renderPosterDialog(state, dlg) {
           <div class="poster-ftr">
             <div class="poster-ftr-box">
               <b style="color:#b45309">⚖️ 酸性度の強弱序列と遊離則</b>
-              <span>スルホン酸 $\\text{R-SO}_3\\text{H}$ ＞ カルボン酸 $\\text{R-COOH}$ ＞ 炭酸 $\\text{H}_2\\text{CO}_3$ ＞ フェノール類 $\\text{Ar-OH}$（弱酸の塩＋強酸 $\\rightarrow$ 弱酸遊離）</span>
+              <span>スルホン酸 R−SO₃H ＞ カルボン酸 R−COOH ＞ 炭酸 H₂CO₃ ＞ フェノール類 Ar−OH（弱酸の塩＋強酸 → 弱酸遊離）</span>
             </div>
             <div class="poster-ftr-box">
               <b style="color:#0369a1">🧪 特異的鑑識・検出反応の極意</b>
@@ -243,10 +243,28 @@ export function renderPosterDialog(state, dlg) {
 
 async function exportPosterPdf(element, format = 'a4') {
   // Capture DOM to canvas with high pixel ratio for print sharpness
+  // The sheet lives inside a scrollable dialog; capture its full height,
+  // not just the part currently visible in the preview.
+  const fullWidth = element.scrollWidth;
+  const fullHeight = element.scrollHeight;
   const canvas = await html2canvas(element, {
     scale: 2.2,
     useCORS: true,
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    width: fullWidth,
+    height: fullHeight,
+    windowWidth: Math.max(document.documentElement.clientWidth, fullWidth),
+    windowHeight: fullHeight,
+    scrollX: 0,
+    scrollY: 0,
+    onclone: doc => {
+      const sheet = doc.getElementById(element.id);
+      for (let el = sheet && sheet.parentElement; el && el !== doc.body; el = el.parentElement) {
+        el.style.overflow = 'visible';
+        el.style.maxHeight = 'none';
+        el.style.height = 'auto';
+      }
+    }
   });
 
   const imgData = canvas.toDataURL('image/jpeg', 0.96);
@@ -260,7 +278,11 @@ async function exportPosterPdf(element, format = 'a4') {
   const pageWidth = isA3 ? 420 : 297;
   const pageHeight = isA3 ? 297 : 210;
 
-  pdf.addImage(imgData, 'JPEG', 0, 0, pageWidth, pageHeight);
+  // Fit the whole sheet on the page without distorting its aspect ratio.
+  const fit = Math.min(pageWidth / canvas.width, pageHeight / canvas.height);
+  const w = canvas.width * fit;
+  const h = canvas.height * fit;
+  pdf.addImage(imgData, 'JPEG', (pageWidth - w) / 2, (pageHeight - h) / 2, w, h);
   const dateStr = new Date().toISOString().slice(0, 10);
   pdf.save(`有機化学_反応大系統図_${dateStr}.pdf`);
 }

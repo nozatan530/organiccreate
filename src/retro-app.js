@@ -86,6 +86,7 @@ export function executeRetroStep(state) {
 
     if (nextSub === curP.target) {
       retro.isClear = true;
+      retro.victoryDismissed = false;
       retro.lastStatus = "clear";
       const totalMoves = retro.routeSteps.length;
       let stars = 1;
@@ -364,8 +365,8 @@ export function renderRetroPuzzle(container, state, callbacks) {
     </div>
   `;
 
-  // Victory Overlay when cleared
-  if (retro.isClear) {
+  // Victory Overlay when cleared (until the player closes it)
+  if (retro.isClear && !retro.victoryDismissed) {
     const sol = retro.solved[curP.id];
     const stars = sol ? sol.stars : 1;
     const isNext = retro.puzzleIdx + 1 < RETRO_PUZZLES.length;
@@ -388,6 +389,7 @@ export function renderRetroPuzzle(container, state, callbacks) {
           <div style="display:flex;justify-content:center;gap:10px;margin-top:20px">
             ${isNext ? `<button type="button" class="btn hot" id="retro-next-stage-btn" style="padding:8px 20px;font-size:14px">次のパズルへ進む →</button>` : `<button type="button" class="btn hot" data-back-craft style="padding:8px 20px;font-size:14px">全パズル制覇！工房へ戻る 🏆</button>`}
             <button type="button" class="btn ghost" id="retro-retry-btn" style="padding:8px 16px;font-size:13px">もう一度挑戦する</button>
+            <button type="button" class="btn ghost" id="retro-close-victory" style="padding:8px 16px;font-size:13px">閉じる</button>
           </div>
         </div>
       </div>
@@ -491,6 +493,14 @@ export function renderRetroPuzzle(container, state, callbacks) {
   if (retryBtn) {
     retryBtn.onclick = () => {
       resetPuzzle(state, retro.puzzleIdx);
+      renderRetroPuzzle(container, state, callbacks);
+    };
+  }
+
+  const closeVictoryBtn = container.querySelector("#retro-close-victory");
+  if (closeVictoryBtn) {
+    closeVictoryBtn.onclick = () => {
+      retro.victoryDismissed = true;
       renderRetroPuzzle(container, state, callbacks);
     };
   }

@@ -548,28 +548,28 @@ export const POS4 = {
   pet: [620, 210],
 
   // Sector 2: ビニロン＆付加重合樹脂（中段）
-  vinyl_acetate: [120, 340],
-  pvac: [280, 340],
-  pva: [440, 340],
-  vinylon: [600, 340],
-  styrene: [760, 340],
-  polystyrene: [900, 340],
+  vinyl_acetate: [87, 340],
+  pvac: [272, 340],
+  pva: [460, 340],
+  vinylon: [676, 340],
+  styrene: [720, 405],
+  polystyrene: [885, 405],
 
   // Sector 3: ジエン＆加硫ゴム（下段左）
-  isoprene: [120, 480],
-  natural_rubber: [300, 480],
-  vulcanized_rubber: [480, 480],
+  isoprene: [100, 480],
+  natural_rubber: [312, 480],
+  vulcanized_rubber: [510, 480],
 
   // Sector 4: 天然高分子・糖＆アミノ酸・タンパク質（下段右）
   glucose: [640, 480],
-  maltose: [780, 480],
-  starch: [910, 480],
+  maltose: [760, 480],
+  starch: [900, 480],
   cellulose: [640, 600],
-  cell_triacetate: [800, 600],
-  glycine: [120, 640],
-  alanine: [260, 640],
-  gly_ala: [400, 640],
-  protein: [540, 640]
+  cell_triacetate: [820, 600],
+  glycine: [78, 680],
+  alanine: [240, 680],
+  gly_ala: [465, 680],
+  protein: [681, 680]
 };
 
 export const POS = POS1; // 後方互換
@@ -653,8 +653,8 @@ export const REGIONS3 = [
 export const REGIONS4 = [
   ["合成繊維・重縮合（ポリアミド・ポリエステル）", 430, 40],
   ["ビニロン連鎖＆付加重合樹脂", 480, 280],
-  ["ジエン系合成ゴム＆硫黄加硫", 260, 440],
-  ["天然高分子（糖類・アミノ酸・タンパク質）", 720, 440]
+  ["ジエン系合成ゴム＆硫黄加硫", 260, 450],
+  ["天然高分子（糖類・アミノ酸・タンパク質）", 720, 450]
 ];
 
 export const REGIONS = REGIONS1;

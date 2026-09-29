@@ -162,7 +162,9 @@ function switchChapter(ch) {
   }
   state.chapter = ch;
   if (ch === "retro") {
-    getRetroState(state);
+    const retro = getRetroState(state);
+    // The victory overlay belongs to the moment of clearing; don't block the board on re-entry.
+    if (retro.isClear) retro.victoryDismissed = true;
     toast("🧩 <b>逆合成パズル「合成ルートビルダー」を開始しました</b><br>目標化合物から逆算し、最短手数で合成経路を構築しましょう！");
   } else if (ch === "separation") {
     getSeparationState(state);
@@ -253,6 +255,7 @@ function load() {
         if (!state.separation) {
           getSeparationState(state);
         }
+        if (state.retro && state.retro.isClear) state.retro.victoryDismissed = true;
         if (state.chapter === 4) {
           state.src.petro_ch4 = true;
           state.src.bio_ch4 = true;
@@ -337,6 +340,9 @@ const DEPTH = (function() {
   }
   return d;
 })();
+
+// Estimated rendered width: full-width (CJK/kana) glyphs are much wider than ASCII/subscripts.
+const textW = (str, narrow, wide) => [...str].reduce((w, c) => w + (c.codePointAt(0) >= 0x2E80 ? wide : narrow), 0);
 
 const rarity = id => Math.max(1, Math.min(5, DEPTH[id] || 1));
 const starsStr = n => "★".repeat(n) + "☆".repeat(5 - n);
@@ -878,17 +884,17 @@ function renderMap() {
       textMarkup = `<text class="t-single" x="${x}" y="${y + 5.5}" text-anchor="middle">${lockLabel}</text>`;
     } else if (mode === "formula") {
       const f = S[id].f;
-      w = Math.max(72, f.length * 9 + 20); h = 32;
+      w = Math.max(72, textW(f, 9, 14) + 20); h = 32;
       textMarkup = `<text class="t-formula-only" x="${x}" y="${y + 5.5}" text-anchor="middle">${f}</text>`;
     } else if (mode === "name") {
       const nm = shortName(id);
-      w = Math.max(66, nm.length * 14 + 22); h = 32;
+      w = Math.max(66, textW(nm, 8, 14) + 22); h = 32;
       textMarkup = `<text class="t-single" x="${x}" y="${y + 5.5}" text-anchor="middle">${nm}</text>`;
     } else {
       // "both" - 名称と示性式（化学式）の2段表示
       const nm = shortName(id);
       const f = S[id].f;
-      w = Math.max(78, Math.max(nm.length * 12.5, f.length * 8) + 22);
+      w = Math.max(78, Math.max(textW(nm, 8, 12.5), textW(f, 8, 11.5)) + 22);
       h = 42;
       textMarkup = `<text class="t-name" x="${x}" y="${y - 3.5}" text-anchor="middle">${nm}</text>` +
                    `<text class="t-formula" x="${x}" y="${y + 11.5}" text-anchor="middle">${f}</text>`;
@@ -1421,8 +1427,10 @@ function deliver() {
       toast("🏆 <b>第1章クリア！</b> 「第2章 官能基の工房」へ進めるようになりました！ ★+2 +50 XP");
     } else if (curChapter() === 2) {
       toast("🏆 <b>第2章クリア！</b> 「第3章 芳香族の迷宮」へ進めるようになりました！ ★+2 +50 XP");
-    } else {
+    } else if (curChapter() === 3) {
       toast("🎉 <b>第3章クリア！</b> 芳香族化合物の最高峰を完全制覇しました！ おめでとうございます！ ★+2 +50 XP");
+    } else {
+      toast("🏆 <b>第4章クリア！</b> 高分子・生体分子の世界を極め、全4章を完全制覇しました！ ★+2 +50 XP");
     }
   } else {
     toast(`依頼「<b>${q.title}</b>」を納品しました！ ★+2 +50 XP<br><small>${q.rewardText || ""}</small>`);
@@ -2160,6 +2168,8 @@ function renderSeparation() {
       toast(`🏆 <b>ステージクリア！</b> ${stg.title} の全成分を完全分離しました！ <b>+30 XP ★+1</b>`);
       checkAch();
       save();
+      renderHUD();
+      renderTabs();
       renderSeparation();
     }
   });
@@ -2180,6 +2190,7 @@ function renderRetro() {
         checkAch();
         save();
         renderHUD();
+        renderTabs();
       } else if (retro.lastStatus === "ok") {
         SFX.ok();
       } else if (retro.lastStatus === "fail") {
