@@ -692,7 +692,10 @@ export const ACH = [
   { id: "det_all", n: "化学のシャーロック", d: "探偵モードの全8事件を完全解決する", test: s => Object.keys(s.detective?.solved || {}).length >= 8 },
   // ===== 系統分離の実績 =====
   { id: "sep_first", n: "分液の第一歩", d: "系統分離シミュレーターでステージ1をクリアする", test: s => !!(s.separation?.solved?.stage1) },
-  { id: "sep_all", n: "酸塩基の魔術師", d: "系統分離シミュレーターの全4ステージを完全制覇する", test: s => Object.keys(s.separation?.solved || {}).length >= 4 }
+  { id: "sep_all", n: "酸塩基の魔術師", d: "系統分離シミュレーターの全4ステージを完全制覇する", test: s => Object.keys(s.separation?.solved || {}).length >= 4 },
+  // ===== 逆合成パズルの実績 =====
+  { id: "retro_first", n: "逆算のひらめき", d: "逆合成パズルで1ステージをクリアする", test: s => Object.keys(s.retro?.solved || {}).length >= 1 },
+  { id: "retro_all", n: "逆合成の巨匠", d: "逆合成パズルの全8ステージを完全制覇する", test: s => Object.keys(s.retro?.solved || {}).length >= 8 }
 ];
 
 export const RANKS = [

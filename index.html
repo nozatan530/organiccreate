@@ -614,6 +614,382 @@
 
   .sep-stage-clear-card { background: var(--surface); border: 2px solid var(--ok); border-radius: 12px; padding: 14px; text-align: center; display: flex; flex-direction: column; gap: 8px; align-items: center; box-shadow: 0 4px 16px rgba(35,115,74,.2); }
   .sep-clear-stamp { font-family: var(--f-display); font-size: 20px; color: var(--ok); letter-spacing: .08em; }
+
+  /* 逆合成パズル（合成ルートビルダー）スタイル */
+  .retro-stage { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+  .retro-mission-banner { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; box-shadow: var(--shadow); }
+  .retro-mission-info { flex: 1; min-width: 260px; }
+  .retro-target-card { background: var(--flame-soft); border: 2px solid var(--flame); border-radius: 12px; padding: 12px 18px; display: flex; flex-direction: column; gap: 2px; align-items: center; text-align: center; min-width: 200px; box-shadow: 0 4px 12px rgba(201,95,34,.12); }
+  .retro-target-badge { font-size: 11px; font-weight: 700; color: var(--flame); letter-spacing: .05em; }
+  .retro-target-name { font-size: 17px; font-weight: 700; color: var(--ink); }
+  .retro-target-formula { font-family: var(--f-mono); font-size: 13px; color: var(--ink-2); font-weight: 700; }
+  .retro-target-par { font-size: 11.5px; color: var(--ink-2); margin-top: 4px; }
+  .retro-clue-box { background: var(--surface); border: 1px solid var(--flame); border-radius: 10px; padding: 12px 16px; box-shadow: var(--shadow); }
+  .retro-workspace { display: flex; flex-direction: column; gap: 14px; }
+  .retro-section-label { font-size: 12.5px; font-weight: 700; color: var(--ink-2); margin-bottom: 6px; }
+  .retro-timeline-wrapper { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px; overflow-x: auto; box-shadow: var(--shadow); }
+  .retro-timeline-scroll { display: flex; align-items: center; gap: 8px; min-width: max-content; }
+  .retro-timeline-step { background: var(--surface-2); border: 1px solid var(--line-2); border-radius: 10px; padding: 8px 14px; display: flex; flex-direction: column; gap: 2px; align-items: center; min-width: 110px; }
+  .retro-timeline-step.start { border-color: var(--accent); background: var(--accent-soft); }
+  .retro-timeline-step.goal { border-color: var(--flame); background: var(--flame-soft); }
+  .retro-timeline-step .step-num { font-size: 10.5px; font-weight: 700; color: var(--ink-3); }
+  .retro-timeline-step .step-name { font-size: 13px; font-weight: 700; color: var(--ink); }
+  .retro-timeline-arrow { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 0 4px; }
+  .retro-timeline-arrow .arrow-sym { font-size: 18px; color: var(--ink-3); font-weight: 700; }
+  .retro-timeline-arrow .arrow-cond { font-size: 10.5px; color: var(--ink-2); font-family: var(--f-mono); white-space: nowrap; }
+  .retro-bench-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: var(--shadow); }
+  .retro-bench-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+  .retro-bench-grid { display: grid; grid-template-columns: 1fr auto 1.5fr; gap: 14px; align-items: center; }
+  @media (max-width: 768px) { .retro-bench-grid { grid-template-columns: 1fr; } }
+  .retro-flask-box { background: var(--surface-2); border: 1px solid var(--line-2); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 4px; align-items: center; text-align: center; }
+  .retro-flask-box .flask-label { font-size: 11.5px; font-weight: 700; color: var(--ink-3); }
+  .retro-flask-box .flask-name { font-size: 16px; font-weight: 700; color: var(--ink); }
+  .retro-flask-box .flask-formula { font-family: var(--f-mono); font-size: 13px; color: var(--accent); font-weight: 700; }
+  .retro-flask-box.reagent-box { align-items: stretch; text-align: left; }
+  .retro-reagents-scroll { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+  .retro-reagent-btn { background: var(--surface); border: 1.5px solid var(--line-2); border-radius: 8px; padding: 6px 12px; display: flex; flex-direction: column; gap: 2px; align-items: center; cursor: pointer; transition: all .15s; font-family: inherit; }
+  .retro-reagent-btn:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .retro-reagent-btn.selected { border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 0 0 2px var(--accent); }
+  .retro-reagent-btn b { font-family: var(--f-mono); font-size: 13px; color: var(--ink); }
+  .retro-reagent-btn small { font-size: 11px; color: var(--ink-2); }
+  .retro-cond-bar { background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .retro-cond-item { display: flex; flex-direction: column; gap: 4px; }
+  .retro-temp-presets { display: flex; gap: 4px; flex-wrap: wrap; }
+  .btn-preset { background: var(--surface); border: 1px solid var(--line-2); border-radius: 6px; padding: 2px 7px; font-size: 11px; font-weight: 700; cursor: pointer; color: var(--ink); transition: all .15s; }
+  .btn-preset:hover { border-color: var(--flame); color: var(--flame); }
+  .btn-preset.active { background: var(--flame-soft); border-color: var(--flame); color: var(--flame); }
+  .retro-status-box { border-radius: 8px; padding: 10px 14px; font-size: 13px; line-height: 1.5; border: 1px solid var(--line); }
+  .retro-status-box.status-idle { background: var(--surface-2); color: var(--ink-2); }
+  .retro-status-box.status-ok { background: var(--ok-soft); border-color: var(--ok); color: var(--ink); }
+  .retro-status-box.status-fail { background: var(--bad); color: #fff; border-color: var(--bad); }
+  .retro-status-box.status-none { background: var(--surface-2); color: var(--ink-2); }
+  .retro-status-box.status-clear { background: var(--ok-soft); border-color: var(--ok); color: var(--ink); }
+  .retro-victory-overlay { position: fixed; inset: 0; background: rgba(23,35,42,.6); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 16px; }
+  .retro-victory-card { background: var(--surface); border: 2px solid var(--gold); border-radius: 16px; padding: 28px 24px; max-width: 580px; width: 100%; text-align: center; box-shadow: 0 16px 40px rgba(0,0,0,.35); animation: popIn .25s ease-out; }
+  .retro-victory-route { background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 14px; text-align: left; max-height: 220px; overflow-y: auto; }
+
+  /* オリジナル有機反応大系統図（ポスター・PDF出力）スタイル */
+  .poster-dialog {
+    border: 1px solid var(--line);
+    background: var(--ground);
+    border-radius: 16px;
+    padding: 0;
+    max-width: 96vw;
+    width: 1400px;
+    box-shadow: 0 25px 60px rgba(0,0,0,.6);
+    color: var(--ink);
+  }
+  .poster-dialog::backdrop {
+    background: rgba(10, 15, 20, 0.75);
+    backdrop-filter: blur(4px);
+  }
+  .poster-modal-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 92vh;
+    max-height: 920px;
+  }
+  .poster-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 18px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .poster-toolbar-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .poster-toolbar-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .poster-btn-group {
+    display: inline-flex;
+    background: var(--surface-2);
+    border-radius: 8px;
+    padding: 2px;
+    gap: 2px;
+    border: 1px solid var(--line-2);
+  }
+  .poster-preview-scroll {
+    overflow: auto;
+    padding: 24px;
+    background: #0b0f14;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  .poster-sheet {
+    background: #ffffff;
+    color: #0f172a;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "BIZ UDPGothic", sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .poster-sheet.size-a4 {
+    width: 1180px;
+    min-width: 1180px;
+  }
+  .poster-sheet.size-a3 {
+    width: 1400px;
+    min-width: 1400px;
+  }
+  .poster-hdr {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2.5px solid #0f172a;
+    padding-bottom: 10px;
+    gap: 16px;
+  }
+  .poster-tag {
+    font-size: 10px;
+    font-weight: 700;
+    color: #475569;
+    background: #f1f5f9;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: .05em;
+  }
+  .poster-main-title {
+    font-size: 26px;
+    font-weight: 900;
+    color: #0f172a;
+    margin: 4px 0 2px;
+    letter-spacing: .06em;
+  }
+  .poster-sub-title {
+    font-size: 10.5px;
+    color: #64748b;
+    font-family: var(--f-mono);
+    font-weight: 700;
+    letter-spacing: .02em;
+  }
+  .poster-hdr-user {
+    background: #f0fdf4;
+    border: 1.5px solid #16a34a;
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 260px;
+  }
+  .poster-badge-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .poster-seal-badge {
+    background: #16a34a;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .poster-rank-text {
+    font-size: 12px;
+    color: #0f172a;
+  }
+  .poster-meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 8px;
+    font-size: 10.5px;
+    color: #334155;
+  }
+  .poster-grid-4 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .poster-sec {
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 10px 12px;
+    background: #fafbfc;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .poster-sec-hdr {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1.5px solid #0284c7;
+    padding-bottom: 4px;
+  }
+  .sec-num {
+    background: #0284c7;
+    color: white;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  .sec-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #0f172a;
+  }
+  .poster-sec-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .p-flow-group {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 6px 8px;
+  }
+  .p-flow-title {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 4px;
+  }
+  .p-flow-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .p-sub {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 5px;
+    padding: 2px 6px;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    min-width: 52px;
+    text-align: center;
+  }
+  .p-sub.found {
+    border-color: #0284c7;
+    background: #f0f9ff;
+  }
+  .p-sub.unk {
+    border-color: #e2e8f0;
+    background: #f8fafc;
+    color: #94a3b8;
+  }
+  .p-sub-f {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: #0369a1;
+    line-height: 1.2;
+  }
+  .p-sub-n {
+    font-size: 9px;
+    color: #334155;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+  .p-arrow {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 1px;
+  }
+  .p-arrow-cond {
+    font-size: 8.5px;
+    color: #b45309;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .p-arrow-line {
+    font-size: 13px;
+    color: #64748b;
+    font-weight: 900;
+    line-height: 1;
+  }
+  .p-arrow.unk .p-arrow-line {
+    color: #cbd5e1;
+  }
+  .poster-ftr {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr auto;
+    gap: 10px;
+    border-top: 1.5px solid #cbd5e1;
+    padding-top: 8px;
+    align-items: center;
+  }
+  .poster-ftr-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 9.5px;
+    line-height: 1.4;
+    color: #334155;
+  }
+  .poster-ftr-sign {
+    border: 2px solid #dc2626;
+    color: #dc2626;
+    border-radius: 50%;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 8px;
+    font-weight: 900;
+    line-height: 1.1;
+    transform: rotate(-6deg);
+  }
+  @media print {
+    body * { visibility: hidden !important; }
+    #poster-dlg, #poster-dlg *, #poster-canvas, #poster-canvas * { visibility: visible !important; }
+    #poster-dlg {
+      position: fixed !important;
+      left: 0 !important;
+      top: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      max-width: 100vw !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      background: white !important;
+    }
+    .poster-modal-wrapper {
+      height: auto !important;
+      max-height: none !important;
+    }
+    .poster-toolbar { display: none !important; }
+    .poster-preview-scroll {
+      overflow: visible !important;
+      padding: 0 !important;
+      background: transparent !important;
+    }
+    .poster-sheet {
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      width: 100% !important;
+      min-width: 100% !important;
+      padding: 8mm !important;
+    }
+    @page { size: landscape; margin: 0; }
+  }
   </style>
 </head>
 <body>
@@ -628,8 +1004,10 @@
             <button type="button" class="btn" id="ch-tab-2" role="tab" style="font-size:12px;padding:2px 8px;font-weight:700">第2章 官能基</button>
             <button type="button" class="btn" id="ch-tab-3" role="tab" style="font-size:12px;padding:2px 8px;font-weight:700">第3章 芳香族</button>
             <button type="button" class="btn" id="ch-tab-4" role="tab" style="font-size:12px;padding:2px 8px;font-weight:700">第4章 高分子</button>
+            <button type="button" class="btn" id="ch-tab-retro" role="tab" style="font-size:12px;padding:2px 8px;font-weight:700">🧩 逆合成パズル</button>
             <button type="button" class="btn" id="ch-tab-sep" role="tab" style="font-size:12px;padding:2px 8px;font-weight:700">🧪 系統分離</button>
             <button type="button" class="btn" id="ch-tab-det" role="tab" style="font-size:12px;padding:2px 8px;font-weight:700">🕵️ 探偵モード</button>
+            <button type="button" class="btn hot" id="open-poster-btn" role="tab" style="font-size:12px;padding:2px 10px;font-weight:700">📜 系統図PDF</button>
           </div>
         </div>
       </div>
@@ -644,9 +1022,12 @@
           <summary>設定</summary>
           <div class="pop">
             <button type="button" id="start-tut">チュートリアルを体験（第1章）</button>
+            <button type="button" id="switch-to-poster-menu" style="font-weight:700;color:var(--flame)">📜「オリジナル有機反応大系統図」PDF出力</button>
             <button type="button" id="switch-to-ch1-menu">第1章「炭化水素の森」を開く</button>
             <button type="button" id="switch-to-ch2-menu">第2章「官能基の工房」を開く</button>
             <button type="button" id="switch-to-ch3-menu">第3章「芳香族の迷宮」を開く</button>
+            <button type="button" id="switch-to-ch4-menu">第4章「高分子の未来」を開く</button>
+            <button type="button" id="switch-to-retro-menu">🧩「逆合成パズル（合成ルートビルダー）」を開く</button>
             <button type="button" id="switch-to-sep-menu">🧪「系統分離実験室（分液漏斗）」を開く</button>
             <button type="button" id="switch-to-det-menu">🕵️「探偵モード（構造決定事件簿）」を開く</button>
             <button type="button" id="toggle-easy">学習サポート（やさしいモード）：ON</button>
@@ -671,6 +1052,7 @@
             <b>合成マップ</b>
             <span id="map-sub"></span>
             <button type="button" class="btn" id="toggle-map-mode" style="padding:2px 8px;font-size:11.5px">表示: 名称＋化学式</button>
+            <button type="button" class="btn hot" id="open-poster-map-btn" style="padding:2px 8px;font-size:11.5px;font-weight:700">📜 大系統図PDF出力</button>
           </span>
           <span class="lgd">
             <span><i class="lg"></i>発見済み</span>
@@ -792,14 +1174,18 @@
     <!-- 系統分離実験室（分液漏斗シミュレーター）ステージ -->
     <section class="separation-stage" id="separation-stage" style="display:none"></section>
 
+    <!-- 逆合成パズル（合成ルートビルダー）ステージ -->
+    <section class="retro-stage" id="retro-stage" style="display:none"></section>
+
     <section class="panel lower">
       <div class="tabs" role="tablist">
         <button type="button" role="tab" data-tab="dex" aria-selected="true">物質図鑑<small id="t-dex"></small></button>
         <button type="button" role="tab" data-tab="rx" aria-selected="false">反応図鑑<small id="t-rx"></small></button>
+        <button type="button" role="tab" data-tab="retro" aria-selected="false">🧩 逆合成<small id="t-retro"></small></button>
+        <button type="button" role="tab" data-tab="sep" aria-selected="false">🧪 系統分離<small id="t-sep"></small></button>
+        <button type="button" role="tab" data-tab="det" aria-selected="false">🕵️ 事件簿<small id="t-det"></small></button>
         <button type="button" role="tab" data-tab="ach" aria-selected="false">称号<small id="t-ach"></small></button>
         <button type="button" role="tab" data-tab="log" aria-selected="false">実験ノート<small id="t-log"></small></button>
-        <button type="button" role="tab" data-tab="det" aria-selected="false">🕵️ 事件簿<small id="t-det"></small></button>
-        <button type="button" role="tab" data-tab="sep" aria-selected="false">🧪 系統分離<small id="t-sep"></small></button>
       </div>
       <div class="tb" id="tabbody"></div>
     </section>
@@ -807,6 +1193,7 @@
 
   <dialog id="dlg"><div class="dlg" id="dlg-body"></div></dialog>
   <dialog id="disc"><div class="card" id="disc-body"></div></dialog>
+  <dialog id="poster-dlg" class="poster-dialog"></dialog>
   <div class="toasts" id="toasts" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/smiles-drawer@2.1.7/dist/smiles-drawer.min.js"></script>

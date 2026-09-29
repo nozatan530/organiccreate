@@ -19,6 +19,11 @@ import {
   addReagentToFunnel, shakeFunnel, drainWaterLayer,
   addReagentToFlask, evaporateEtherLayer, getTheoryModalHtml
 } from './separation-app.js';
+import { RETRO_PUZZLES } from './retro-data.js';
+import {
+  getRetroState, resetPuzzle, executeRetroStep, undoRetroStep, renderRetroPuzzle
+} from './retro-app.js';
+import { openPosterModal } from './poster-app.js';
 
 const KEY = "organic-craft-ch1-v4";
 
@@ -33,7 +38,7 @@ function fresh() {
     q2: 0,
     q3: 0,
     q4: 0,
-    chapter: 1, // 1: 炭化水素の森, 2: 官能基の工房, 3: 芳香族の迷宮, 4: 高分子の未来, 'detective': 探偵モード
+    chapter: 1, // 1: 炭化水素の森, 2: 官能基の工房, 3: 芳香族の迷宮, 4: 高分子の未来, 'detective': 探偵モード, 'separation': 系統分離, 'retro': 逆合成
     prevChapter: 1,
     detective: {
       caseIdx: 0,
@@ -56,6 +61,19 @@ function fresh() {
       isolated: {},
       lastLog: "分液漏斗に有機化合物のエーテル混合溶液が入っています。試薬を加えて分離を始めましょう。",
       lastReaction: null
+    },
+    retro: {
+      puzzleIdx: 0,
+      solved: {},
+      currentSubstance: RETRO_PUZZLES[0].start,
+      routeSteps: [],
+      currentReagent: RETRO_PUZZLES[0].reagents[0] || null,
+      temp: 20,
+      light: false,
+      cat: "none",
+      lastMsg: "出発物質から目標の化合物を目指して、必要な試薬と反応条件を選びましょう。",
+      lastStatus: "idle",
+      isClear: false
     },
     hints: {},
     clue: {},
@@ -139,11 +157,14 @@ function getDetRank(solved) {
 }
 
 function switchChapter(ch) {
-  if (state.chapter !== "detective" && state.chapter !== "separation" && (ch === 1 || ch === 2 || ch === 3 || ch === 4)) {
+  if (state.chapter !== "detective" && state.chapter !== "separation" && state.chapter !== "retro" && (ch === 1 || ch === 2 || ch === 3 || ch === 4)) {
     state.prevChapter = ch;
   }
   state.chapter = ch;
-  if (ch === "separation") {
+  if (ch === "retro") {
+    getRetroState(state);
+    toast("🧩 <b>逆合成パズル「合成ルートビルダー」を開始しました</b><br>目標化合物から逆算し、最短手数で合成経路を構築しましょう！");
+  } else if (ch === "separation") {
     getSeparationState(state);
     toast("🧪 <b>系統分離実験室を開始しました</b><br>分液漏斗と酸・塩基の性質を使って、混合化合物を鮮やかに単離しましょう！");
   } else if (ch === "detective") {
@@ -1287,6 +1308,7 @@ function renderHUD() {
   if (subTitle) {
     subTitle.textContent = ch === "separation" ? "🧪 系統分離実験室：酸・塩基の強弱と分液漏斗による抽出（高校化学）" :
                            ch === "detective" ? "🔍 探偵モード：未知化合物の構造決定事件簿（高校化学）" :
+                           ch === "retro" ? "🧩 逆合成パズル：E. J. コーリーの逆合成思考と最短ルート構築（高校化学）" :
                            ch === 4 ? "第4章 高分子の未来（合成高分子・天然高分子・生体分子）" :
                            ch === 3 ? "第3章 芳香族の迷宮（学習指導要領 準拠）" :
                            ch === 2 ? "第2章 官能基の工房（学習指導要領 準拠）" :
@@ -1298,8 +1320,9 @@ function renderHUD() {
   const q4Done = (state.q4 || 0) >= QUESTS4.length;
   const detDone = Object.keys(state.detective?.solved || {}).length;
   const sepDone = Object.keys(state.separation?.solved || {}).length;
+  const retroDone = Object.keys(state.retro?.solved || {}).length;
 
-  const tab1 = $("ch-tab-1"), tab2 = $("ch-tab-2"), tab3 = $("ch-tab-3"), tab4 = $("ch-tab-4"), tabDet = $("ch-tab-det"), tabSep = $("ch-tab-sep");
+  const tab1 = $("ch-tab-1"), tab2 = $("ch-tab-2"), tab3 = $("ch-tab-3"), tab4 = $("ch-tab-4"), tabRetro = $("ch-tab-retro"), tabDet = $("ch-tab-det"), tabSep = $("ch-tab-sep");
   if (tab1) {
     tab1.setAttribute("aria-selected", ch === 1);
     tab1.textContent = `第1章 炭化水素${q1Done ? " 🏆" : ""}`;
@@ -1331,6 +1354,15 @@ function renderHUD() {
     tab4.style.borderColor = ch === 4 ? "var(--accent)" : "var(--line-2)";
     tab4.style.color = ch === 4 ? "var(--accent)" : "var(--ink-2)";
     tab4.style.fontWeight = ch === 4 ? "700" : "500";
+  }
+  if (tabRetro) {
+    const isRetro = ch === "retro";
+    tabRetro.setAttribute("aria-selected", isRetro);
+    tabRetro.textContent = `🧩 逆合成${retroDone >= RETRO_PUZZLES.length ? " 🏆" : (retroDone > 0 ? ` (${retroDone}/${RETRO_PUZZLES.length})` : "")}`;
+    tabRetro.style.background = isRetro ? "var(--flame-soft)" : "transparent";
+    tabRetro.style.borderColor = isRetro ? "var(--flame)" : "var(--line-2)";
+    tabRetro.style.color = isRetro ? "var(--flame)" : "var(--ink-2)";
+    tabRetro.style.fontWeight = isRetro ? "700" : "500";
   }
   if (tabSep) {
     const isSep = ch === "separation";
@@ -1483,6 +1515,8 @@ function renderTabs() {
   if (tDet) tDet.textContent = `${Object.keys(state.detective?.solved || {}).length}/${DETECTIVE_CASES.length}`;
   const tSep = $("t-sep");
   if (tSep) tSep.textContent = `${Object.keys(state.separation?.solved || {}).length}/${SEP_STAGES.length}`;
+  const tRetro = $("t-retro");
+  if (tRetro) tRetro.textContent = `${Object.keys(state.retro?.solved || {}).length}/${RETRO_PUZZLES.length}`;
   document.querySelectorAll("[data-tab]").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === ui.tab));
 
   let h = "";
@@ -1503,6 +1537,13 @@ function renderTabs() {
     h += `<div class="dex-sec"><span>第4章の物質（合成高分子・合成繊維・加硫ゴム・糖・タンパク質）</span><span>${d4}/${DEX4.length}</span></div><div class="dex">${DEX4.map(item).join("")}</div>`;
     h += `<div class="dex-sec"><span>副産物</span><span>${DEXX.filter(i => state.found[i]).length}/${DEXX.length}</span></div><div class="dex">${DEXX.map(item).join("")}</div>`;
   } else if (ui.tab === "rx") {
+    h += `<div style="background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <div>
+        <span class="badge" style="background:var(--flame-soft);color:var(--flame);border:1px solid var(--flame);font-size:12px">学習ポスター</span>
+        <span style="font-size:12.5px;color:var(--ink-2);margin-left:8px">全4分野の有機反応系統図をポスター印刷・PDF出力できます</span>
+      </div>
+      <button type="button" class="btn hot" id="rx-open-poster-btn" style="font-size:12px;padding:4px 12px;font-weight:700">📜 大系統図PDF出力 / 印刷 →</button>
+    </div>`;
     // 反応図鑑（学習指導要領の分類ごと）
     const groups = ["置換", "付加", "脱離", "縮合", "重合", "酸化", "加水分解", "検出", "燃焼", "熱分解", "その他"];
     groups.forEach(g => {
@@ -1604,6 +1645,47 @@ function renderTabs() {
         <b>③ 水層とエーテル層：</b> イオン化した塩は水層に溶け、電荷をもたない中性分子はジエチルエーテル層（上層）に残る。
       </div>
     </div>`;
+  } else if (ui.tab === "retro") {
+    // 逆合成パズル一覧
+    const retro = getRetroState(state);
+    const retroSolvedCount = Object.keys(retro.solved || {}).length;
+    h += `<div class="dex-sec"><span>🧩 逆合成パズル「合成ルートビルダー」</span><span>完全制覇: ${retroSolvedCount}/${RETRO_PUZZLES.length}</span></div>`;
+    h += `<div style="background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <div>
+        <span class="badge" style="background:var(--flame-soft);color:var(--flame);border:1px solid var(--flame);font-size:12px">逆合成解析</span>
+        <span style="font-size:12.5px;color:var(--ink-2);margin-left:8px">目標化合物（Target）から出発物質まで逆算し、最短手数で最適ルートを設計する思考パズル</span>
+      </div>
+      <button type="button" class="btn primary" id="goto-retro-mode" style="font-size:12px;padding:4px 12px">逆合成パズルを開始する →</button>
+    </div>`;
+    h += `<div class="rx-grid">`;
+    RETRO_PUZZLES.forEach((p, idx) => {
+      const sol = retro.solved[p.id];
+      const starStr = sol ? "★".repeat(sol.stars) : "";
+      h += `
+        <div class="rx-card ${sol ? "" : "unk"}" style="cursor:pointer" data-retro-stage-jump="${idx}">
+          <div class="rxh">
+            <span class="chip ${sol ? "good" : "miss"}">${sol ? `制覇 ${starStr} (${sol.moves}手)` : p.difficulty.split(" ")[0]}</span>
+            <span style="font-size:12px;font-weight:700">Q${idx + 1}（目標: ${p.par}手）</span>
+          </div>
+          <div class="rx-eq" style="font-size:14px;color:var(--ink)">${p.title}</div>
+          <div style="font-size:12px;color:var(--accent);font-family:var(--f-mono);margin:2px 0 4px"><b>目標:</b> ${p.targetName} [${p.targetFormula}]</div>
+          <p class="rx-desc">${p.desc}</p>
+          <div style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:11.5px;color:var(--ink-3)">出発: ${p.startName.split("（")[0]}</span>
+            <button type="button" class="btn ghost" style="padding:2px 8px;font-size:11.5px">${sol ? "再挑戦する" : "パズルを解く →"}</button>
+          </div>
+        </div>
+      `;
+    });
+    h += `</div>`;
+    h += `<div style="margin-top:14px;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:12px 14px">
+      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px">💡 E. J. コーリーの「逆合成解析（Retrosynthetic Analysis）」とは？</div>
+      <div style="font-size:12.5px;line-height:1.6;color:var(--ink-2)">
+        <b>① 逆算思考（⇒）：</b> 目標とする複雑な化合物（ターゲット）から、結合の切断（Disconnection）によって官能基を一段階前の前駆体へ遡る論理的手法です。<br>
+        <b>② 入試への直結：</b> 大学入試や共通テストの構造決定・多段階合成問題は、まさにこの「逆合成の思考力」そのものを問うています。<br>
+        <b>③ 最短ルートの美学：</b> 副反応を防ぎ、最少ステップで収率高く目標へ導くルートを組み立てていきましょう！
+      </div>
+    </div>`;
   } else {
     h += state.log.length ? `<ol class="log">${state.log.map(l => `<li><span class="n">#${l.n}</span><span class="e">${l.eq}</span><span class="r ${l.ok ? "ok" : "no"}">${l.ok ? "成功" : "—"}</span></li>`).join("")}</ol>` : `<p class="muted" style="margin:0;font-size:13.5px">まだ実験していません。</p>`;
   }
@@ -1614,17 +1696,30 @@ function renderAll() {
   renderHUD();
   const isDet = curChapter() === "detective";
   const isSep = curChapter() === "separation";
+  const isRetro = curChapter() === "retro";
   const craftStage = $("craft-stage");
   const qbar = $("qbar");
   const tutBar = $("tut-bar");
   const detStage = $("detective-stage");
   const sepStage = $("separation-stage");
+  const retroStage = $("retro-stage");
 
-  if (isSep) {
+  if (isRetro) {
     if (craftStage) craftStage.style.display = "none";
     if (qbar) qbar.style.display = "none";
     if (tutBar) tutBar.style.display = "none";
     if (detStage) detStage.style.display = "none";
+    if (sepStage) sepStage.style.display = "none";
+    if (retroStage) {
+      retroStage.style.display = "flex";
+      renderRetro();
+    }
+  } else if (isSep) {
+    if (craftStage) craftStage.style.display = "none";
+    if (qbar) qbar.style.display = "none";
+    if (tutBar) tutBar.style.display = "none";
+    if (detStage) detStage.style.display = "none";
+    if (retroStage) retroStage.style.display = "none";
     if (sepStage) {
       sepStage.style.display = "flex";
       renderSeparation();
@@ -1634,6 +1729,7 @@ function renderAll() {
     if (qbar) qbar.style.display = "none";
     if (tutBar) tutBar.style.display = "none";
     if (sepStage) sepStage.style.display = "none";
+    if (retroStage) retroStage.style.display = "none";
     if (detStage) {
       detStage.style.display = "flex";
       renderDetective();
@@ -1643,6 +1739,7 @@ function renderAll() {
     if (qbar) qbar.style.display = "grid";
     if (detStage) detStage.style.display = "none";
     if (sepStage) sepStage.style.display = "none";
+    if (retroStage) retroStage.style.display = "none";
     renderTutorial();
     renderQuest();
     renderMap();
@@ -2068,6 +2165,30 @@ function renderSeparation() {
   });
 }
 
+/* ================= 逆合成パズル 描画＆ロジック ================= */
+function renderRetro() {
+  const el = $("retro-stage");
+  if (!el) return;
+  renderRetroPuzzle(el, state, {
+    onStepExecute: retro => {
+      if (retro.lastStatus === "clear") {
+        SFX.lvl();
+        const p = RETRO_PUZZLES[retro.puzzleIdx] || RETRO_PUZZLES[0];
+        state.xp += 40;
+        state.stars += 2;
+        toast(`🏆 <b>パズルクリア！</b> 「${p.targetName}」の合成に成功しました！ <b>+40 XP ★+2</b>`);
+        checkAch();
+        save();
+        renderHUD();
+      } else if (retro.lastStatus === "ok") {
+        SFX.ok();
+      } else if (retro.lastStatus === "fail") {
+        SFX.fail();
+      }
+    }
+  });
+}
+
 /* ---------- detail dialog ---------- */
 function openDetail(id) {
   const s = S[id];
@@ -2275,8 +2396,29 @@ document.addEventListener("click", e => {
     if (m) m.open = false;
     return;
   }
+  if (t.id === "ch-tab-retro" || t.id === "switch-to-retro-menu" || t.id === "goto-retro-mode") {
+    switchChapter("retro");
+    const m = $("menu");
+    if (m) m.open = false;
+    return;
+  }
+  if (t.id === "open-poster-btn" || t.id === "open-poster-map-btn" || t.id === "switch-to-poster-menu" || t.id === "rx-open-poster-btn") {
+    openPosterModal(state);
+    const m = $("menu");
+    if (m) m.open = false;
+    return;
+  }
   if (t.closest("[data-back-craft]")) {
     switchChapter(state.prevChapter || 1);
+    return;
+  }
+
+  // Retro Mode Events
+  const retroStageJump = t.closest("[data-retro-stage-jump]");
+  if (retroStageJump) {
+    const idx = +retroStageJump.dataset.retroStageJump;
+    resetPuzzle(state, idx);
+    switchChapter("retro");
     return;
   }
 
