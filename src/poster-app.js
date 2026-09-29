@@ -50,7 +50,7 @@ export function renderPosterDialog(state, dlg) {
           <span style="font-size:20px">📜</span>
           <div>
             <b>オリジナル有機反応大系統図</b>
-            <span style="font-size:12px;color:var(--ink-2);margin-left:8px">学習指導要領 準拠・高校有機化学 全体系</span>
+            <span style="font-size:12px;color:var(--ink-2);margin-left:8px">高校有機化学 全体系</span>
           </div>
         </div>
 
@@ -93,7 +93,7 @@ export function renderPosterDialog(state, dlg) {
           <!-- ポスターヘッダー -->
           <div class="poster-hdr">
             <div class="poster-hdr-left">
-              <span class="poster-tag">文部科学省 学習指導要領「化学」準拠・研究系統樹</span>
+              <span class="poster-tag">高校化学・研究系統樹</span>
               <h1 class="poster-main-title">有機化合物 反応大系統図</h1>
               <div class="poster-sub-title">Organic Chemical Reaction Master Chart & Synthesis Network</div>
             </div>
