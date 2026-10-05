@@ -78,4 +78,3 @@ AI Studio の雛形から残っている不要物（仕上げで整理する候�
 - `src/main.tsx` `src/App.tsx` `src/index.css`（`index.html` から読み込まれていない）
 - `@google/genai` `express` `dotenv` `react` など（コードからは使っていない）
 - `.env.example` の `GEMINI_API_KEY` / `APP_URL`、`metadata.json`
-- `src/poster-app.js` に `alert()` が1か所残っている（上の実装ルールに反する）

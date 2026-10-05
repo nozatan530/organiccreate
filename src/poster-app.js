@@ -87,6 +87,11 @@ export function renderPosterDialog(state, dlg) {
         </div>
       </div>
 
+      <!-- PDF保存に失敗したときのメッセージ（alert() は埋め込み先で動かないことがあるため、ページ内に出す） -->
+      <p id="poster-pdf-error" role="alert" hidden style="margin:0;padding:8px 14px;font-size:13px;color:var(--bad);background:var(--surface-2);border-bottom:1px solid var(--line)">
+        PDFの作成中にエラーが起きました。「🖨️ 印刷」を押して、印刷画面の送信先で「PDFに保存」を選ぶ方法もお試しください。
+      </p>
+
       <!-- プレビューエリア（スクロール可能） -->
       <div class="poster-preview-scroll">
         <div id="poster-canvas" class="poster-sheet ${currentOptions.format === 'a3' ? 'size-a3' : 'size-a4'}">
@@ -225,6 +230,8 @@ export function renderPosterDialog(state, dlg) {
     pdfBtn.onclick = async () => {
       const canvasEl = dlg.querySelector('#poster-canvas');
       if (!canvasEl) return;
+      const errorEl = dlg.querySelector('#poster-pdf-error');
+      if (errorEl) errorEl.hidden = true;
       pdfBtn.disabled = true;
       pdfBtn.textContent = '⏳ PDF生成中...';
 
@@ -232,7 +239,7 @@ export function renderPosterDialog(state, dlg) {
         await exportPosterPdf(canvasEl, currentOptions.format);
       } catch (err) {
         console.error('PDF export error:', err);
-        alert('PDF生成中にエラーが発生しました。印刷ボタンから「PDFに保存」もお試しください。');
+        if (errorEl) errorEl.hidden = false;
       } finally {
         pdfBtn.disabled = false;
         pdfBtn.textContent = '📥 PDF保存';
