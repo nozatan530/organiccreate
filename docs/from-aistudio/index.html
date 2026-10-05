@@ -1,0 +1,1151 @@
+<title>有機クラフト工房</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=IBM+Plex+Mono:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root{
+  --ground:#E9EDEA; --surface:#FBFCFA; --surface-2:#F1F4F1;
+  --ink:#17232A; --ink-2:#4B5B63; --ink-3:#7F8E93; --line:#D3DBD7; --line-2:#AEBBB5;
+  --accent:#2F49C5; --accent-soft:#E6EAFB; --accent-ink:#FFFFFF;
+  --flame:#C95F22; --flame-soft:#FBEADF; --gold:#B7861B;
+  --ok:#23734A; --ok-soft:#E0F1E6; --bad:#B42318;
+  --c-alkane:#5B6B7A; --c-alkene:#2F49C5; --c-alkyne:#7A3FB8; --c-halide:#23734A;
+  --c-polymer:#A66A12; --c-alcohol:#C2410C; --c-aroma:#0E7490; --c-reagent:#6B7280; --c-inorg:#6B7280;
+  --mol-c:#17232A; --mol-o:#C0392B; --mol-cl:#1E7A47; --mol-br:#A0461A;
+  --liquid:#C9D3F5; --fog:#E2E8E4;
+  --shadow:0 1px 0 rgba(23,35,42,.05), 0 8px 24px -16px rgba(23,35,42,.3);
+  --f-display:"Dela Gothic One","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#0E1316; --surface:#172026; --surface-2:#1E2930;
+    --ink:#E2EAE6; --ink-2:#A3B4AE; --ink-3:#72847F; --line:#2B3940; --line-2:#3C4D55;
+    --accent:#8FA2FF; --accent-soft:#232C52; --accent-ink:#0E1316;
+    --flame:#F08A4B; --flame-soft:#3A2418; --gold:#E8B84A;
+    --ok:#62C48E; --ok-soft:#173026; --bad:#F58B80;
+    --c-alkane:#9AABB9; --c-alkene:#8FA2FF; --c-alkyne:#B98CF0; --c-halide:#62C48E;
+    --c-polymer:#E3A646; --c-alcohol:#F59A6B; --c-aroma:#4CC3DB; --c-reagent:#A3ACB5; --c-inorg:#A3ACB5;
+    --mol-c:#E2EAE6; --mol-o:#FF8A7A; --mol-cl:#62C48E; --mol-br:#F0A06A;
+    --liquid:#2B3766; --fog:#131A1E;
+    --shadow:0 1px 0 rgba(0,0,0,.3), 0 8px 20px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#0E1316; --surface:#172026; --surface-2:#1E2930;
+  --ink:#E2EAE6; --ink-2:#A3B4AE; --ink-3:#72847F; --line:#2B3940; --line-2:#3C4D55;
+  --accent:#8FA2FF; --accent-soft:#232C52; --accent-ink:#0E1316;
+  --flame:#F08A4B; --flame-soft:#3A2418; --gold:#E8B84A;
+  --ok:#62C48E; --ok-soft:#173026; --bad:#F58B80;
+  --c-alkane:#9AABB9; --c-alkene:#8FA2FF; --c-alkyne:#B98CF0; --c-halide:#62C48E;
+  --c-polymer:#E3A646; --c-alcohol:#F59A6B; --c-aroma:#4CC3DB; --c-reagent:#A3ACB5; --c-inorg:#A3ACB5;
+  --mol-c:#E2EAE6; --mol-o:#FF8A7A; --mol-cl:#62C48E; --mol-br:#F0A06A;
+  --liquid:#2B3766; --fog:#131A1E;
+  --shadow:0 1px 0 rgba(0,0,0,.3), 0 8px 20px -12px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.65}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.app{max-width:1240px;margin:0 auto;padding-inline:16px;padding-block:16px 48px;display:grid;gap:14px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.btn{border:1px solid var(--line-2);background:var(--surface);border-radius:8px;padding:5px 12px;font-size:13px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
+.btn.hot{background:var(--flame);border-color:var(--flame);color:#fff;font-weight:700}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--ink-2)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px 20px;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.brand h1{font-family:var(--f-display);font-weight:400;font-size:26px;line-height:1.1;margin:0;letter-spacing:.02em}
+.brand h1 .c{color:var(--accent)}
+.brand > span{font-size:13px;color:var(--ink-2)}
+.hud{display:flex;align-items:center;gap:10px}
+.rank{display:grid;gap:3px;min-width:150px}
+.rank .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:13px}
+.rank b{font-weight:700}
+.rank small{font-family:var(--f-mono);font-size:11px;color:var(--ink-3)}
+.xpbar{height:5px;border-radius:3px;background:var(--line);overflow:hidden}
+.xpbar i{display:block;height:100%;background:var(--accent);width:0;transition:width .6s ease}
+.stars{font-family:var(--f-mono);font-size:17px;font-weight:500;color:var(--gold);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:2px 12px}
+.menu{position:relative}
+.menu summary{list-style:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:3px 12px;font-size:13px;color:var(--ink-2);cursor:pointer}
+.menu summary::-webkit-details-marker{display:none}
+.menu .pop{position:absolute;right:0;top:calc(100% + 6px);z-index:10;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:8px;display:grid;gap:4px;min-width:220px}
+.menu .pop button{text-align:left;border:0;background:transparent;border-radius:8px;padding:7px 10px;font-size:13.5px}
+.menu .pop button:hover{background:var(--surface-2)}
+.menu .pop p{margin:4px 10px;font-size:11.5px;color:var(--ink-3);line-height:1.5}
+
+/* quest bar */
+.qbar{padding:12px 16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;align-items:center}
+@media (max-width:640px){.qbar{grid-template-columns:1fr}}
+.qbar .eyebrow{font-size:11.5px;color:var(--ink-3);letter-spacing:.08em}
+.qbar h2{margin:0;font-size:16px;font-weight:700;line-height:1.4}
+.qbar .say{margin:2px 0 0;font-size:13.5px;color:var(--ink-2)}
+.qbar .acts{display:flex;gap:8px;flex-wrap:wrap}
+.qbar ol{grid-column:1/-1;margin:4px 0 0;padding-left:1.3em;font-size:13px;color:var(--ink-2)}
+.qbar.clear h2{font-family:var(--f-display);font-weight:400;color:var(--accent);font-size:19px}
+@media (prefers-reduced-motion:no-preference){ #deliver:not(:disabled){animation:beat 1.2s ease-in-out infinite} }
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+
+/* stage */
+.stage{display:grid;grid-template-columns:1fr;gap:14px;align-items:start}
+@media (min-width:980px){.stage{grid-template-columns:minmax(0,1fr) 360px}}
+.mapcard{padding:6px;overflow:hidden}
+.map-scroll{overflow-x:auto;border-radius:10px;background:var(--fog)}
+.map-scroll svg{display:block;width:100%;min-width:560px;aspect-ratio:16/10;height:auto}
+.maphead{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:6px 10px 8px;font-size:12px;color:var(--ink-3);flex-wrap:wrap}
+.maphead b{font-family:var(--f-display);font-weight:400;font-size:15px;color:var(--ink);letter-spacing:.04em;margin-right:8px}
+.maphead .lgd{display:flex;gap:12px;flex-wrap:wrap}
+.maphead .lgd span{display:inline-flex;align-items:center;gap:5px}
+.lg{display:inline-block;width:16px;height:9px;border-radius:4px;border:1.5px solid var(--ink-2);background:var(--surface)}
+.lg.q{border-color:var(--accent);border-style:dashed;background:var(--accent-soft)}
+.lg.n{border-color:var(--flame);background:var(--flame-soft)}
+.region{font-family:var(--f-display);font-size:14px;fill:var(--ink-3);opacity:.45;letter-spacing:.12em}
+.ed{fill:none;stroke:var(--line-2);stroke-width:1.8}
+.ed.front{stroke:var(--accent);stroke-dasharray:5 5;opacity:.7}
+.ed.alt{stroke:var(--ink-3);stroke-dasharray:2 5;opacity:.7}
+.ed.hl{stroke:var(--ink-2);stroke-width:2.4;opacity:1}
+.chip-bg{fill:var(--surface);stroke:var(--line-2)}
+.chip-t{font-family:var(--f-mono);font-size:11.5px;fill:var(--ink-2)}
+.mn{cursor:pointer}
+.mn rect.body{fill:var(--surface);stroke:var(--cc);stroke-width:1.8}
+.mn text{font-family:var(--f-body);font-size:15px;font-weight:500;fill:var(--ink)}
+.mn.raw rect.body{fill:var(--surface-2);stroke-width:2.2}
+.mn.locked{opacity:.55}
+.mn.locked rect.body{stroke:var(--line-2);stroke-dasharray:3 3;fill:transparent}
+.mn.locked text{fill:var(--ink-3);font-size:12.5px}
+.mn.front rect.body{fill:var(--accent-soft);stroke:var(--accent);stroke-dasharray:5 3}
+.mn.front text{fill:var(--accent);font-family:var(--f-mono);letter-spacing:.12em}
+.mn.sel rect.body{stroke-width:3.2}
+.mn.dim{opacity:.4}
+.halo{fill:none;stroke:var(--accent);stroke-width:2;opacity:0}
+.mn.front .halo{opacity:.3}
+.mn.next .halo{stroke:var(--flame);opacity:.9;stroke-width:2.6}
+.flag rect{fill:var(--flame)}
+.flag text{fill:#fff;font-size:11.5px;font-weight:700;font-family:var(--f-body)}
+@media (prefers-reduced-motion:no-preference){
+  .mn.front .halo{animation:pulse 1.8s ease-in-out infinite}
+  .mn.next .halo{animation:pulse 1.1s ease-in-out infinite}
+}
+@keyframes pulse{0%,100%{opacity:.12}50%{opacity:.9}}
+
+/* side panel */
+.side{display:flex;flex-direction:column;min-height:100%}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:6px;border-bottom:1px solid var(--line)}
+.seg button{border:0;background:transparent;border-radius:9px;padding:7px;font-size:14px;font-weight:500;color:var(--ink-2)}
+.seg button[aria-selected="true"]{background:var(--accent-soft);color:var(--accent);font-weight:700}
+.side-b{padding:16px}
+.eyebrow{font-size:11.5px;color:var(--ink-3);letter-spacing:.1em}
+.side-b h3{margin:2px 0 4px;font-size:18px;font-weight:700;line-height:1.35}
+.side-b p{margin:8px 0 0;font-size:14px}
+.fm{font-family:var(--f-mono);font-size:14px;color:var(--cc)}
+.rar{color:var(--gold);font-family:var(--f-mono);font-size:12.5px;letter-spacing:.05em}
+.muted{color:var(--ink-3)}
+.route{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:12px}
+.route .rh{font-size:11.5px;color:var(--ink-3);letter-spacing:.08em;margin-bottom:6px}
+.route dl{display:grid;grid-template-columns:4em 1fr;gap:6px 8px;margin:0;font-size:14px;align-items:center}
+.route dt{color:var(--ink-3);font-size:12.5px}
+.route dd{margin:0}
+.hid{font-family:var(--f-mono);color:var(--ink-3);letter-spacing:.2em}
+.spend{border:1px solid var(--gold);color:var(--gold);background:transparent;border-radius:999px;font-size:12px;padding:1px 10px;margin-left:8px;font-weight:700}
+.spend:disabled{opacity:.4;cursor:not-allowed}
+.nextbox{border-left:3px solid var(--flame);border-radius:0;padding:4px 0 4px 12px;margin-top:14px;font-size:13.5px}
+.nextbox b{color:var(--flame)}
+
+/* bench */
+.slots{display:grid;grid-template-columns:1fr 72px 1fr;gap:8px;align-items:center}
+.slot{min-height:70px;border:1.5px dashed var(--line-2);border-radius:12px;padding:8px 10px;background:var(--surface-2);text-align:left;display:flex;flex-direction:column;justify-content:center;gap:1px;position:relative;width:100%}
+.slot.filled{border-style:solid;background:var(--surface)}
+.slot.active{border-color:var(--accent);border-style:solid;background:var(--accent-soft)}
+.slot .lab{font-size:10.5px;color:var(--ink-3);letter-spacing:.08em}
+.slot .nm{font-weight:700;font-size:14px;line-height:1.3}
+.slot .sf{font-family:var(--f-mono);font-size:12px;color:var(--ink-2)}
+.slot .empty{color:var(--ink-3);font-size:12.5px}
+.flask-wrap{width:72px;height:82px}
+.flask-wrap svg{width:100%;height:100%;overflow:visible}
+.picker{margin-top:10px;border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--surface-2)}
+.picker .ph{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--ink-3);margin-bottom:6px}
+.picker h4{margin:8px 0 4px;font-size:11.5px;color:var(--ink-3);font-weight:500;letter-spacing:.08em}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px 10px 3px 8px;font-size:13px;line-height:1.4}
+.tag:hover{border-color:var(--line-2)}
+.tag .dot{width:8px;height:8px;border-radius:50%;background:var(--cc,var(--c-reagent));flex:none}
+.tag .tf{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3)}
+.tag.on{border-color:var(--accent);background:var(--accent-soft)}
+.conds{display:grid;gap:12px;margin-top:14px}
+.cond label,.cond .lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-2);letter-spacing:.04em;margin-bottom:4px}
+.cond .val{font-family:var(--f-mono);font-size:14px;color:var(--ink)}
+input[type=range]{width:100%;accent-color:var(--flame)}
+select{width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface)}
+.row2{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:end}
+.toggle{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line-2);background:var(--surface);border-radius:999px;padding:6px 14px 6px 9px;font-size:13px;white-space:nowrap}
+.toggle .bulb{width:13px;height:13px;border-radius:50%;border:1.5px solid var(--ink-3);transition:.2s}
+.toggle[aria-pressed="true"]{border-color:#8B5CF6;background:rgba(139,92,246,.12)}
+.toggle[aria-pressed="true"] .bulb{background:#8B5CF6;border-color:#8B5CF6;box-shadow:0 0 0 4px rgba(139,92,246,.2)}
+.go{margin-top:14px;width:100%;border:0;border-radius:12px;background:var(--accent);color:var(--accent-ink);font-family:var(--f-display);font-size:17px;letter-spacing:.1em;padding:11px}
+.go:hover{filter:brightness(1.07)}
+.err{color:var(--bad);font-size:13px;margin-top:6px}
+.result{margin-top:14px;border-radius:12px;padding:12px 14px;background:var(--surface-2)}
+.result.ok{background:var(--ok-soft)}
+.result.fail{background:var(--flame-soft)}
+.result h4{margin:0;font-size:15px;font-weight:700;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{display:inline-block;font-size:11px;font-weight:500;border-radius:6px;padding:0 7px;border:1px solid currentColor}
+.chip.type{color:var(--accent)} .chip.good{color:var(--ok)} .chip.miss{color:var(--ink-3)} .chip.xp{color:var(--gold)}
+.eq{font-family:var(--f-mono);font-size:13.5px;margin:8px 0 0;overflow-x:auto;white-space:nowrap}
+.result p{margin:6px 0 0;font-size:13.5px}
+.result .tn{font-size:12px;color:var(--ink-2)}
+
+/* lower tabs */
+.lower .tabs{display:flex;gap:4px;padding:6px 6px 0;border-bottom:1px solid var(--line);overflow-x:auto}
+.lower .tabs button{border:0;background:transparent;padding:8px 14px;font-size:14px;color:var(--ink-2);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.lower .tabs button[aria-selected="true"]{color:var(--ink);font-weight:700;border-bottom-color:var(--accent)}
+.lower .tabs small{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);margin-left:4px}
+.lower .tb{padding:14px 16px 16px}
+.dex{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px}
+.dex-i{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:8px 6px;text-align:center;min-height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.dex-i .df{font-family:var(--f-mono);font-size:12px;color:var(--cc);font-weight:500;overflow-wrap:anywhere;line-height:1.3}
+.dex-i .dn{font-size:12px;line-height:1.3}
+.dex-i.unk{border-style:dashed;background:transparent;cursor:default}
+.dex-i.unk .df,.dex-i.unk .dn{color:var(--ink-3)}
+.dex-i:not(.unk):hover{border-color:var(--cc)}
+.dex-sec{font-size:12px;color:var(--ink-3);letter-spacing:.08em;margin:16px 0 8px;display:flex;justify-content:space-between}
+.dex-sec:first-child{margin-top:0}
+.ach{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
+.badge{border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:12.5px;line-height:1.45}
+.badge b{display:block;font-size:14px}
+.badge span{color:var(--ink-3)}
+.badge.on{border-color:var(--gold)}
+.badge.on b{color:var(--gold)}
+.badge.off b{color:var(--ink-3)}
+.log{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.log li{display:grid;grid-template-columns:40px 1fr auto;gap:10px;font-size:13px;align-items:baseline;border-bottom:1px dotted var(--line);padding-bottom:6px}
+.log .n{font-family:var(--f-mono);color:var(--ink-3)}
+.log .e{font-family:var(--f-mono);overflow-wrap:anywhere}
+.log .r.ok{color:var(--ok)} .log .r.no{color:var(--ink-3)}
+
+/* dialogs */
+dialog{border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);padding:0;width:min(520px,calc(100vw - 32px));max-height:calc(100vh - 48px)}
+dialog::backdrop{background:rgba(10,15,18,.55)}
+.dlg{padding:18px 20px 20px}
+.dlg-h{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.dlg-h h3{margin:0;font-size:19px;font-weight:700;line-height:1.35}
+.dlg .mol{background:var(--surface-2);border-radius:12px;margin:12px 0;display:flex;justify-content:center;padding:8px}
+.dlg .mol svg{width:100%;max-width:320px;height:190px}
+.poly{font-family:var(--f-mono);font-size:22px;padding:30px 8px;text-align:center}
+.dlg dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px}
+.dlg dt{color:var(--ink-3);font-size:12.5px;padding-top:2px}
+.dlg dd{margin:0}
+.dlg ul{margin:0;padding-left:1.1em}
+.dlg ul li{font-family:var(--f-mono);font-size:13px}
+#disc{width:min(360px,calc(100vw - 32px));border:2px solid var(--gold)}
+.card{padding:18px 20px 20px;text-align:center}
+.card .new{font-family:var(--f-display);font-size:28px;color:var(--gold);letter-spacing:.12em;line-height:1}
+.card .rar{font-size:16px;margin-top:6px;display:block}
+.card .mol{background:var(--surface-2);border-radius:12px;margin:12px 0;padding:6px}
+.card .mol svg{width:100%;height:160px;display:block}
+.card .mol .poly{padding:52px 8px}
+.card h3{margin:0;font-size:20px;font-weight:700;line-height:1.3}
+.card .cl{display:inline-block;margin-top:6px;font-size:11.5px;border:1px solid var(--cc);color:var(--cc);border-radius:6px;padding:0 8px}
+.card p{font-size:13.5px;text-align:left;margin:10px 0 0}
+.card .gain{display:flex;justify-content:center;gap:12px;margin-top:12px;font-family:var(--f-mono);font-size:13px;color:var(--gold)}
+.card .lvl{margin-top:10px;background:var(--accent-soft);border-radius:10px;padding:8px;font-weight:700;color:var(--accent)}
+.card .btn{margin-top:14px;width:100%;padding:9px}
+@media (prefers-reduced-motion:no-preference){
+  #disc[open]{animation:flip .55s cubic-bezier(.2,.9,.3,1.2)}
+  .result{animation:fadein .3s ease}
+}
+@keyframes flip{from{transform:perspective(800px) rotateY(80deg) scale(.8);opacity:0}to{transform:none;opacity:1}}
+@keyframes fadein{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+.toasts{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));display:grid;gap:8px;z-index:20;width:min(420px,calc(100vw - 32px));pointer-events:none}
+.toast{background:var(--ink);color:var(--surface);border-radius:12px;padding:10px 14px;font-size:13.5px;box-shadow:var(--shadow);transition:opacity .4s,transform .4s}
+.toast b{color:var(--gold)}
+.toast.out{opacity:0;transform:translateY(8px)}
+
+#liquid{transition:fill .7s ease}
+.bub,.smoke{opacity:0}
+@media (prefers-reduced-motion:no-preference){
+  .flask-wrap.boil .bub{animation:rise 1.1s ease-in infinite}
+  .flask-wrap.boil .bub:nth-of-type(2){animation-delay:.25s}
+  .flask-wrap.boil .bub:nth-of-type(3){animation-delay:.5s}
+  .flask-wrap.boil .bub:nth-of-type(4){animation-delay:.7s}
+  .flask-wrap.boil .bub:nth-of-type(5){animation-delay:.9s}
+  .flask-wrap.shake{animation:shake .4s ease}
+  .flask-wrap.puff .smoke{animation:puff 1.2s ease-out}
+}
+@keyframes rise{0%{opacity:0;transform:translateY(0)}20%{opacity:.9}100%{opacity:0;transform:translateY(-58px)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px) rotate(-2deg)}75%{transform:translateX(3px) rotate(2deg)}}
+@keyframes puff{0%{opacity:0;transform:translateY(0) scale(.6)}30%{opacity:.7}100%{opacity:0;transform:translateY(-40px) scale(1.4)}}
+.flame-g{opacity:0;transition:opacity .3s}
+.flask-wrap.hot .flame-g{opacity:1}
+.uv{opacity:0;transition:opacity .3s}
+.flask-wrap.uvon .uv{opacity:1}
+footer{font-size:12px;color:var(--ink-3)}
+</style>
+
+<div class="app">
+  <header class="top">
+    <div class="brand"><h1>有機<span class="c">クラフト</span>工房</h1><span>第1章 炭化水素の森</span></div>
+    <div class="hud">
+      <div class="rank" aria-live="polite"><div class="row"><b id="st-rank">見習い</b><small id="st-xp">0 XP</small></div><div class="xpbar"><i id="st-xpbar"></i></div></div>
+      <span class="stars" id="st-star" title="ひらめき（手がかりを見るのに使う）">★3</span>
+      <details class="menu" id="menu"><summary>設定</summary><div class="pop">
+        <button type="button" id="mute">効果音：あり</button>
+        <button type="button" id="reset">最初からやり直す</button>
+        <p>進み具合はこのブラウザに保存されます。高校化学「有機化合物」（化学(4)ア(ア)）に対応した試作版です。</p>
+      </div></details>
+    </div>
+  </header>
+
+  <section class="panel qbar" id="qbar" aria-live="polite"></section>
+
+  <div class="stage">
+    <section class="panel mapcard" aria-label="合成マップ">
+      <div class="maphead">
+        <span><b>合成マップ</b><span id="map-sub"></span></span>
+        <span class="lgd"><span><i class="lg"></i>発見済み</span><span><i class="lg q"></i>作れそう</span><span><i class="lg n"></i>次の一歩</span></span>
+      </div>
+      <div class="map-scroll"><svg id="map" viewBox="0 0 980 612" role="img" aria-label="合成マップ"></svg></div>
+    </section>
+
+    <section class="panel side" id="side">
+      <div class="seg" role="tablist">
+        <button type="button" role="tab" id="seg-look" data-side="look" aria-selected="true">調べる</button>
+        <button type="button" role="tab" id="seg-bench" data-side="bench" aria-selected="false">反応台</button>
+      </div>
+      <div class="side-b" id="look"></div>
+      <div class="side-b" id="bench" hidden>
+        <div class="slots">
+          <button type="button" class="slot" id="slot-a" data-slot="a"></button>
+          <div class="flask-wrap" id="flask" aria-hidden="true">
+            <svg viewBox="0 0 150 170">
+              <g class="uv"><line x1="18" y1="18" x2="44" y2="52" stroke="#8B5CF6" stroke-width="3" stroke-linecap="round" stroke-dasharray="4 6"/><circle cx="12" cy="12" r="9" fill="#8B5CF6" opacity=".85"/></g>
+              <defs><clipPath id="fclip"><path d="M60 14 H90 V62 L128 138 Q132 150 120 150 H30 Q18 150 22 138 L60 62 Z"/></clipPath></defs>
+              <g clip-path="url(#fclip)">
+                <rect id="liquid" x="0" y="96" width="150" height="60" fill="var(--liquid)"/>
+                <circle class="bub" cx="62" cy="140" r="5" fill="var(--surface)"/><circle class="bub" cx="80" cy="144" r="4" fill="var(--surface)"/><circle class="bub" cx="94" cy="138" r="6" fill="var(--surface)"/><circle class="bub" cx="72" cy="146" r="4" fill="var(--surface)"/><circle class="bub" cx="100" cy="146" r="4" fill="var(--surface)"/>
+              </g>
+              <path d="M60 14 H90 V62 L128 138 Q132 150 120 150 H30 Q18 150 22 138 L60 62 Z" fill="none" stroke="var(--ink-2)" stroke-width="4" stroke-linejoin="round"/>
+              <circle class="smoke" cx="75" cy="4" r="12" fill="var(--ink-3)"/>
+              <g class="flame-g"><path d="M52 170 Q58 150 64 158 Q70 144 76 170 Z" fill="var(--flame)"/><path d="M74 170 Q80 146 86 156 Q92 142 98 170 Z" fill="var(--flame)" opacity=".8"/></g>
+            </svg>
+          </div>
+          <button type="button" class="slot" id="slot-b" data-slot="b"></button>
+        </div>
+        <div id="picker"></div>
+        <div class="conds">
+          <div class="cond">
+            <label for="temp">温度<span class="val" id="temp-v">20℃</span></label>
+            <input type="range" id="temp" min="20" max="900" step="10" value="20">
+          </div>
+          <div class="row2">
+            <div class="cond"><span class="lbl">光</span><button type="button" class="toggle" id="light" aria-pressed="false"><span class="bulb"></span><span id="light-t">当てない</span></button></div>
+            <div class="cond"><label for="cat">触媒</label><select id="cat"></select></div>
+          </div>
+          <div class="cond"><label for="pred">反応の種類を予想<span class="muted">当たると★</span></label><select id="pred"></select></div>
+        </div>
+        <button type="button" class="go" id="go">反応させる</button>
+        <div class="err" id="err" role="alert"></div>
+        <div id="result"></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="panel lower">
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" data-tab="dex" aria-selected="true">物質図鑑<small id="t-dex"></small></button>
+      <button type="button" role="tab" data-tab="ach" aria-selected="false">称号<small id="t-ach"></small></button>
+      <button type="button" role="tab" data-tab="log" aria-selected="false">実験ノート<small id="t-log"></small></button>
+    </div>
+    <div class="tb" id="tabbody"></div>
+  </section>
+</div>
+
+<dialog id="dlg"><div class="dlg" id="dlg-body"></div></dialog>
+<dialog id="disc"><div class="card" id="disc-body"></div></dialog>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/smiles-drawer@2.1.7/dist/smiles-drawer.min.js"></script>
+<script>
+(function(){
+"use strict";
+/* ================= data ================= */
+const CLS = {
+  alkane:{label:"アルカン",c:"--c-alkane"}, alkene:{label:"アルケン",c:"--c-alkene"},
+  alkyne:{label:"アルキン",c:"--c-alkyne"}, halide:{label:"ハロゲン化合物",c:"--c-halide"},
+  polymer:{label:"高分子",c:"--c-polymer"}, alcohol:{label:"酸素を含む化合物（2章）",c:"--c-alcohol"},
+  aroma:{label:"芳香族（3章）",c:"--c-aroma"}, reagent:{label:"試薬・原料",c:"--c-reagent"}, inorg:{label:"無機物",c:"--c-inorg"}
+};
+const SHORT = {alkane:"アルカン",alkene:"アルケン",alkyne:"アルキン",halide:"ハロゲン化物",polymer:"高分子",alcohol:"2章の物質",aroma:"3章の物質",inorg:"無機物",reagent:"試薬"};
+const S = {
+  methane:{n:"メタン",f:"CH₄",cls:"alkane",smi:"[H]C([H])([H])[H]",note:"天然ガスの主成分。炭素1個に水素4個が正四面体の向きに結合している。すべて単結合の「飽和」炭化水素で、付加反応はしない。",use:"都市ガス、燃料"},
+  ethane:{n:"エタン",f:"CH₃−CH₃",cls:"alkane",smi:"[H]C([H])([H])C([H])([H])[H]",note:"C−C単結合は、結合を軸にして自由に回転できる。",use:"天然ガスに少量含まれる"},
+  propane:{n:"プロパン",f:"CH₃−CH₂−CH₃",cls:"alkane",smi:"[H]C([H])([H])C([H])([H])C([H])([H])[H]",note:"加圧すると液体になりやすい。",use:"LPガス（家庭用ボンベ）"},
+  ethylene:{n:"エチレン（エテン）",f:"CH₂=CH₂",cls:"alkene",smi:"[H]C([H])=C([H])[H]",note:"C=C二重結合をもち、6個の原子がすべて同じ平面上にある。二重結合のうち1本は切れやすく、付加反応を起こす。植物ホルモンとして果実の成熟を促す。",use:"ポリエチレン、エタノールなど石油化学製品の出発点"},
+  propene:{n:"プロペン（プロピレン）",f:"CH₂=CH−CH₃",cls:"alkene",smi:"[H]C([H])=C([H])C([H])([H])[H]",note:"二重結合を1つもつ。左右が非対称なので、付加反応では生成物が2通り考えられる。",use:"ポリプロピレンの原料"},
+  acetylene:{n:"アセチレン（エチン）",f:"CH≡CH",cls:"alkyne",smi:"[H]C#C[H]",note:"C≡C三重結合をもつ直線形の分子。付加反応を2段階起こせる。酸素とともに燃やすと約3000℃の炎になる。",use:"溶接・切断用の酸素アセチレン炎"},
+  ch3cl:{n:"クロロメタン（塩化メチル）",f:"CH₃Cl",cls:"halide",smi:"[H]C([H])([H])Cl",note:"メタンのH原子1個がCl原子に置き換わった。",use:"シリコーン樹脂などの原料"},
+  ch2cl2:{n:"ジクロロメタン（塩化メチレン）",f:"CH₂Cl₂",cls:"halide",smi:"ClC([H])([H])Cl",note:"水に溶けにくく、油をよく溶かす有機溶媒。",use:"溶媒、塗装のはく離剤"},
+  chcl3:{n:"クロロホルム（トリクロロメタン）",f:"CHCl₃",cls:"halide",smi:"ClC([H])(Cl)Cl",note:"甘いにおいのする液体。19世紀には麻酔薬として使われたが、毒性があるため現在は使われない。",use:"実験用の溶媒"},
+  ccl4:{n:"四塩化炭素（テトラクロロメタン）",f:"CCl₄",cls:"halide",smi:"ClC(Cl)(Cl)Cl",note:"H原子がすべてCl原子に置き換わった。燃えない液体だが、毒性とオゾン層破壊のため現在は製造が規制されている。",use:"かつては消火剤・溶媒"},
+  chloroethane:{n:"クロロエタン（塩化エチル）",f:"CH₃−CH₂Cl",cls:"halide",smi:"[H]C([H])([H])C([H])([H])Cl",note:"すぐに蒸発して皮膚を冷やすため、冷却スプレーに使われたことがある。",use:"かつての局所冷却剤"},
+  dibromoethane:{n:"1,2-ジブロモエタン",f:"CH₂Br−CH₂Br",cls:"halide",smi:"BrC([H])([H])C([H])([H])Br",note:"二重結合の両側の炭素に臭素原子が1個ずつ付加した。臭素水の赤褐色が消えるので、不飽和結合の検出に使われる。",use:"不飽和結合の検出（臭素水の脱色）"},
+  dichloroethane:{n:"1,2-ジクロロエタン",f:"CH₂Cl−CH₂Cl",cls:"halide",smi:"ClC([H])([H])C([H])([H])Cl",note:"加熱するとHClが外れて塩化ビニルになる。工業的な塩化ビニル製造の中間体。",use:"塩化ビニルの原料"},
+  vinylchloride:{n:"塩化ビニル（クロロエテン）",f:"CH₂=CHCl",cls:"halide",smi:"[H]C([H])=C([H])Cl",note:"C=C二重結合が残っているので、たくさんつなげて高分子（ポリ塩化ビニル）にできる。",use:"ポリ塩化ビニル（塩ビ）の単量体"},
+  dibromoethene:{n:"1,2-ジブロモエテン",f:"CHBr=CHBr",cls:"halide",smi:"BrC([H])=C([H])Br",note:"アセチレンに臭素が1分子だけ付加した段階で、まだ二重結合が残っている。シス形とトランス形がある。",use:"アセチレンの付加反応が2段階で進むことの確認"},
+  tetrabromoethane:{n:"1,1,2,2-テトラブロモエタン",f:"CHBr₂−CHBr₂",cls:"halide",smi:"BrC(Br)([H])C([H])(Br)Br",note:"三重結合に臭素が2分子付加し、不飽和結合がなくなった。",use:"密度の大きい液体（鉱物の分離）"},
+  dibromopropane:{n:"1,2-ジブロモプロパン",f:"CH₂Br−CHBr−CH₃",cls:"halide",smi:"BrC([H])([H])C([H])(Br)C([H])([H])[H]",note:"プロペンの二重結合に臭素が付加した。",use:"不飽和結合の検出"},
+  polyethylene:{n:"ポリエチレン",f:"−[CH₂−CH₂]ₙ−",cls:"polymer",note:"エチレンが数千〜数万個つながった高分子。二重結合は開いて単結合になっている。",use:"レジ袋、ラップフィルム、容器"},
+  pvc:{n:"ポリ塩化ビニル",f:"−[CH₂−CHCl]ₙ−",cls:"polymer",note:"塩化ビニルがつながった高分子。燃えにくく、水や薬品に強い。",use:"水道管（塩ビ管）、ホース、消しゴム"},
+  pp:{n:"ポリプロピレン",f:"−[CH₂−CH(CH₃)]ₙ−",cls:"polymer",note:"プロペンがつながった高分子。軽くて熱に比較的強い。",use:"食品容器、ペットボトルのキャップ"},
+  ethanol:{n:"エタノール",f:"CH₃−CH₂−OH",cls:"alcohol",smi:"[H]C([H])([H])C([H])([H])O[H]",note:"ヒドロキシ基 −OH をもつアルコール。第2章の主役の一つ。",use:"酒類、消毒、燃料"},
+  ether:{n:"ジエチルエーテル",f:"C₂H₅−O−C₂H₅",cls:"alcohol",smi:"[H]C([H])([H])C([H])([H])OC([H])([H])C([H])([H])[H]",note:"エタノール2分子から水が取れてつながった（分子間脱水）。揮発しやすく引火しやすい。かつては麻酔薬に使われた。",use:"溶媒、かつての麻酔薬"},
+  acetaldehyde:{n:"アセトアルデヒド",f:"CH₃−CHO",cls:"alcohol",smi:"[H]C([H])([H])C([H])=O",note:"ホルミル基（アルデヒド基）−CHO をもつ。還元性があり銀鏡反応を示す（第2章）。お酒を飲んだあと、体内でエタノールから作られる物質でもある。",use:"酢酸などの原料"},
+  isopropanol:{n:"2-プロパノール",f:"CH₃−CH(OH)−CH₃",cls:"alcohol",smi:"[H]C([H])([H])C([H])(O[H])C([H])([H])[H]",note:"プロペンに水が付加するとき、OHは主に中央の炭素に付く（マルコフニコフ則：発展）。",use:"消毒用アルコール"},
+  benzene:{n:"ベンゼン",f:"C₆H₆",cls:"aroma",smi:"[H]C1=C([H])C([H])=C([H])C([H])=C1[H]",note:"6個の炭素が正六角形の環をつくる。炭素間の結合は単結合と二重結合の中間の性質をもち、付加より置換が起こりやすい。第3章の主役。",use:"染料・医薬品・合成樹脂の原料"},
+  co2:{n:"二酸化炭素",f:"CO₂",cls:"inorg",smi:"O=C=O",note:"炭化水素を完全燃焼させると、CO₂とH₂Oだけになる。"},
+  cl2:{n:"塩素",f:"Cl₂",cls:"reagent",smi:"ClCl",note:"黄緑色の有毒な気体。光（紫外線）が当たると塩素原子に分かれ、反応しやすくなる。"},
+  h2:{n:"水素",f:"H₂",cls:"reagent",smi:"[H][H]",note:"最も軽い気体。触媒があると不飽和結合に付加する。"},
+  h2o:{n:"水",f:"H₂O",cls:"reagent",smi:"[H]O[H]",note:"触媒と条件がそろうと、二重結合・三重結合に付加する。"},
+  o2:{n:"酸素",f:"O₂",cls:"reagent",smi:"O=O",note:"炭化水素と一緒に加熱・点火すると燃焼が起こる。"},
+  br2:{n:"臭素水",f:"Br₂",cls:"reagent",smi:"BrBr",note:"臭素を水に溶かした赤褐色の液体。二重結合・三重結合に付加すると色が消える。"},
+  hcl:{n:"塩化水素",f:"HCl",cls:"reagent",smi:"[H]Cl",note:"水に溶かすと塩酸になる気体。不飽和結合に付加する。"},
+  h2so4:{n:"濃硫酸",f:"H₂SO₄",cls:"reagent",note:"強い脱水作用をもつ。有機物から水を取り去る。"},
+  cac2:{n:"炭化カルシウム（カーバイド）",f:"CaC₂",cls:"reagent",note:"灰色の固体。水をかけるとアセチレンが発生する。かつては夜店の「カーバイドランプ」にも使われた。"},
+  glucose:{n:"ブドウ糖（グルコース）",f:"C₆H₁₂O₆",cls:"reagent",note:"サトウキビなどの植物から得られる糖。酵母がアルコール発酵でエタノールに変える。"},
+  naphtha:{n:"ナフサ（粗製ガソリン）",f:"C₅〜C₁₀の混合物",cls:"reagent",note:"原油を蒸留して得られる炭化水素の混合物。高温で熱分解（クラッキング）するとエチレンやプロペンが得られる。"}
+};
+const DEX1 = ["methane","ethane","propane","ethylene","propene","acetylene","ch3cl","ch2cl2","chcl3","ccl4","chloroethane","dibromoethane","dichloroethane","vinylchloride","dibromoethene","tetrabromoethane","dibromopropane","polyethylene","pvc","pp"];
+const DEXX = ["ethanol","ether","acetaldehyde","isopropanol","benzene","co2"];
+
+const SOURCES = [
+  {id:"gas",n:"天然ガス田",items:["methane"],start:true},
+  {id:"salt",n:"食塩水の電気分解工場",items:["cl2","h2"],start:true},
+  {id:"nature",n:"井戸と空気",items:["h2o","o2"],start:true},
+  {id:"shelf",n:"鑑定用の試薬棚",items:["br2"],start:true},
+  {id:"quarry",n:"石灰岩の採石場",items:["cac2"],by:"依頼1"},
+  {id:"farm",n:"サトウキビ畑",items:["glucose"],by:"依頼2"},
+  {id:"store",n:"薬品問屋",items:["h2so4","hcl"],by:"依頼2"},
+  {id:"refinery",n:"製油所",items:["naphtha"],by:"依頼3"}
+];
+const CATS = [
+  {id:"none",n:"なし"},{id:"Ni",n:"ニッケル Ni"},{id:"Pt",n:"白金 Pt"},
+  {id:"HgSO4",n:"硫酸水銀(II) HgSO₄"},{id:"HgCl2",n:"塩化水銀(II) HgCl₂"},
+  {id:"H3PO4",n:"リン酸 H₃PO₄"},{id:"Fe",n:"鉄 Fe"},{id:"yeast",n:"酵母（チマーゼ）"},
+  {id:"poly",n:"重合触媒（チーグラー・ナッタ触媒）",lock:"依頼4"}
+];
+const CATSHORT = {Ni:"Ni",Pt:"Pt",HgSO4:"HgSO₄",HgCl2:"HgCl₂",H3PO4:"H₃PO₄",Fe:"Fe",yeast:"酵母",poly:"重合触媒"};
+const TYPES = ["置換","付加","脱離","縮合","重合","燃焼","熱分解","その他","反応しない"];
+const TYPE_NOTE = {
+  "置換":"置換反応：分子中の原子が、別の原子に置き換わる反応。",
+  "付加":"付加反応：二重結合・三重結合のうち切れやすい結合が開き、そこに原子が結びつく反応。",
+  "脱離":"脱離反応：1つの分子から水やHClなどの小さな分子が外れ、二重結合ができる反応。",
+  "縮合":"縮合反応：2つの分子から水などの小さな分子が取れて、つながる反応。",
+  "重合":"重合：小さな分子（単量体）がたくさんつながって大きな分子になる反応。",
+  "燃焼":"燃焼：酸素と激しく反応して熱と光を出す。完全燃焼するとCO₂とH₂Oになる。",
+  "熱分解":"熱分解：加熱によって大きな分子が小さな分子に分かれる反応。",
+  "その他":"この章の分類に当てはまらない反応（無機物の反応や発酵など）。"
+};
+const HYDRO_CAT = "水素は触媒なしではほとんど付加しない。Ni や Pt の表面で反応が進む。";
+const POLY_CAT = "単量体を高分子につなぐには、重合触媒が必要だ。";
+const RULES = [
+  {id:"cl1",in:["methane","cl2"],light:true,out:["ch3cl"],give:["hcl"],types:["置換"],eq:"CH₄ + Cl₂ → CH₃Cl + HCl",text:"メタンのH原子1個がCl原子に置き換わった。光（紫外線）がCl₂を原子に分け、反応のきっかけをつくる。副産物の塩化水素も手に入った。"},
+  {id:"cl2",in:["ch3cl","cl2"],light:true,out:["ch2cl2"],give:["hcl"],types:["置換"],eq:"CH₃Cl + Cl₂ → CH₂Cl₂ + HCl",text:"さらにH原子がもう1個Cl原子に置き換わった。"},
+  {id:"cl3",in:["ch2cl2","cl2"],light:true,out:["chcl3"],give:["hcl"],types:["置換"],eq:"CH₂Cl₂ + Cl₂ → CHCl₃ + HCl",text:"3個目の置換。これがクロロホルム。"},
+  {id:"cl4",in:["chcl3","cl2"],light:true,out:["ccl4"],give:["hcl"],types:["置換"],eq:"CHCl₃ + Cl₂ → CCl₄ + HCl",text:"H原子がすべてCl原子に置き換わった。実際には、メタンと塩素を混ぜて光を当てると、これら4種類が混ざってできる。"},
+  {id:"clEt",in:["ethane","cl2"],light:true,out:["chloroethane"],give:["hcl"],types:["置換"],eq:"C₂H₆ + Cl₂ → C₂H₅Cl + HCl",text:"エタンでもメタンと同じように、光で置換反応が起こる。"},
+  {id:"carb",in:["cac2","h2o"],out:["acetylene"],types:["その他"],eq:"CaC₂ + 2H₂O → CH≡CH + Ca(OH)₂",text:"炭化カルシウムに水を加えると、アセチレンが泡を出して発生した。実験室でのアセチレンのつくり方。"},
+  {id:"hAc",in:["acetylene","h2"],cat:["Ni","Pt"],catMsg:HYDRO_CAT,out:["ethylene"],types:["付加"],eq:"CH≡CH + H₂ → CH₂=CH₂",text:"三重結合に水素が1分子付加して、二重結合が1つ残った。"},
+  {id:"hEt",in:["ethylene","h2"],cat:["Ni","Pt"],catMsg:HYDRO_CAT,out:["ethane"],types:["付加"],eq:"CH₂=CH₂ + H₂ → CH₃−CH₃",text:"二重結合に水素が付加し、単結合だけのアルカンになった。"},
+  {id:"hPr",in:["propene","h2"],cat:["Ni","Pt"],catMsg:HYDRO_CAT,out:["propane"],types:["付加"],eq:"CH₂=CH−CH₃ + H₂ → CH₃−CH₂−CH₃",text:"プロペンに水素が付加してプロパンになった。"},
+  {id:"brEt",in:["ethylene","br2"],out:["dibromoethane"],types:["付加"],eq:"CH₂=CH₂ + Br₂ → CH₂Br−CH₂Br",text:"臭素水の赤褐色がすっと消えた。二重結合に臭素が付加したしるし。不飽和結合があるかどうかを調べる方法として使われる。",fade:true},
+  {id:"brAc",in:["acetylene","br2"],out:["dibromoethene"],types:["付加"],eq:"CH≡CH + Br₂ → CHBr=CHBr",text:"臭素水の色が消えた。三重結合に臭素が1分子付加し、二重結合が残っている。",fade:true},
+  {id:"brAc2",in:["dibromoethene","br2"],out:["tetrabromoethane"],types:["付加"],eq:"CHBr=CHBr + Br₂ → CHBr₂−CHBr₂",text:"残っていた二重結合にも臭素が付加した。三重結合は2段階で付加反応を起こせる。",fade:true},
+  {id:"brPr",in:["propene","br2"],out:["dibromopropane"],types:["付加"],eq:"CH₂=CH−CH₃ + Br₂ → CH₂Br−CHBr−CH₃",text:"プロペンの二重結合に臭素が付加し、臭素水の色が消えた。",fade:true},
+  {id:"hclEt",in:["ethylene","hcl"],out:["chloroethane"],types:["付加"],eq:"CH₂=CH₂ + HCl → CH₃−CH₂Cl",text:"二重結合にHとClが1個ずつ付加した。エタンの置換反応でも同じ物質ができる。"},
+  {id:"cl2Et",in:["ethylene","cl2"],out:["dichloroethane"],types:["付加"],eq:"CH₂=CH₂ + Cl₂ → CH₂Cl−CH₂Cl",text:"二重結合に塩素が付加した。光がなくても、二重結合があれば付加反応は進む。"},
+  {id:"vc1",in:["dichloroethane"],t:[400,600],lowMsg:"加熱が足りない。400℃以上に熱すると、HClが外れる。",out:["vinylchloride"],give:["hcl"],types:["脱離","熱分解"],eq:"CH₂Cl−CH₂Cl → CH₂=CHCl + HCl",text:"加熱するとHClが外れ、二重結合ができた。工業ではこの方法で塩化ビニルを大量につくっている。"},
+  {id:"vc2",in:["acetylene","hcl"],cat:["HgCl2"],catMsg:"アセチレンへのHClの付加には、塩化水銀(II)が触媒になる。",out:["vinylchloride"],types:["付加"],eq:"CH≡CH + HCl → CH₂=CHCl",text:"三重結合にHClが1分子付加した。ただし水銀化合物は毒性が高いため、現在の工業ではエチレンからつくる方法が中心。"},
+  {id:"hyAc",in:["acetylene","h2o"],cat:["HgSO4"],catMsg:"アセチレンへの水の付加には、硫酸水銀(II)が触媒になる。",out:["acetaldehyde"],types:["付加"],eq:"CH≡CH + H₂O → [CH₂=CH−OH] → CH₃−CHO",text:"水が付加してビニルアルコールができるが、この物質は不安定で、すぐにアセトアルデヒドに変わる。第2章の物質を先取りした。"},
+  {id:"hyEt",in:["ethylene","h2o"],cat:["H3PO4"],catMsg:"エチレンへの水の付加には、リン酸を触媒にする。",t:[250,350],lowMsg:"温度が低い。リン酸触媒を使い、高温・高圧にする必要がある（約300℃）。",out:["ethanol"],types:["付加"],eq:"CH₂=CH₂ + H₂O → CH₃−CH₂−OH",text:"二重結合にHとOHが付加し、エタノールができた。工業的なエタノールの製法の一つ。"},
+  {id:"hyPr",in:["propene","h2o"],cat:["H3PO4"],catMsg:"プロペンへの水の付加には、リン酸を触媒にする。",t:[250,350],lowMsg:"温度が低い。高温・高圧にする必要がある（約300℃）。",out:["isopropanol"],types:["付加"],eq:"CH₂=CH−CH₃ + H₂O → CH₃−CH(OH)−CH₃",text:"主に2-プロパノールができた。Hは、もともとHの多い端の炭素に付きやすい（マルコフニコフ則：発展）。"},
+  {id:"ferm",in:["glucose"],cat:["yeast"],catMsg:"糖をアルコールに変えるには、生き物の力（酵母）を借りよう。",t:[25,40],lowMsg:"温度が低くて酵母がほとんど働かない。30〜35℃くらいがよい。",highMsg:"温度が高すぎて、酵母が死んでしまった。",out:["ethanol","co2"],types:["その他"],eq:"C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂",text:"酵母のはたらき（アルコール発酵）でエタノールができた。泡の正体は二酸化炭素。"},
+  {id:"dhEt",in:["ethanol","h2so4"],t:[160,170],lowMsg:"エチレンを取り出すには、もう少し高い温度（160〜170℃）が必要。この温度だとエーテルとエチレンが混ざってしまう。",highMsg:"170℃を超えて加熱しすぎた。濃硫酸が有機物を炭化させ、液が黒くなってしまった。",out:["ethylene"],types:["脱離"],eq:"CH₃−CH₂−OH → CH₂=CH₂ + H₂O",text:"1つのエタノール分子から水が外れ（分子内脱水）、二重結合ができた。温度を変えると別の物質ができる。130〜140℃も試してみよう。"},
+  {id:"dhEther",in:["ethanol","h2so4"],t:[130,140],lowMsg:"温度が低くて反応がほとんど進まない。",highMsg:"温度がやや高い。エーテルとエチレンが混ざり、どちらもうまく取り出せなかった。",out:["ether"],types:["縮合"],eq:"2CH₃−CH₂−OH → C₂H₅−O−C₂H₅ + H₂O",text:"2つのエタノール分子の間で水が取れ（分子間脱水）、つながった。160〜170℃だとどうなるだろう？"},
+  {id:"crack",in:["naphtha"],t:[700,900],lowMsg:"ナフサは700℃以上の高温にしないと分解しない。",out:["ethylene","propene"],types:["熱分解"],eq:"ナフサ →（熱分解）→ CH₂=CH₂ + CH₂=CH−CH₃ など",text:"長い炭化水素が高温で切れて、エチレンとプロペンが同時に得られた。石油化学コンビナートの出発点になる反応。"},
+  {id:"pe",in:["ethylene"],cat:["poly"],catMsg:POLY_CAT,out:["polyethylene"],types:["重合"],eq:"n CH₂=CH₂ → −[CH₂−CH₂]ₙ−",text:"二重結合が開いて、エチレンが次々とつながった（付加重合）。"},
+  {id:"pvc",in:["vinylchloride"],cat:["poly"],catMsg:POLY_CAT,out:["pvc"],types:["重合"],eq:"n CH₂=CHCl → −[CH₂−CHCl]ₙ−",text:"塩化ビニルが付加重合し、ポリ塩化ビニルができた。"},
+  {id:"pp",in:["propene"],cat:["poly"],catMsg:POLY_CAT,out:["pp"],types:["重合"],eq:"n CH₂=CH−CH₃ → −[CH₂−CH(CH₃)]ₙ−",text:"プロペンが付加重合し、ポリプロピレンができた。"},
+  {id:"bz",in:["acetylene"],cat:["Fe"],catMsg:"アセチレンを赤熱した鉄に触れさせてみよう。",t:[400,700],lowMsg:"鉄を赤熱させる（400℃以上）必要がある。",out:["benzene"],types:["重合"],eq:"3 CH≡CH → C₆H₆",text:"アセチレン3分子がつながって環になり、ベンゼンができた（三分子重合）。第3章「芳香族」への入口となる物質。"}
+];
+const COMB = {
+  methane:"CH₄ + 2O₂ → CO₂ + 2H₂O", ethane:"2C₂H₆ + 7O₂ → 4CO₂ + 6H₂O", propane:"C₃H₈ + 5O₂ → 3CO₂ + 4H₂O",
+  ethylene:"C₂H₄ + 3O₂ → 2CO₂ + 2H₂O", propene:"2C₃H₆ + 9O₂ → 6CO₂ + 6H₂O",
+  acetylene:"2C₂H₂ + 5O₂ → 4CO₂ + 2H₂O", benzene:"2C₆H₆ + 15O₂ → 12CO₂ + 6H₂O"
+};
+Object.keys(COMB).forEach(k=>{
+  RULES.push({id:"comb_"+k,in:[k,"o2"],t:[400,900],lowMsg:"混ぜただけでは燃えない。点火する（400℃以上）必要がある。",out:["co2"],types:["燃焼"],eq:COMB[k],comb:true,
+    text: k==="acetylene" ? "まぶしい炎が上がった。酸素アセチレン炎は約3000℃に達し、鉄を溶かして切断できる。" :
+          k==="benzene" ? "すすの多い炎で燃えた。炭素の割合が大きい物質ほど、すすが出やすい。" :
+          "炎を上げて燃え、二酸化炭素と水になった。炭化水素は完全燃焼するとCO₂とH₂Oだけになる。"});
+});
+const RULE = {}; RULES.forEach(r=>RULE[r.id]=r);
+
+const QUESTS = [
+  {id:"q1",who:"町の薬局",title:"クロロホルムを1本",say:"「昔、麻酔に使われていたという甘い香りの液体を、見本として棚に並べたい。クロロホルムを作ってもらえないか」",target:"chcl3",
+   hints:["メタンと塩素をフラスコに入れてみよう。","塩素は暗いところではメタンと反応しない。何かを当てる必要がある。","光（紫外線）を当てると、メタン → クロロメタン → ジクロロメタン → … とH原子が1個ずつClに置き換わっていく。"],
+   reward:{src:["quarry"]},rewardText:"石灰岩の採石場（炭化カルシウム）が使えるようになる"},
+  {id:"q2",who:"鉄工所",title:"鉄を切る炎",say:"「厚い鉄板を切るには3000℃の炎が要る。アセチレンを酸素で燃やす炎を見せてくれ」",rx:"comb_acetylene",via:"acetylene",
+   hints:["炭化カルシウム（カーバイド）に水を加えると、ある気体が発生する。","できたアセチレンを、酸素と一緒にフラスコへ。","燃やすには点火が必要。温度を400℃以上にしよう。"],
+   reward:{src:["farm","store"]},rewardText:"サトウキビ畑（ブドウ糖）と薬品問屋（濃硫酸・塩化水素）が使えるようになる"},
+  {id:"q3",who:"青果市場",title:"バナナを熟させるガス",say:"「青いバナナを黄色く熟させるガスがあると聞いた。植物ホルモンでもあるらしい。作れるかい？」",target:"ethylene",
+   hints:["そのガスはエチレン。二重結合を1つもつ。","ルートA：アセチレンに水素を1分子付加する（触媒は Ni か Pt）。","ルートB：ブドウ糖を酵母で発酵（30℃前後）させてエタノールをつくり、濃硫酸と160〜170℃で加熱する。"],
+   reward:{src:["refinery"]},rewardText:"製油所（ナフサ）が使えるようになる"},
+  {id:"q4",who:"水道工事店",title:"塩ビ管の原料",say:"「水道管に使う塩ビ管。その原料になる、二重結合をもつ小さな分子がほしい」",target:"vinylchloride",
+   hints:["塩化ビニルは CH₂=CHCl。二重結合が1つ残っている。","アセチレンに塩化水素を付加する（触媒は塩化水銀(II)）。","工業的な方法：エチレン＋塩素 → 1,2-ジクロロエタン → 400℃以上で加熱してHClを外す。"],
+   reward:{cat:["poly"]},rewardText:"重合触媒（チーグラー・ナッタ触媒）が使えるようになる"},
+  {id:"q5",who:"雑貨店",title:"レジ袋の素材",say:"「薄くて丈夫な袋の素材、ポリエチレンを作ってみてくれないか」",target:"polyethylene",
+   hints:["小さな分子（単量体）をたくさんつなげると高分子になる。","エチレンだけをフラスコAに入れ（Bは空）、重合触媒を選ぶ。"],
+   reward:{},rewardText:"第4章「高分子の都」で学ぶ内容の先取り"},
+  {id:"q6",who:"差出人不明の手紙",title:"六角形の分子",say:"「炭素6個が輪になった、不思議なほど安定な分子があるという。アセチレンから作れるらしいのだが…」",target:"benzene",
+   hints:["C₂H₂ を3つ合わせると C₆H₆ になる。","アセチレンだけをフラスコAに入れ（Bは空）、触媒に鉄を選ぶ。","鉄を赤熱させる。温度は400〜700℃。"],
+   reward:{},rewardText:"第1章クリア"}
+];
+
+const ACH = [
+  {id:"first",n:"はじめての合成",d:"反応を1回成功させる",test:s=>Object.keys(s.rx).length>=1},
+  {id:"fail5",n:"失敗は発見のもと",d:"うまくいかない反応を5回試す",test:s=>s.fails>=5},
+  {id:"light",n:"光の使い手",d:"メタンの塩素化を4段階すべて",test:s=>["cl1","cl2","cl3","cl4"].every(i=>s.rx[i])},
+  {id:"brom",n:"脱色の目利き",d:"臭素水が消える物質と消えない物質を見分ける",test:s=>s.flags.brNo && ["brEt","brAc","brPr"].some(i=>s.rx[i])},
+  {id:"temp",n:"温度の職人",d:"エタノールからエーテルとエチレンを作り分ける",test:s=>s.rx.dhEt && s.rx.dhEther},
+  {id:"two",n:"二つの道",d:"エチレンを2通り以上の方法で作る",test:s=>["hAc","dhEt","crack"].filter(i=>s.rx[i]).length>=2},
+  {id:"seer",n:"予言者",d:"反応の種類の予想を5回当てる",test:s=>s.predN>=5},
+  {id:"poly",n:"高分子の芽",d:"3種類の高分子をすべて作る",test:s=>s.found.polyethylene&&s.found.pvc&&s.found.pp},
+  {id:"dex",n:"森の博物学者",d:"第1章の図鑑をすべて埋める",test:s=>DEX1.every(i=>s.found[i])}
+];
+const RANKS = [[0,"見習い"],[150,"助手"],[400,"研究員"],[750,"主任研究員"],[1150,"合成マスター"]];
+
+/* ---------- map layout ---------- */
+const K = 1, OY = 22;
+const POS = {
+  methane:[80,40],ch3cl:[230,40],ch2cl2:[380,40],chcl3:[530,40],ccl4:[680,40],
+  cac2:[80,200],acetylene:[230,200],dibromoethene:[380,130],tetrabromoethane:[560,130],acetaldehyde:[380,260],
+  vinylchloride:[700,240],pvc:[880,240],benzene:[230,300],
+  ethylene:[400,380],ethane:[580,320],chloroethane:[760,320],dibromoethane:[580,380],dichloroethane:[580,440],
+  polyethylene:[220,410],ethanol:[400,500],ether:[580,500],glucose:[80,500],
+  naphtha:[80,600],propene:[330,620],isopropanol:[520,580],dibromopropane:[520,630],propane:[520,680],pp:[180,680]
+};
+const RAWSRC = {methane:"gas",cac2:"quarry",glucose:"farm",naphtha:"refinery"};
+const MAPNAME = {methane:"メタン",ch3cl:"クロロメタン",ch2cl2:"ジクロロメタン",chcl3:"クロロホルム",ccl4:"四塩化炭素",cac2:"カーバイド",acetylene:"アセチレン",dibromoethene:"ジブロモエテン",tetrabromoethane:"テトラブロモエタン",acetaldehyde:"アセトアルデヒド",vinylchloride:"塩化ビニル",pvc:"ポリ塩化ビニル",benzene:"ベンゼン",ethylene:"エチレン",ethane:"エタン",chloroethane:"クロロエタン",dibromoethane:"ジブロモエタン",dichloroethane:"ジクロロエタン",polyethylene:"ポリエチレン",ethanol:"エタノール",ether:"ジエチルエーテル",glucose:"ブドウ糖",naphtha:"ナフサ",propene:"プロペン",isopropanol:"2-プロパノール",dibromopropane:"ジブロモプロパン",propane:"プロパン",pp:"ポリプロピレン"};
+const REGIONS = [["塩素の洞窟",430,84],["アセチレン峠",120,146],["エチレン平原",640,420],["石油の谷",190,560]];
+const P = id => [POS[id][0]*K, POS[id][1]*K+OY];
+const mapRules = () => RULES.filter(r=>!r.comb);
+
+/* rarity = steps from raw */
+const DEPTH = (function(){
+  const d = {}; SOURCES.forEach(s=>s.items.forEach(i=>d[i]=0));
+  let ch = true;
+  while(ch){ ch=false; RULES.forEach(r=>{ if(r.in.every(i=>d[i]!==undefined)){ const v=Math.max(...r.in.map(i=>d[i]))+1; r.out.forEach(o=>{ if(d[o]===undefined||d[o]>v){ d[o]=v; ch=true; } }); } }); }
+  return d;
+})();
+const rarity = id => Math.max(1, Math.min(5, DEPTH[id]||1));
+const starsStr = n => "★".repeat(n) + "☆".repeat(5-n);
+
+/* ================= state ================= */
+const KEY = "organic-craft-ch1-v2";
+function fresh(){
+  return {found:{methane:true},rx:{},stars:3,xp:0,q:0,hints:{},clue:{},src:{gas:true,salt:true,nature:true,shelf:true},cat:{},log:[],intro:false,n:0,fails:0,predN:0,flags:{},ach:{},mute:false};
+}
+let state = fresh();
+const freshUI = () => ({a:"methane",b:"cl2",temp:20,light:false,cat:"none",pred:"",result:null,sel:null,side:"look",tab:"dex",picking:null});
+let ui = freshUI();
+function load(){ try{ const raw = localStorage.getItem(KEY); if(raw){ const s = JSON.parse(raw); if(s && s.found) state = Object.assign(fresh(), s); } }catch(e){} }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+
+/* ================= helpers ================= */
+const $ = id => document.getElementById(id);
+const cc = id => "var(" + CLS[S[id].cls].c + ")";
+const shortName = id => MAPNAME[id] || S[id].n.replace(/（.*）/,"");
+function available(){
+  const set = new Set();
+  SOURCES.forEach(s=>{ if(state.src[s.id]) s.items.forEach(i=>set.add(i)); });
+  Object.keys(state.found).forEach(i=>set.add(i));
+  return set;
+}
+const ruleAvail = (r,av) => r.in.every(i=>av.has(i));
+function sameSet(a,b){ if(a.length!==b.length) return false; const x=[...a].sort(), y=[...b].sort(); return x.every((v,i)=>v===y[i]); }
+const tRange = r => r.t || [0,300];
+function rankIdx(xp){ let i=0; RANKS.forEach((r,k)=>{ if(xp>=r[0]) i=k; }); return i; }
+function condText(r){
+  const p = [];
+  if(r.light) p.push("光（紫外線）を当てる");
+  if(r.cat) p.push("触媒：" + r.cat.map(c=>CATSHORT[c]).join(" または "));
+  if(r.t) p.push(`温度 ${r.t[0]}〜${r.t[1]}℃`);
+  return p.length ? p.join("／") : "特別な条件はいらない（室温でOK）";
+}
+function partnerText(r){
+  const others = r.in.filter(i=>!POS[i]);
+  return others.length ? others.map(i=>`${S[i].n.replace(/（.*）/,"")} ${S[i].f}`).join("＋") : "なし（フラスコBは空のまま）";
+}
+function edgeChip(r){
+  const p = r.in.filter(i=>!POS[i]).map(i=>"+"+S[i].f);
+  if(r.light) p.push("光");
+  if(r.cat) p.push(r.cat.map(c=>CATSHORT[c]).join("/"));
+  if(r.t) p.push(r.t[0]+"℃〜");
+  return p.join(" ") || "室温";
+}
+
+/* ---------- sound ---------- */
+let actx = null;
+function tone(freqs, opt){
+  if(state.mute) return;
+  try{
+    actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+    const o = Object.assign({type:"triangle",dur:.13,gap:.09,vol:.08}, opt||{});
+    freqs.forEach((f,i)=>{
+      const t0 = actx.currentTime + i*o.gap;
+      const osc = actx.createOscillator(), g = actx.createGain();
+      osc.type = o.type; osc.frequency.value = f;
+      g.gain.setValueAtTime(0.0001,t0); g.gain.exponentialRampToValueAtTime(o.vol,t0+.015); g.gain.exponentialRampToValueAtTime(0.0001,t0+o.dur);
+      osc.connect(g).connect(actx.destination); osc.start(t0); osc.stop(t0+o.dur+.02);
+    });
+  }catch(e){}
+}
+const SFX = {
+  ok:()=>tone([523,659,784]),
+  nw:()=>tone([523,659,784,1047],{dur:.2}),
+  fail:()=>tone([196,147],{type:"square",vol:.04,gap:.12}),
+  none:()=>tone([330,311],{type:"sine",vol:.05,gap:.12}),
+  star:()=>tone([1175,1568],{type:"sine",gap:.07}),
+  lvl:()=>tone([523,659,784,1047,1319],{dur:.28,gap:.11,vol:.09}),
+  click:()=>tone([880],{type:"sine",dur:.05,vol:.03})
+};
+
+/* ---------- toasts ---------- */
+function toast(html){
+  const el = document.createElement("div"); el.className="toast"; el.innerHTML = html;
+  $("toasts").appendChild(el);
+  setTimeout(()=>el.classList.add("out"), 3400);
+  setTimeout(()=>el.remove(), 3900);
+}
+
+/* ================= reaction engine ================= */
+function resolve(){
+  let ids = [ui.a, ui.b].filter(Boolean);
+  if(ids.length===2 && ids[0]===ids[1]) ids = [ids[0]];
+  const cands = RULES.filter(r=>sameSet(r.in, ids));
+  const ok = r => {
+    if(r.light && !ui.light) return false;
+    if(r.cat && !r.cat.includes(ui.cat)) return false;
+    const [lo,hi] = tRange(r); return ui.temp>=lo && ui.temp<=hi;
+  };
+  const hit = cands.find(ok);
+  if(hit) return {kind:"ok", rule:hit};
+  if(cands.length){
+    const dist = r => { const [lo,hi]=tRange(r); return ui.temp<lo ? lo-ui.temp : ui.temp>hi ? ui.temp-hi : 0; };
+    const r = cands.slice().sort((p,q)=>dist(p)-dist(q))[0];
+    if(r.cat && !r.cat.includes(ui.cat)){
+      if(r.cat.includes("poly") && !state.cat.poly) return {kind:"fail",rule:r,msg:"この反応には重合触媒が必要だが、まだ手に入っていない（依頼4で解放）。"};
+      return {kind:"fail",rule:r,msg:(ui.cat==="none"?"何も起きない。":"この触媒では反応が進まない。")+(r.catMsg||"")};
+    }
+    if(r.light && !ui.light) return {kind:"fail",rule:r,msg:"暗いままでは何も起きない。アルカンと塩素の置換反応には、光（紫外線）が必要だ。"};
+    const [lo] = tRange(r);
+    if(ui.temp<lo) return {kind:"fail",rule:r,msg:r.lowMsg||"温度が低すぎて、反応が進まない。"};
+    return {kind:"fail",rule:r,msg:r.highMsg||"温度が高すぎた。分解や副反応が起きて、目的の物質は得られなかった。",hot:true};
+  }
+  const set = new Set(ids);
+  const other = ids.find(i=>i!=="br2"&&i!=="h2"&&i!=="cl2"&&i!=="o2");
+  const oc = other && S[other].cls;
+  if(set.has("br2") && oc==="alkane"){ state.flags.brNo = true; return {kind:"none",msg:"臭素水の赤褐色は消えなかった。アルカンは単結合だけ（飽和）なので、付加反応をしない。これが不飽和結合の見分け方になる。"}; }
+  if(set.has("h2") && oc==="alkane") return {kind:"none",msg:"アルカンは飽和しているので、水素が付加する場所がない。"};
+  if(set.has("cl2") && other==="propane" && ids.length===2) return {kind:"none",msg:"光を当てても、1-クロロプロパンと2-クロロプロパンなどが混ざってしまい、目的の物質を取り出せなかった。"};
+  if(oc==="polymer") return {kind:"none",msg:"高分子は安定で、この条件では反応しにくい。"};
+  if(set.has("o2") && oc && ["halide","alcohol"].includes(oc)) return {kind:"none",msg:"この工房では、炭化水素の燃焼だけを扱っている。"};
+  if(ids.length===1 && S[ids[0]].cls==="reagent") return {kind:"none",msg:"試薬だけでは何も起きない。反応させる相手を入れよう。"};
+  return {kind:"none",msg:"何も起きなかった。組み合わせか条件を変えてみよう。マップの「？？？」に手がかりがある。"};
+}
+
+function react(){
+  $("err").textContent = "";
+  if(!ui.a && !ui.b){ $("err").textContent = "フラスコ A に物質を入れてください。"; return; }
+  const res = resolve();
+  const pred = ui.pred;
+  const rank0 = rankIdx(state.xp);
+  let newSubs = [], newRx = false, predOk = null, star = 0, xp = 0;
+  if(res.kind==="ok"){
+    const r = res.rule;
+    newRx = !state.rx[r.id];
+    state.rx[r.id] = true;
+    r.out.concat(r.give||[]).forEach(id=>{ if(!state.found[id]){ state.found[id]=true; if(r.out.includes(id)){ newSubs.push(id); xp += 10 + rarity(id)*10; } } });
+    if(newRx) xp += 10;
+    if(pred){ predOk = r.types.includes(pred); if(predOk && newRx){ star++; xp += 5; state.predN++; } }
+  } else {
+    state.fails++;
+    if(pred) predOk = pred==="反応しない";
+  }
+  state.stars += star; state.xp += xp;
+  state.n++;
+  const eqText = res.kind==="ok" ? res.rule.eq : [ui.a,ui.b].filter(Boolean).map(i=>S[i].f).join(" + ") + " → ×";
+  state.log.unshift({n:state.n, eq:eqText, ok:res.kind==="ok"});
+  state.log = state.log.slice(0,30);
+  const lvlUp = rankIdx(state.xp) > rank0 ? RANKS[rankIdx(state.xp)][1] : null;
+  ui.result = {res, newSubs, newRx, predOk, star, pred, xp};
+  if(newSubs.length){ ui.sel = newSubs[0]; }
+  checkAch();
+  save();
+  animate(res);
+  renderAll();
+  if(res.kind==="ok"){ (newSubs.length?SFX.nw:SFX.ok)(); if(star) setTimeout(SFX.star,450); }
+  else (res.kind==="fail"?SFX.fail:SFX.none)();
+  if(newSubs.length) showDiscovery(newSubs, {xp, star, lvlUp});
+  else if(lvlUp){ SFX.lvl(); toast(`ランクアップ！ <b>${lvlUp}</b> になった`); }
+}
+
+function checkAch(){
+  ACH.forEach(a=>{
+    if(!state.ach[a.id] && a.test(state)){
+      state.ach[a.id] = true; state.stars += 1;
+      setTimeout(()=>{ toast(`称号「<b>${a.n}</b>」を手に入れた　★+1`); SFX.star(); }, 900);
+    }
+  });
+}
+
+/* ---------- discovery card ---------- */
+let discQueue = [], discInfo = null;
+function showDiscovery(list, info){ discQueue = list.slice(); discInfo = info; nextDiscovery(); }
+function nextDiscovery(){
+  const dlg = $("disc");
+  if(!discQueue.length){ if(dlg.open) dlg.close(); return; }
+  const id = discQueue.shift(); const s = S[id]; const rr = rarity(id);
+  const last = !discQueue.length;
+  let h = `<div class="new">NEW!</div><span class="rar">${starsStr(rr)}</span>`;
+  h += `<div class="mol">${s.smi?`<svg id="disc-svg"></svg>`:`<div class="poly">${s.f}</div>`}</div>`;
+  h += `<h3>${s.n}</h3><div class="fm" style="--cc:${cc(id)}">${s.f}</div><span class="cl" style="--cc:${cc(id)}">${CLS[s.cls].label}</span>`;
+  h += `<p>${s.note}</p>`;
+  if(last && discInfo){
+    h += `<div class="gain"><span>+${discInfo.xp} XP</span>${discInfo.star?`<span>ひらめき ★+${discInfo.star}</span>`:""}</div>`;
+    if(discInfo.lvlUp) h += `<div class="lvl">ランクアップ！「${discInfo.lvlUp}」になった</div>`;
+  }
+  h += `<button type="button" class="btn primary" id="disc-ok">${last?"図鑑に登録する":"次のカード"}</button>`;
+  $("disc-body").innerHTML = h;
+  if(s.smi){ const svg=$("disc-svg"); const bg=getComputedStyle(document.documentElement).getPropertyValue("--surface-2").trim(); if(!drawMol(svg, s.smi, bg)) svg.outerHTML=`<div class="poly">${s.f}</div>`; }
+  $("disc-ok").onclick = ()=>{ if(last && discInfo && discInfo.lvlUp) SFX.lvl(); else SFX.click(); nextDiscovery(); };
+  if(!dlg.open){ if(dlg.showModal) dlg.showModal(); else dlg.setAttribute("open",""); }
+}
+
+/* ---------- flask ---------- */
+let animT = null;
+function animate(res){
+  const fw = $("flask"); const liq = $("liquid");
+  fw.classList.remove("boil","shake","puff"); void fw.offsetWidth; clearTimeout(animT);
+  if(res.kind==="ok"){
+    const main = res.rule.out[0];
+    liq.setAttribute("fill", res.rule.fade ? "var(--surface-2)" : cc(main));
+    liq.setAttribute("opacity", res.rule.fade ? "1" : ".55");
+    fw.classList.add("boil");
+    if(res.rule.comb || res.rule.t) fw.classList.add("puff");
+    animT = setTimeout(()=>fw.classList.remove("boil","puff"), 1800);
+  } else {
+    fw.classList.add("shake");
+    if(res.hot){ liq.setAttribute("fill","var(--ink-2)"); liq.setAttribute("opacity",".8"); }
+    animT = setTimeout(()=>fw.classList.remove("shake"), 500);
+  }
+}
+function paintFlaskIdle(){
+  const liq = $("liquid"); const hasBr = ui.a==="br2" || ui.b==="br2";
+  liq.setAttribute("fill", hasBr ? "var(--mol-br)" : "var(--liquid)");
+  liq.setAttribute("opacity", hasBr ? ".6" : "1");
+}
+
+/* ---------- molecule drawing ---------- */
+function themeColors(){
+  const cs = getComputedStyle(document.documentElement);
+  const g = v => cs.getPropertyValue(v).trim(); const ink = g("--mol-c");
+  return {C:ink,H:ink,O:g("--mol-o"),N:ink,CL:g("--mol-cl"),BR:g("--mol-br"),F:ink,I:ink,P:ink,S:ink,B:ink,SI:ink,BACKGROUND:g("--surface")};
+}
+function drawMol(svg, smi, bg){
+  if(!window.SmilesDrawer || !smi) return false;
+  try{
+    const t = themeColors(); if(bg) t.BACKGROUND = bg;
+    const d = new SmilesDrawer.SvgDrawer({width:260,height:180,explicitHydrogens:true,compactDrawing:false,bondThickness:1.1,bondLength:22,fontSizeLarge:9,fontSizeSmall:6,padding:8,themes:{lab:t}});
+    SmilesDrawer.parse(smi, tree=>{ d.draw(tree, svg, "lab", null, false); }, ()=>{});
+    svg.removeAttribute("width"); svg.removeAttribute("height");
+    return true;
+  }catch(e){ return false; }
+}
+
+/* ================= guidance ================= */
+function questTargetSub(q){
+  if(!q) return null;
+  if(q.target) return q.target;
+  return state.found[q.via] ? null : q.via;
+}
+function nextStep(target){
+  const av = available();
+  if(!target || av.has(target)) return null;
+  const reach = new Set(av), parent = {};
+  let ch = true;
+  while(ch){ ch=false;
+    mapRules().forEach(r=>{
+      if(r.cat && r.cat.includes("poly") && !state.cat.poly) return;
+      if(r.in.every(i=>reach.has(i))) r.out.forEach(o=>{ if(!reach.has(o)){ reach.add(o); parent[o]=r; ch=true; } });
+    });
+  }
+  if(!reach.has(target)) return null;
+  let cur = target, guard = 0;
+  while(guard++<20){
+    const r = parent[cur]; if(!r) return null;
+    const miss = r.in.find(i=>!av.has(i));
+    if(!miss) return {id:cur, rule:r};
+    cur = miss;
+  }
+  return null;
+}
+
+/* ================= render: map ================= */
+function nodeState(id, av){
+  if(av.has(id)) return RAWSRC[id] ? "raw" : "known";
+  if(RAWSRC[id]){
+    const src = SOURCES.find(z=>z.id===RAWSRC[id]);
+    return src.by === "依頼"+(state.q+1) ? "locked" : "hidden";
+  }
+  if(mapRules().some(r=>r.out.includes(id) && ruleAvail(r,av))) return "front";
+  return "hidden";
+}
+let vb = null, vbAnim = null;
+function targetViewBox(ids){
+  let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity;
+  ids.forEach(id=>{ const [x,y]=P(id); x0=Math.min(x0,x-100); x1=Math.max(x1,x+100); y0=Math.min(y0,y-60); y1=Math.max(y1,y+50); });
+  let w=Math.max(x1-x0,620), h=Math.max(y1-y0,1);
+  const cx=(x0+x1)/2, cy=(y0+y1)/2, ar=1.6;
+  if(w/h>ar) h=w/ar; else w=h*ar;
+  if(h>=740){ h=740; w=h*ar; }
+  const x = w>=980 ? (980-w)/2 : Math.max(0,Math.min(980-w,cx-w/2));
+  const y = h>=740 ? 0 : Math.max(0,Math.min(740-h,cy-h/2));
+  return [x,y,w,h];
+}
+function setViewBox(t){
+  const svg=$("map");
+  let reduce=false; try{ reduce = matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){}
+  if(!vb || reduce){ vb=t; svg.setAttribute("viewBox",t.join(" ")); return; }
+  if(vb.every((v,i)=>Math.abs(v-t[i])<.5)) return;
+  const from=vb.slice(), t0=performance.now(); cancelAnimationFrame(vbAnim);
+  const step=now=>{ const k=Math.min(1,(now-t0)/650), e=1-Math.pow(1-k,3); vb=from.map((v,i)=>v+(t[i]-v)*e); svg.setAttribute("viewBox",vb.join(" ")); if(k<1) vbAnim=requestAnimationFrame(step); };
+  vbAnim=requestAnimationFrame(step);
+}
+function renderMap(){
+  const av = available();
+  const st = {}; Object.keys(POS).forEach(id=>st[id]=nodeState(id,av));
+  const q = QUESTS[state.q]; const qt = questTargetSub(q);
+  const nx = nextStep(qt);
+  const sel = ui.sel;
+  let edges = "", chips = "", nodes = "";
+  const bend = (a,b,k) => { const mx=(a[0]+b[0])/2, my=(a[1]+b[1])/2, dx=b[0]-a[0], dy=b[1]-a[1]; return [mx - dy*k, my + dx*k]; };
+  mapRules().forEach(r=>{
+    const disc = !!state.rx[r.id], avl = ruleAvail(r,av);
+    r.in.filter(i=>POS[i]).forEach(i=>{
+      r.out.filter(o=>POS[o]).forEach(o=>{
+        if(st[i]==="hidden"||st[o]==="hidden"||st[i]==="locked") return;
+        let cls;
+        if(disc) cls = "";
+        else if(avl) cls = av.has(o) ? "alt" : "front";
+        else return;
+        const touch = sel && (sel===i || sel===o);
+        const a = P(i), b = P(o), c = bend(a,b, r.id==="vc1" ? -.35 : .12);
+        edges += `<path class="ed ${cls}${touch&&!cls?" hl":""}" d="M${a[0]} ${a[1]} Q${c[0]} ${c[1]} ${b[0]} ${b[1]}"/>`;
+        if(touch){
+          const mx = .25*a[0]+.5*c[0]+.25*b[0], my = .25*a[1]+.5*c[1]+.25*b[1] - (Math.abs(b[1]-a[1])<40 ? 27 : 0);
+          const lv = state.clue[r.id]||0;
+          const label = disc || lv>=2 ? edgeChip(r) : lv>=1 ? (r.in.filter(x=>!POS[x]).map(x=>"+"+S[x].f).join(" ")||"単独")+" …" : "？";
+          const w = Math.max(24, [...label].length*7.4+14);
+          chips += `<g><rect class="chip-bg" x="${mx-w/2}" y="${my-11}" width="${w}" height="22" rx="11"/><text class="chip-t" x="${mx}" y="${my+4}" text-anchor="middle">${label}</text></g>`;
+        }
+      });
+    });
+  });
+  const shown = [];
+  Object.keys(POS).forEach(id=>{
+    const s = st[id]; if(s==="hidden") return;
+    shown.push(id);
+    const [x,y] = P(id);
+    const src = RAWSRC[id] && SOURCES.find(z=>z.id===RAWSRC[id]);
+    const label = s==="front" ? "？？？" : s==="locked" ? `${src.by}で解放` : shortName(id);
+    const w = s==="front" ? 88 : Math.max(66, [...label].length*14.5 + 22);
+    const isNext = nx && nx.id===id;
+    const cls = ["mn", s==="raw"?"raw":"", s==="front"?"front":"", s==="locked"?"locked":"", sel===id?"sel":"", isNext?"next":""].join(" ");
+    const rx = s==="raw"||s==="locked" ? 5 : 16;
+    nodes += `<g class="${cls}" data-node="${id}" tabindex="0" role="button" aria-label="${s==="front"?"未発見の物質":label}" style="--cc:${s==="front"?"var(--accent)":cc(id)}">`;
+    nodes += `<rect class="halo" x="${x-w/2-6}" y="${y-22}" width="${w+12}" height="44" rx="${rx+5}"/>`;
+    nodes += `<rect class="body" x="${x-w/2}" y="${y-16}" width="${w}" height="32" rx="${rx}"/>`;
+    nodes += `<text x="${x}" y="${y+5.5}" text-anchor="middle">${label}</text></g>`;
+    const flagTxt = qt===id ? "依頼" : isNext ? "次の一歩" : "";
+    if(flagTxt){
+      const fw = flagTxt.length*12+16;
+      nodes += `<g class="flag"><rect x="${x-fw/2}" y="${y-42}" width="${fw}" height="19" rx="4"/><text x="${x}" y="${y-28.5}" text-anchor="middle">${flagTxt}</text></g>`;
+    }
+  });
+  const regions = REGIONS.map(r=>`<text class="region" x="${r[1]*K}" y="${r[2]*K+OY}">${r[0]}</text>`).join("");
+  $("map").innerHTML = `${regions}<g>${edges}</g><g>${nodes}</g><g>${chips}</g>`;
+  setViewBox(targetViewBox(shown));
+  const nf = Object.values(st).filter(v=>v==="front").length;
+  $("map-sub").textContent = nf ? `作れそうな「？」が ${nf}個` : "";
+}
+
+/* ================= render: side ================= */
+function renderLook(){
+  const el = $("look"); const av = available(); const id = ui.sel;
+  const q = QUESTS[state.q]; const qt = questTargetSub(q); const nx = nextStep(qt);
+  const s = id ? nodeState(id,av) : "hidden";
+  let h = "";
+  if(s==="hidden"){
+    h += `<div class="eyebrow">調べる</div><h3>次はどこへ？</h3>`;
+    h += `<p>マップで点線の<b style="color:var(--accent)">「？？？」</b>は、いまの手持ちから作れそうな物質です。押すと作り方の手がかりが出ます。</p>`;
+    h += nextHTML(q, qt, nx);
+  } else if(s==="locked"){
+    const src = SOURCES.find(z=>z.id===RAWSRC[id]);
+    h += `<div class="eyebrow">未開拓の原料</div><h3>${src.n}</h3><p>${src.by}をこなすと、ここから原料を調達できます。</p>`;
+  } else if(s==="front"){
+    const routes = mapRules().filter(r=>r.out.includes(id) && ruleAvail(r,av));
+    h += `<div class="eyebrow">未発見の物質</div><h3>？？？ <span class="rar">${starsStr(rarity(id))}</span></h3>`;
+    h += `<p class="muted">${CLS[S[id].cls].label}らしい</p>`;
+    routes.forEach((r,k)=>h += routeHTML(r, routes.length>1 ? `ルート${k+1}` : "手がかり"));
+    if(nx && nx.id===id) h += `<div class="nextbox"><b>次の一歩</b>：依頼「${q.title}」への近道です。</div>`;
+  } else {
+    const sub = S[id];
+    const fronts = new Set();
+    mapRules().forEach(r=>{ if(r.in.includes(id) && ruleAvail(r,av)) r.out.forEach(o=>{ if(!av.has(o) && POS[o]) fronts.add(o); }); });
+    h += `<div class="eyebrow">${s==="raw"?"原料":"発見済み"}${s==="raw"?"":`　<span class="rar">${starsStr(rarity(id))}</span>`}</div>`;
+    h += `<h3>${sub.n}</h3><div class="fm" style="--cc:${cc(id)}">${sub.f}</div>`;
+    h += fronts.size ? `<p>ここから作れそうな「？」が <b style="color:var(--accent)">${fronts.size}個</b> あります。</p>` : `<p class="muted">いまの手持ちでは、ここから先の道は見えていません。</p>`;
+    h += `<div class="btns"><button type="button" class="btn primary" data-toa="${id}">フラスコAに入れる</button><button type="button" class="btn" data-open="${id}">構造式と解説</button></div>`;
+  }
+  el.innerHTML = h;
+}
+function nextHTML(q, qt, nx){
+  if(!q) return `<div class="nextbox"><b>第1章クリア！</b> 残りの「？」を探して図鑑を完成させよう。</div>`;
+  if(q.rx && state.found[q.via]) return `<div class="nextbox"><b>依頼</b>：必要な物質はそろった。反応台で試そう。</div>`;
+  if(qt && available().has(qt)) return `<div class="nextbox"><b>依頼</b>：目的の物質は手元にある。上の「納品する」を押そう。</div>`;
+  if(nx){
+    const from = nx.rule.in.filter(i=>POS[i]).map(shortName).join("・");
+    return `<div class="nextbox"><b>次の一歩</b>：「${from}」から伸びる、オレンジに光る「？？？」を調べよう。</div>`;
+  }
+  return `<div class="nextbox"><b>依頼</b>：道が見えないときは、上の「ヒント」を見てみよう。</div>`;
+}
+function routeHTML(r, title){
+  const lv = state.clue[r.id]||0;
+  const from = r.in.filter(i=>POS[i]).map(i=>`<b style="color:${cc(i)}">${shortName(i)}</b>`).join("・");
+  const btn = `<button type="button" class="spend" data-clue="${r.id}" ${state.stars<1?"disabled":""}>★1で見る</button>`;
+  let h = `<div class="route"><div class="rh">${title}</div><dl>`;
+  h += `<dt>出発点</dt><dd>${from}</dd>`;
+  h += `<dt>相手</dt><dd>${lv>=1 ? partnerText(r) : `<span class="hid">？？？</span>${btn}`}</dd>`;
+  h += `<dt>条件</dt><dd>${lv>=2 ? condText(r) : `<span class="hid">？？？</span>${lv>=1?btn:""}`}</dd>`;
+  h += `</dl><div class="btns"><button type="button" class="btn hot" data-set="${r.id}">反応台で試す</button></div></div>`;
+  return h;
+}
+function slotHTML(k){
+  const id = ui[k]; const lab = k==="a" ? "A" : "B（空でもよい）";
+  if(!id) return `<span class="lab">${lab}</span><span class="empty">押して選ぶ</span>`;
+  return `<span class="lab">${lab}</span><span class="nm" style="color:${cc(id)}">${shortName(id)}</span><span class="sf">${S[id].f}</span>`;
+}
+function tagHTML(id){
+  const on = ui[ui.picking]===id;
+  return `<button type="button" class="tag${on?" on":""}" data-pick="${id}" style="--cc:${cc(id)}"><span class="dot"></span>${shortName(id)}<span class="tf">${S[id].f}</span></button>`;
+}
+function renderPicker(){
+  const el = $("picker"); const k = ui.picking;
+  if(!k){ el.innerHTML = ""; return; }
+  const srcItems = []; SOURCES.forEach(s=>{ if(state.src[s.id]) s.items.forEach(i=>{ if(!srcItems.includes(i)) srcItems.push(i); }); });
+  const made = Object.keys(S).filter(i=>state.found[i] && !srcItems.includes(i));
+  const extra = made.filter(i=>S[i].cls==="reagent"||S[i].cls==="inorg");
+  const org = made.filter(i=>!extra.includes(i));
+  let h = `<div class="picker"><div class="ph"><span>フラスコ${k.toUpperCase()}に入れる物質</span><span>${k==="b"?`<button type="button" class="btn ghost" data-pick="">空にする</button>`:""}<button type="button" class="btn ghost" data-pick-close>閉じる</button></span></div>`;
+  h += `<h4>原料・試薬</h4><div class="tags">${srcItems.concat(extra).map(tagHTML).join("")}</div>`;
+  h += `<h4>つくった物質</h4><div class="tags">${org.length?org.map(tagHTML).join(""):'<span class="muted" style="font-size:12.5px">まだありません</span>'}</div></div>`;
+  el.innerHTML = h;
+}
+function renderBench(){
+  ["a","b"].forEach(k=>{ const el=$("slot-"+k); el.innerHTML = slotHTML(k); el.classList.toggle("active", ui.picking===k); el.classList.toggle("filled", !!ui[k]); });
+  renderPicker();
+  $("temp").value = ui.temp; $("temp-v").textContent = ui.temp + "℃";
+  $("light").setAttribute("aria-pressed", ui.light); $("light-t").textContent = ui.light ? "当てる" : "当てない";
+  $("cat").innerHTML = CATS.map(c=>{ const locked = c.lock && !state.cat[c.id]; return `<option value="${c.id}"${locked?" disabled":""}${ui.cat===c.id?" selected":""}>${c.n}${locked?`（${c.lock}で解放）`:""}</option>`; }).join("");
+  $("pred").innerHTML = `<option value="">予想しない</option>` + TYPES.map(t=>`<option value="${t}"${ui.pred===t?" selected":""}>${t}</option>`).join("");
+  const fw = $("flask"); fw.classList.toggle("hot", ui.temp>=100); fw.classList.toggle("uvon", ui.light);
+  renderResult();
+}
+function renderResult(){
+  const el = $("result"); const R = ui.result;
+  if(!R){ el.innerHTML = ""; return; }
+  const {res,newSubs,newRx,predOk,star,pred,xp} = R;
+  let h = "";
+  if(res.kind==="ok"){
+    const r = res.rule;
+    h += `<div class="result ok"><h4>${newSubs.length?"新しい物質ができた！":newRx?"新しい反応を発見！":"反応した"}`;
+    r.types.forEach(t=>h+=`<span class="chip type">${t}</span>`);
+    if(predOk===true) h += `<span class="chip good">予想的中${star?" ★+1":""}</span>`;
+    if(predOk===false) h += `<span class="chip miss">予想はずれ</span>`;
+    if(xp) h += `<span class="chip xp">+${xp} XP</span>`;
+    h += `</h4><div class="eq">${r.eq}</div><p>${r.text}</p><p class="tn">${TYPE_NOTE[r.types[0]]}</p></div>`;
+  } else {
+    h += `<div class="result ${res.kind==="fail"?"fail":""}"><h4>${res.kind==="fail"?"おしい！":"変化なし"}`;
+    if(predOk===true) h += `<span class="chip good">予想どおり</span>`;
+    h += `</h4><p>${res.msg}</p>${res.kind==="fail"?`<p class="tn">組み合わせは合っている。温度・光・触媒を見直そう。</p>`:""}</div>`;
+  }
+  el.innerHTML = h;
+}
+function renderSide(){
+  const b = ui.side==="bench";
+  $("look").hidden = b; $("bench").hidden = !b;
+  $("seg-look").setAttribute("aria-selected", !b); $("seg-bench").setAttribute("aria-selected", b);
+  if(b) renderBench(); else renderLook();
+}
+
+/* ================= render: header, quest, tabs ================= */
+function renderHUD(){
+  $("st-star").textContent = "★" + state.stars;
+  const ri = rankIdx(state.xp); $("st-rank").textContent = RANKS[ri][1];
+  const lo = RANKS[ri][0], hi = RANKS[ri+1] ? RANKS[ri+1][0] : null;
+  $("st-xpbar").style.width = hi ? Math.round((state.xp-lo)/(hi-lo)*100)+"%" : "100%";
+  $("st-xp").textContent = hi ? `${state.xp} / ${hi} XP` : `${state.xp} XP`;
+  $("mute").textContent = "効果音：" + (state.mute ? "なし" : "あり");
+}
+function questReady(q){ return q.rx ? !!state.rx[q.rx] : !!state.found[q.target]; }
+function renderQuest(){
+  const el = $("qbar"); const done = state.q;
+  if(done >= QUESTS.length){
+    el.className = "panel qbar clear";
+    el.innerHTML = `<div><div class="eyebrow">依頼 6/6 達成</div><h2>第1章クリア</h2><p class="say">マップに残る「？」を探して、図鑑と称号を集めよう。第2章「官能基の工房」は準備中。</p></div>`;
+    return;
+  }
+  el.className = "panel qbar";
+  const q = QUESTS[done]; const nh = state.hints[q.id]||0; const ready = questReady(q);
+  let h = `<div><div class="eyebrow">依頼 ${done+1}/${QUESTS.length}　${q.who}より</div><h2>${q.title}</h2><p class="say">${q.say}</p></div>`;
+  h += `<div class="acts"><button type="button" class="btn" id="hint"${nh>=q.hints.length?" disabled":""}>ヒント ${nh}/${q.hints.length}</button>`;
+  h += `<button type="button" class="btn hot" id="deliver"${ready?"":" disabled"}>納品する</button></div>`;
+  if(nh) h += `<ol>${q.hints.slice(0,nh).map(x=>`<li>${x}</li>`).join("")}</ol>`;
+  el.innerHTML = h;
+}
+function renderTabs(){
+  const d1 = DEX1.filter(i=>state.found[i]).length;
+  $("t-dex").textContent = `${d1}/${DEX1.length}`;
+  $("t-ach").textContent = `${ACH.filter(a=>state.ach[a.id]).length}/${ACH.length}`;
+  $("t-log").textContent = state.log.length ? String(state.n) : "";
+  document.querySelectorAll("[data-tab]").forEach(b=>b.setAttribute("aria-selected", b.dataset.tab===ui.tab));
+  let h = "";
+  if(ui.tab==="dex"){
+    const item = id => state.found[id]
+      ? `<button type="button" class="dex-i" data-open="${id}" style="--cc:${cc(id)}"><span class="df">${S[id].f}</span><span class="dn">${shortName(id)}</span></button>`
+      : `<div class="dex-i unk"><span class="df">？</span><span class="dn">${SHORT[S[id].cls]}</span></div>`;
+    h += `<div class="dex-sec"><span>第1章の物質</span><span>${d1}/${DEX1.length}</span></div><div class="dex">${DEX1.map(item).join("")}</div>`;
+    h += `<div class="dex-sec"><span>ほかの章の先取り・副産物</span><span>${DEXX.filter(i=>state.found[i]).length}/${DEXX.length}</span></div><div class="dex">${DEXX.map(item).join("")}</div>`;
+  } else if(ui.tab==="ach"){
+    h += `<div class="ach">${ACH.map(a=>`<div class="badge ${state.ach[a.id]?"on":"off"}"><b>${state.ach[a.id]?a.n:"？？？"}</b><span>${a.d}</span></div>`).join("")}</div>`;
+  } else {
+    h += state.log.length ? `<ol class="log">${state.log.map(l=>`<li><span class="n">#${l.n}</span><span class="e">${l.eq}</span><span class="r ${l.ok?"ok":"no"}">${l.ok?"成功":"—"}</span></li>`).join("")}</ol>` : `<p class="muted" style="margin:0;font-size:13.5px">まだ実験していません。</p>`;
+  }
+  $("tabbody").innerHTML = h;
+}
+function renderAll(){ renderHUD(); renderQuest(); renderMap(); renderSide(); renderTabs(); if(!ui.result) paintFlaskIdle(); }
+
+/* ---------- detail dialog ---------- */
+function openDetail(id){
+  const s = S[id]; const dlg = $("dlg");
+  const made = RULES.filter(r=>state.rx[r.id] && r.out.includes(id));
+  const used = RULES.filter(r=>state.rx[r.id] && r.in.includes(id));
+  let h = `<div class="dlg-h"><div><h3>${s.n}</h3><div class="fm" style="--cc:${cc(id)}">${s.f}</div></div><button type="button" class="btn" id="dlg-x">閉じる</button></div>`;
+  h += `<div class="mol">${s.smi?`<svg id="dlg-svg"></svg>`:`<div class="poly">${s.f}</div>`}</div>`;
+  h += `<dl><dt>分類</dt><dd>${CLS[s.cls].label}</dd>`;
+  if(DEPTH[id]) h += `<dt>レア度</dt><dd class="rar">${starsStr(rarity(id))}（原料から${DEPTH[id]}段）</dd>`;
+  h += `<dt>解説</dt><dd>${s.note}</dd>`;
+  if(s.use) h += `<dt>使い道</dt><dd>${s.use}</dd>`;
+  if(made.length) h += `<dt>つくり方</dt><dd><ul>${made.map(r=>`<li>${r.eq}</li>`).join("")}</ul></dd>`;
+  if(used.length) h += `<dt>使った反応</dt><dd><ul>${used.map(r=>`<li>${r.eq}</li>`).join("")}</ul></dd>`;
+  h += `</dl>`;
+  $("dlg-body").innerHTML = h;
+  if(s.smi){ const svg=$("dlg-svg"); const bg=getComputedStyle(document.documentElement).getPropertyValue("--surface-2").trim(); if(!drawMol(svg, s.smi, bg)) svg.outerHTML = `<div class="poly">${s.f}</div>`; }
+  $("dlg-x").onclick = ()=>dlg.close();
+  if(dlg.showModal) dlg.showModal(); else dlg.setAttribute("open","");
+}
+
+/* ================= events ================= */
+function showSide(which){
+  ui.side = which; renderSide();
+  if(window.matchMedia("(max-width:979px)").matches){ const s=$("side"); if(s.scrollIntoView) s.scrollIntoView({behavior:"smooth",block:"start"}); }
+}
+function setFromRule(r){
+  const lv = state.clue[r.id]||0;
+  const main = r.in.find(i=>POS[i]) || r.in[0];
+  const other = r.in.find(i=>i!==main) || null;
+  ui.a = main; ui.b = lv>=1 ? other : null;
+  ui.picking = lv>=1 ? null : (other ? "b" : null);
+  if(lv>=2){ ui.light = !!r.light; ui.cat = r.cat ? r.cat[0] : "none"; ui.temp = r.t ? Math.round((r.t[0]+r.t[1])/20)*10 : 20; }
+  ui.pred = ""; ui.result = null;
+  SFX.click(); renderAll(); showSide("bench");
+}
+document.addEventListener("click", e=>{
+  const t = e.target;
+  const node = t.closest("[data-node]"); if(node){ ui.sel = node.dataset.node; SFX.click(); renderMap(); showSide("look"); return; }
+  const sd = t.closest("[data-side]"); if(sd){ showSide(sd.dataset.side); return; }
+  const tb = t.closest("[data-tab]"); if(tb){ ui.tab = tb.dataset.tab; renderTabs(); return; }
+  const slot = t.closest(".slot"); if(slot){ const k=slot.dataset.slot; ui.picking = ui.picking===k ? null : k; renderBench(); return; }
+  if(t.closest("[data-pick-close]")){ ui.picking=null; renderBench(); return; }
+  const pk = t.closest("[data-pick]");
+  if(pk){ const k=ui.picking; const id=pk.dataset.pick||null; ui[k]=id; if(k==="a"&&ui.b===id) ui.b=null; if(k==="b"&&ui.a===id) ui.b=null;
+    ui.picking = (k==="a" && !ui.b) ? "b" : null; ui.result=null; $("err").textContent=""; SFX.click(); renderBench(); paintFlaskIdle(); return; }
+  const toA = t.closest("[data-toa]"); if(toA){ ui.a = toA.dataset.toa; if(ui.b===ui.a) ui.b=null; ui.picking = ui.b ? null : "b"; ui.result=null; SFX.click(); renderAll(); showSide("bench"); return; }
+  const clue = t.closest("[data-clue]");
+  if(clue){ if(state.stars<1) return; const id=clue.dataset.clue; state.stars--; state.clue[id]=(state.clue[id]||0)+1; save(); SFX.star(); renderHUD(); renderMap(); renderLook(); return; }
+  const set = t.closest("[data-set]"); if(set){ setFromRule(RULE[set.dataset.set]); return; }
+  const op = t.closest("[data-open]"); if(op){ openDetail(op.dataset.open); return; }
+  if(t.id==="hint"){ const q=QUESTS[state.q]; state.hints[q.id]=(state.hints[q.id]||0)+1; save(); renderQuest(); return; }
+  if(t.id==="deliver"){ deliver(); return; }
+  const menu = $("menu"); if(menu.open && !t.closest("#menu")) menu.open = false;
+});
+document.addEventListener("keydown", e=>{
+  const node = e.target.closest && e.target.closest("[data-node]");
+  if(node && (e.key==="Enter"||e.key===" ")){ e.preventDefault(); ui.sel=node.dataset.node; renderMap(); showSide("look"); }
+});
+function deliver(){
+  const q = QUESTS[state.q]; if(!q || !questReady(q)) return;
+  const rank0 = rankIdx(state.xp);
+  (q.reward.src||[]).forEach(s=>state.src[s]=true);
+  (q.reward.cat||[]).forEach(c=>state.cat[c]=true);
+  state.q++; state.xp += 50; state.stars += 2; ui.sel = null;
+  checkAch(); save(); renderAll(); showSide("look");
+  SFX.lvl();
+  toast(`「${q.title}」を納品した！ <b>+50 XP ★+2</b><br>${q.rewardText}${q.id==="q6"?"！":"。"}`);
+  if(rankIdx(state.xp)>rank0) setTimeout(()=>toast(`ランクアップ！ <b>${RANKS[rankIdx(state.xp)][1]}</b> になった`),700);
+}
+$("go").addEventListener("click", ()=>{ ui.picking=null; react(); });
+$("temp").addEventListener("input", e=>{ ui.temp=+e.target.value; $("temp-v").textContent=ui.temp+"℃"; $("flask").classList.toggle("hot", ui.temp>=100); });
+$("light").addEventListener("click", ()=>{ ui.light=!ui.light; SFX.click(); $("light").setAttribute("aria-pressed", ui.light); $("light-t").textContent = ui.light ? "当てる" : "当てない"; $("flask").classList.toggle("uvon", ui.light); });
+$("cat").addEventListener("change", e=>{ ui.cat=e.target.value; });
+$("pred").addEventListener("change", e=>{ ui.pred=e.target.value; });
+$("mute").addEventListener("click", ()=>{ state.mute=!state.mute; save(); renderHUD(); if(!state.mute) SFX.click(); });
+let resetArmed = false, resetT = null;
+$("reset").addEventListener("click", e=>{
+  if(!resetArmed){ resetArmed=true; e.target.textContent="本当に消す？もう一度押す"; resetT=setTimeout(()=>{resetArmed=false; e.target.textContent="最初からやり直す";},4000); return; }
+  clearTimeout(resetT); resetArmed=false; e.target.textContent="最初からやり直す"; $("menu").open=false;
+  state = fresh(); ui = freshUI(); vb = null;
+  try{ localStorage.removeItem(KEY); }catch(err){}
+  renderAll();
+});
+
+/* ================= boot ================= */
+function start(data){
+  load();
+  if(data && data.ui) ui = Object.assign(ui, data.ui, {result:null});
+  renderAll();
+}
+try{ window.claude && window.claude.hot && window.claude.hot.snapshot && window.claude.hot.snapshot(()=>({ui:{a:ui.a,b:ui.b,temp:ui.temp,light:ui.light,cat:ui.cat,pred:ui.pred,sel:ui.sel,side:ui.side,tab:ui.tab}})); }catch(e){}
+if(window.claude && window.claude.hot && window.claude.hot.ready) window.claude.hot.ready(start); else start((window.claude && window.claude.hot && window.claude.hot.data) || {});
+
+})();
+</script>

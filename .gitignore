@@ -1,8 +1,12 @@
 node_modules/
-build/
+/build/
 dist/
 coverage/
 .DS_Store
 *.log
 .env*
 !.env.example
+
+prompts/*/eval-result.json
+docs/verify/*.png
+.claude/settings.local.json
